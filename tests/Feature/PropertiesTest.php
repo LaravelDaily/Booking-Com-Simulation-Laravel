@@ -21,8 +21,8 @@ class PropertiesTest extends TestCase
 
     public function test_user_does_not_have_access_to_properties_feature()
     {
-        $owner = User::factory()->create(['role_id' => Role::ROLE_USER]);
-        $response = $this->actingAs($owner)->getJson('/api/owner/properties');
+        $user = User::factory()->create(['role_id' => Role::ROLE_USER]);
+        $response = $this->actingAs($user)->getJson('/api/owner/properties');
 
         $response->assertStatus(403);
     }

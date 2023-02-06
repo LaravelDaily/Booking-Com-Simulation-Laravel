@@ -13,8 +13,8 @@ class BookingsTest extends TestCase
 
     public function test_user_has_access_to_bookings_feature()
     {
-        $owner = User::factory()->create(['role_id' => Role::ROLE_USER]);
-        $response = $this->actingAs($owner)->getJson('/api/user/bookings');
+        $user = User::factory()->create(['role_id' => Role::ROLE_USER]);
+        $response = $this->actingAs($user)->getJson('/api/user/bookings');
 
         $response->assertStatus(200);
     }
