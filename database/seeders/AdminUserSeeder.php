@@ -15,12 +15,13 @@ class AdminUserSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
+        $user = User::create([
             'name' => 'Administrator',
             'email' => 'superadmin@booking.com',
             'password' => bcrypt('SuperSecretPassword'),
             'email_verified_at' => now(),
-            'role_id' => 1, // Administrator
         ]);
+
+        $user->assignRole('Administrator');
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\GateDefineMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -43,7 +42,6 @@ class Kernel extends HttpKernel
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            GateDefineMiddleware::class,
         ],
     ];
 
