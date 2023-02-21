@@ -49,4 +49,29 @@ class PropertySearchTest extends TestCase
         $response->assertJsonCount(1);
         $response->assertJsonFragment(['id' => $propertyInCountry->id]);
     }
+
+    public function test_property_search_by_coordinates_returns_correct_results(): void
+    {
+        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $user = User::factory()->create(['role_id' => Role::ROLE_USER]);
+        $cityId = City::value('id');
+        $propertyNear = Property::factory()->create([
+            'owner_id' => $owner->id,
+            'city_id' => $cityId,
+            'lat' => 0,
+            'long' => 0,
+        ]);
+        $propertyFar = Property::factory()->create([
+            'owner_id' => $owner->id,
+            'city_id' => $cityId,
+            'lat' => 10,
+            'long' => 10,
+        ]);
+
+        $response = $this->actingAs($user)->getJson('/api/user/search?lat=0.01&long=0.01');
+
+        $response->assertStatus(200);
+        $response->assertJsonCount(1);
+        $response->assertJsonFragment(['id' => $propertyNear->id]);
+    }
 }
