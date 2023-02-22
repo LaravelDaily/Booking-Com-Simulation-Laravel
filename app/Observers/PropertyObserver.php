@@ -12,7 +12,7 @@ class PropertyObserver
             $property->owner_id = auth()->id();
         }
 
-        if (is_null($property->lat) && is_null($property->long)) {
+        if (is_null($property->lat) && is_null($property->long) && !(app()->environment('testing'))) {
             $fullAddress = $property->address_street . ', '
                 . $property->address_postcode . ', '
                 . $property->city->name . ', '
