@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Geoobject;
 use App\Models\Property;
 use Illuminate\Http\Request;
 
@@ -17,16 +18,19 @@ class PropertySearchController extends Controller
             ->when($request->country, function($query) use ($request) {
                 $query->whereHas('city', fn($q) => $q->where('country_id', $request->country));
             })
-            ->when($request->lat && $request->long, function($query) use ($request) {
-                $haversine = "(
-                    6371 * acos(
-                        cos(radians(" .$request->lat. "))
-                        * cos(radians(`lat`))
-                        * cos(radians(`long`) - radians(" .$request->long. "))
-                        + sin(radians(" .$request->lat. ")) * sin(radians(`long`))
-                    ) < 10
-                )";
-                $query->whereRaw($haversine);
+            ->when($request->geoobject, function($query) use ($request) {
+                $geoobject = Geoobject::find($request->geoobject);
+                if ($geoobject) {
+                    $condition = "(
+                        6371 * acos(
+                            cos(radians(" . $geoobject->lat . "))
+                            * cos(radians(`lat`))
+                            * cos(radians(`long`) - radians(" . $geoobject->long . "))
+                            + sin(radians(" . $geoobject->lat . ")) * sin(radians(`lat`))
+                        ) < 10
+                    )";
+                    $query->whereRaw($condition);
+                }
             })
             ->get();
     }

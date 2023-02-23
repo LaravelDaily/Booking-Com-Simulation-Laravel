@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\City;
 use App\Models\Country;
+use App\Models\Geoobject;
 use App\Models\Property;
 use App\Models\Role;
 use App\Models\User;
@@ -50,25 +51,26 @@ class PropertySearchTest extends TestCase
         $response->assertJsonFragment(['id' => $propertyInCountry->id]);
     }
 
-    public function test_property_search_by_coordinates_returns_correct_results(): void
+    public function test_property_search_by_geoobject_returns_correct_results(): void
     {
         $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
         $user = User::factory()->create(['role_id' => Role::ROLE_USER]);
         $cityId = City::value('id');
+        $geoobject = Geoobject::first();
         $propertyNear = Property::factory()->create([
             'owner_id' => $owner->id,
             'city_id' => $cityId,
-            'lat' => 0,
-            'long' => 0,
+            'lat' => $geoobject->lat,
+            'long' => $geoobject->long,
         ]);
         $propertyFar = Property::factory()->create([
             'owner_id' => $owner->id,
             'city_id' => $cityId,
-            'lat' => 10,
-            'long' => 10,
+            'lat' => $geoobject->lat + 10,
+            'long' => $geoobject->long - 10,
         ]);
 
-        $response = $this->actingAs($user)->getJson('/api/user/search?lat=0.01&long=0.01');
+        $response = $this->actingAs($user)->getJson('/api/user/search?geoobject=' . $geoobject->id);
 
         $response->assertStatus(200);
         $response->assertJsonCount(1);
