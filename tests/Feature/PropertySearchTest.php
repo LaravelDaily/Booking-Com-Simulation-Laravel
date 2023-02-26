@@ -7,6 +7,7 @@ use App\Models\Country;
 use App\Models\Geoobject;
 use App\Models\Property;
 use App\Models\Role;
+use App\Models\Room;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -75,5 +76,64 @@ class PropertySearchTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonCount(1);
         $response->assertJsonFragment(['id' => $propertyNear->id]);
+    }
+
+    public function test_property_search_by_capacity_returns_correct_results(): void
+    {
+        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $user = User::factory()->create(['role_id' => Role::ROLE_USER]);
+        $cityId = City::value('id');
+        $propertyWithSmallRoom = Property::factory()->create([
+            'owner_id' => $owner->id,
+            'city_id' => $cityId,
+        ]);
+        Room::factory()->create([
+            'property_id' => $propertyWithSmallRoom->id,
+            'capacity_adults' => 1,
+            'capacity_children' => 0,
+        ]);
+        $propertyWithLargeRoom = Property::factory()->create([
+            'owner_id' => $owner->id,
+            'city_id' => $cityId,
+        ]);
+        Room::factory()->create([
+            'property_id' => $propertyWithLargeRoom->id,
+            'capacity_adults' => 3,
+            'capacity_children' => 2,
+        ]);
+
+        $response = $this->actingAs($user)->getJson('/api/user/search?city=' . $cityId . '&adults=2&children=1');
+
+        $response->assertStatus(200);
+        $response->assertJsonCount(1);
+        $response->assertJsonFragment(['id' => $propertyWithLargeRoom->id]);
+    }
+
+    public function test_property_search_by_capacity_returns_only_suitable_rooms(): void
+    {
+        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $user = User::factory()->create(['role_id' => Role::ROLE_USER]);
+        $cityId = City::value('id');
+        $property = Property::factory()->create([
+            'owner_id' => $owner->id,
+            'city_id' => $cityId,
+        ]);
+        $smallRoom = Room::factory()->create([
+            'property_id' => $property->id,
+            'capacity_adults' => 1,
+            'capacity_children' => 0,
+        ]);
+        $largeRoom = Room::factory()->create([
+            'property_id' => $property->id,
+            'capacity_adults' => 3,
+            'capacity_children' => 2,
+        ]);
+
+        $response = $this->actingAs($user)->getJson('/api/user/search?city=' . $cityId . '&adults=2&children=1');
+
+        $response->assertStatus(200);
+        $response->assertJsonCount(1);
+        $response->assertJsonCount(1, '0.rooms');
+        $response->assertJsonPath('0.rooms.0.id', $largeRoom->id);
     }
 }
