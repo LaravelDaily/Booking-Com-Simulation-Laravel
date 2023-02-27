@@ -85,6 +85,10 @@ class PropertySearchController extends Controller
 
 Here, we're using a `->withWhereHas()` method that appeared in Laravel 9.17, see [my video](https://www.youtube.com/watch?v=ZEDUihpRQMM) about it.
 
+Here's the result in Postman:
+
+![](images/property-search-city-rooms.png)
+
 Finally, let's test if it works. We add another method to our Search Testing class.
 
 **tests/Feature/PropertySearchTest.php**:

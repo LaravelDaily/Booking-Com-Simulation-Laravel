@@ -58,6 +58,8 @@ Route::get('search',
     \App\Http\Controllers\Public\PropertySearchController::class);
 ```
 
+Our search should be public for everyone, without any registration, so we put that route outside of `auth:sanctum` Middleware group.
+
 Now, let's start filling in various search cases. For what we will use Eloquent syntax of `Model::when()` with different conditions.
 
 ---
@@ -82,6 +84,10 @@ class PropertySearchController extends Controller
 ```
 
 **Notice**: for now, let's return all the results without pagination and ordering, we will improve those in the future lessons.
+
+Here's how the result looks like in Postman:
+
+![](images/property-search-city.png)
 
 And let's immediately write the test for it.
 
