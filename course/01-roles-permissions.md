@@ -405,11 +405,13 @@ class RegisterController extends Controller
 
 More readable, isn't it? You could also create a separate [Enum Class](https://php.watch/versions/8.1/enums) for this, but for simplicity, I decided to create those constants in the Model. It's a totally personal preference.
 
-Ok, so we have the user's registration endpoint. Let's test how it works, by building **automated test**.
+Ok, so we have the user's registration endpoint. Here's how it works in the Postman API client:
 
-Yes, this is exactly how I will show the features throughout this course: I keep repeating the word "simulate" and this is exactly what we will do: automated PhpUnit tests are the perfect examples of simulating what users would do. So, in this and upcoming lessons, I probably won't launch any web browser or Postman client, but rather check if the feature tests are passing. 
+![](images/auth-register-postman.png)
 
-So, let's prepare our test suite first.
+Let's test how it works, by building **automated test**.
+
+Let's prepare our test suite first.
 
 In the default Laravel project, I typically delete two example test files
 
@@ -676,7 +678,15 @@ class Kernel extends HttpKernel
 
 Now, all we need to do to check if the middleware is working, is to launch the API endpoints for the user and the property owner separately, with the Bearer Token that we received from the registration endpoint.
 
-But, as I was saying earlier, I will not launch the actual requests throughout this course, instead will use automated tests to cover them. So let's try one.
+Here's how it looks in Postman:
+
+![](images/auth-access-postman.png)
+
+And when access is denied:
+
+![](images/auth-access-denied-postman)
+
+Now, automated tests should cover those cases, too. So let's generate one.
 
 ```sh
 php artisan make:test PropertiesTest

@@ -11,10 +11,10 @@ For starters, we will try these criteria:
 Let's build the controller and method for this.
 
 ```sh
-php artisan make:controller User/PropertySearchController
+php artisan make:controller Public/PropertySearchController
 ```
 
-**app/Http/Controllers/User/PropertySearchController.php**:
+**app/Http/Controllers/Public/PropertySearchController.php**:
 ```php
 namespace App\Http\Controllers\User;
 
@@ -33,9 +33,12 @@ class PropertySearchController extends Controller
 }
 ```
 
+As you can see, we're adding another namespace of `/Public`, so we'll have three zones: owner, user and public.
+
 And let's add the route, also grouping the owner/user routes with prefixes.
 
 **routes/api.php**:
+
 ```php
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('owner')->group(function () {
@@ -48,11 +51,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('user')->group(function () {
         Route::get('bookings',
             [\App\Http\Controllers\User\BookingController::class, 'index']);
-        Route::get('search',
-            \App\Http\Controllers\User\PropertySearchController::class);
     });
 });
+
+Route::get('search',
+    \App\Http\Controllers\Public\PropertySearchController::class);
 ```
+
 Now, let's start filling in various search cases. For what we will use Eloquent syntax of `Model::when()` with different conditions.
 
 ---
@@ -61,7 +66,7 @@ Now, let's start filling in various search cases. For what we will use Eloquent 
 
 Let's assume that we have 'city' as a GET parameter, and the search is easy.
 
-**app/Http/Controllers/User/PropertySearchController.php**:
+**app/Http/Controllers/Public/PropertySearchController.php**:
 ```php
 class PropertySearchController extends Controller
 {
@@ -148,7 +153,7 @@ class PropertySearchTest extends TestCase
         $propertyInCity = Property::factory()->create(['owner_id' => $owner->id, 'city_id' => $cities[0]]);
         $propertyInAnotherCity = Property::factory()->create(['owner_id' => $owner->id, 'city_id' => $cities[1]]);
 
-        $response = $this->actingAs($user)->getJson('/api/user/search?city=' . $cities[0]);
+        $response = $this->getJson('/api/search?city=' . $cities[0]);
 
         $response->assertStatus(200);
         $response->assertJsonCount(1);
@@ -172,7 +177,7 @@ Same sequence of action, same logic, just different filter of data in the contro
 
 This is our controller method now, with country search added, using `whereHas()` Eloquent method:
 
-**app/Http/Controllers/User/PropertySearchController.php**:
+**app/Http/Controllers/Public/PropertySearchController.php**:
 ```php
 class PropertySearchController extends Controller
 {
@@ -208,7 +213,7 @@ public function test_property_search_by_country_returns_correct_results(): void
         'city_id' => $countries[1]->cities()->value('id')
     ]);
 
-    $response = $this->actingAs($user)->getJson('/api/user/search?country=' . $countries[0]->id);
+    $response = $this->getJson('/api/search?country=' . $countries[0]->id);
 
     $response->assertStatus(200);
     $response->assertJsonCount(1);
@@ -228,7 +233,7 @@ What if someone searches for a property near The Statue of Liberty? No problem, 
 
 Another new `when()` in the Controller, with adding a Geoobject search inside.
 
-**app/Http/Controllers/User/PropertySearchController.php**:
+**app/Http/Controllers/Public/PropertySearchController.php**:
 ```php
 class PropertySearchController extends Controller
 {
@@ -285,7 +290,7 @@ public function test_property_search_by_geoobject_returns_correct_results(): voi
         'long' => $geoobject->long - 10,
     ]);
 
-    $response = $this->actingAs($user)->getJson('/api/user/search?geoobject=' . $geoobject->id);
+    $response = $this->getJson('/api/search?geoobject=' . $geoobject->id);
 
     $response->assertStatus(200);
     $response->assertJsonCount(1);

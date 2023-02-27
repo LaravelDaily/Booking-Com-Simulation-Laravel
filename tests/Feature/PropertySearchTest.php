@@ -24,7 +24,7 @@ class PropertySearchTest extends TestCase
         $propertyInCity = Property::factory()->create(['owner_id' => $owner->id, 'city_id' => $cities[0]]);
         $propertyInAnotherCity = Property::factory()->create(['owner_id' => $owner->id, 'city_id' => $cities[1]]);
 
-        $response = $this->actingAs($user)->getJson('/api/user/search?city=' . $cities[0]);
+        $response = $this->getJson('/api/search?city=' . $cities[0]);
 
         $response->assertStatus(200);
         $response->assertJsonCount(1);
@@ -45,7 +45,7 @@ class PropertySearchTest extends TestCase
             'city_id' => $countries[1]->cities()->value('id')
         ]);
 
-        $response = $this->actingAs($user)->getJson('/api/user/search?country=' . $countries[0]->id);
+        $response = $this->getJson('/api/search?country=' . $countries[0]->id);
 
         $response->assertStatus(200);
         $response->assertJsonCount(1);
@@ -71,7 +71,7 @@ class PropertySearchTest extends TestCase
             'long' => $geoobject->long - 10,
         ]);
 
-        $response = $this->actingAs($user)->getJson('/api/user/search?geoobject=' . $geoobject->id);
+        $response = $this->getJson('/api/search?geoobject=' . $geoobject->id);
 
         $response->assertStatus(200);
         $response->assertJsonCount(1);
@@ -102,7 +102,7 @@ class PropertySearchTest extends TestCase
             'capacity_children' => 2,
         ]);
 
-        $response = $this->actingAs($user)->getJson('/api/user/search?city=' . $cityId . '&adults=2&children=1');
+        $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1');
 
         $response->assertStatus(200);
         $response->assertJsonCount(1);
@@ -129,7 +129,7 @@ class PropertySearchTest extends TestCase
             'capacity_children' => 2,
         ]);
 
-        $response = $this->actingAs($user)->getJson('/api/user/search?city=' . $cityId . '&adults=2&children=1');
+        $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1');
 
         $response->assertStatus(200);
         $response->assertJsonCount(1);
