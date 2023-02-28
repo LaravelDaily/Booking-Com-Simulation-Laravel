@@ -1,12 +1,119 @@
-Now, let's try to show the property and room information in the search results, similarly to how it's done on Booking.com website:
+Now, let's try to show the property and apartment information in the search results, similarly to how it's done on Booking.com website:
 
-- Every apartment may have size in square meters, number of small/large/sofa beds, number of bedrooms, living rooms and bathrooms
+- Every apartment may have its type, size in square meters, number of small/large/sofa beds, number of bedrooms, living rooms and bathrooms
 - In property search, we need to show only ONE apartment which is the best fit for the number of guests
 - Other apartments may be seen if someone clicks on the property, so we need to create an API endpoint for that 
 
-## DB Structure: Apartment Size and Type
+Let's tackle those, one by one.
 
-TBD.
+- - -
+
+## DB Structure: Apartment Type and Size
+
+Let's add two fields to the apartments: their type and size (in square meters).
+
+Types should have a separate DB table, with a relationship, so we do exactly that.
+
+```sh
+php artisan make:model ApartmentType -m
+```
+
+**Migration file**:
+```php
+use App\Models\ApartmentType;
+
+public function up(): void
+{
+    Schema::create('apartment_types', function (Blueprint $table) {
+        $table->id();
+        $table->string('name');
+        $table->timestamps();
+    });
+
+    ApartmentType::create(['name' => 'Entire apartment']);
+    ApartmentType::create(['name' => 'Entire studio']);
+    ApartmentType::create(['name' => 'Private suite']);
+}
+```
+
+For such simple seeds, I often prefer doing them right in the migration file, instead of creating a separate Seeder. But that's a personal preference.
+
+The Model is very simple.
+
+**app/Models/ApartmentType.php**:
+```php
+class ApartmentType extends Model
+{
+    use HasFactory;
+
+    protected $fillable = ['name'];
+}
+```
+
+Next, we create a migration for adding both type and size.
+
+```sh
+php artisan make:migration add_apartment_type_size_to_apartments_table
+```
+
+**Migration file**:
+```php
+public function up(): void
+{
+    Schema::table('apartments', function (Blueprint $table) {
+        $table->foreignId('apartment_type_id')
+            ->nullable()
+            ->after('id')
+            ->constrained();
+        $table->unsignedInteger('size')->nullable();
+    });
+}
+```
+
+Apartment type should be `nullable`, as I've noticed on the page that not all apartments show their type.
+
+Next, we add those fields to the fillables in the Model and create a relationship to the type.
+
+**app/Models/Apartment.php**:
+```php
+class Apartment extends Model
+{
+    protected $fillable = [
+        'property_id',
+        'apartment_type_id',
+        'name',
+        'capacity_adults',
+        'capacity_children',
+        'size',
+    ];
+
+    public function apartment_type()
+    {
+        return $this->belongsTo(ApartmentType::class);
+    }
+}
+```
+
+Finally, we need to modify our search to return that type as a relationship.
+
+**app/Http/Controllers/Public/PropertySearchController.php**:
+```php
+class PropertySearchController extends Controller
+{
+    public function __invoke(Request $request)
+    {
+        return Property::with('city', 'apartments.apartment_type')
+            // ... when() conditions
+            ->get();
+    }
+}
+```
+
+These are new fields, visible in the search results now:
+
+![Property search apartment type](images/property-search-apartment-type.png)
+
+- - - 
 
 ## Apartment Rooms
 
