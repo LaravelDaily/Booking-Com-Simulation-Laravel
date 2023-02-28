@@ -32,8 +32,8 @@ class Property extends Model
         return $this->belongsTo(City::class);
     }
 
-    public function rooms()
+    public function apartments()
     {
-        return $this->hasMany(Room::class);
+        return $this->hasMany(Apartment::class);
     }
 }

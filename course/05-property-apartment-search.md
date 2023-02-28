@@ -2,19 +2,19 @@ Now we're moving to the next filter in the search: people are looking for proper
 
 ![booking.com search by capacity](images/booking-com-search-capacity.png)
 
-Here's where we get to the next concept: **rooms**. Each property may have multiple rooms, not only for hotels but also for bigger houses are often divided into separate rooms for booking.
+Here's where we get to the next concept: **apartments**. Each property may have multiple apartments, not only for hotels but also for bigger houses are often divided into separate apartments for booking.
 
-So, our search needs to accept the number of adults and children and filter the properties by rooms that are fit for that number of people.
+So, our search needs to accept the number of adults and children and filter the properties by apartments that are fit for that number of people.
 
-First, we create the Room model/migration, also adding a Factory for testing.
+First, we create the Apartment model/migration, also adding a Factory for testing.
 
 ```sh
-php artisan make:model Room -mf
+php artisan make:model Apartment -mf
 ```
 
 **Migration file**:
 ```php
-Schema::create('rooms', function (Blueprint $table) {
+Schema::create('apartments', function (Blueprint $table) {
     $table->id();
     $table->foreignId('property_id')->constrained();
     $table->string('name');
@@ -24,9 +24,9 @@ Schema::create('rooms', function (Blueprint $table) {
 });
 ```
 
-**app/Models/Room.php**:
+**app/Models/Apartment.php**:
 ```php
-class Room extends Model
+class Apartment extends Model
 {
     use HasFactory;
 
@@ -44,7 +44,7 @@ class Room extends Model
 }
 ```
 
-Also, we add a relationship of `rooms` for a Property.
+Also, we add a relationship of `apartments` for a Property.
 
 **app/Models/Property.php**:
 ```php
@@ -52,9 +52,9 @@ class Property extends Model
 {
     // ...
 
-    public function rooms()
+    public function apartments()
     {
-        return $this->hasMany(Room::class);
+        return $this->hasMany(Apartment::class);
     }
 }
 ```
@@ -73,7 +73,7 @@ class PropertySearchController extends Controller
             })
             // ... more when() conditions
             ->when($request->adults && $request->children, function($query) use ($request) {
-                $query->withWhereHas('rooms', function($query) use ($request) {
+                $query->withWhereHas('apartments', function($query) use ($request) {
                     $query->where('capacity_adults', '>', $request->adults)
                         ->where('capacity_children', '>', $request->children);
                 });
@@ -87,7 +87,7 @@ Here, we're using a `->withWhereHas()` method that appeared in Laravel 9.17, see
 
 Here's the result in Postman:
 
-![](images/property-search-city-rooms.png)
+![](images/property-search-city-apartments.png)
 
 Finally, let's test if it works. We add another method to our Search Testing class.
 
@@ -96,42 +96,41 @@ Finally, let's test if it works. We add another method to our Search Testing cla
 public function test_property_search_by_capacity_returns_correct_results(): void
 {
     $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
-    $user = User::factory()->create(['role_id' => Role::ROLE_USER]);
     $cityId = City::value('id');
-    $propertyWithSmallRoom = Property::factory()->create([
+    $propertyWithSmallApartment = Property::factory()->create([
         'owner_id' => $owner->id,
         'city_id' => $cityId,
     ]);
-    Room::factory()->create([
-        'property_id' => $propertyWithSmallRoom->id,
+    Apartment::factory()->create([
+        'property_id' => $propertyWithSmallApartment->id,
         'capacity_adults' => 1,
         'capacity_children' => 0,
     ]);
-    $propertyWithLargeRoom = Property::factory()->create([
+    $propertyWithLargeApartment = Property::factory()->create([
         'owner_id' => $owner->id,
         'city_id' => $cityId,
     ]);
-    Room::factory()->create([
-        'property_id' => $propertyWithLargeRoom->id,
+    Apartment::factory()->create([
+        'property_id' => $propertyWithLargeApartment->id,
         'capacity_adults' => 3,
         'capacity_children' => 2,
     ]);
 
-    $response = $this->actingAs($user)->getJson('/api/user/search?city=' . $cityId . '&adults=2&children=1');
+    $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1');
 
     $response->assertStatus(200);
     $response->assertJsonCount(1);
-    $response->assertJsonFragment(['id' => $propertyWithLargeRoom->id]);
+    $response->assertJsonFragment(['id' => $propertyWithLargeApartment->id]);
 }
 ```
 
-As you can see, we're creating two properties: one with a small room for only 1 adult, and another one fitting 3 adults and 2 children. Our search queries for the properties for 2 adults and 1 child, and only `$propertyWithLargeRoom` should be returned.
+As you can see, we're creating two properties: one with a small apartment for only 1 adult, and another one fitting 3 adults and 2 children. Our search queries for the properties for 2 adults and 1 child, and only `$propertyWithLargeApartment` should be returned.
 
-To create a fake room, we fill in the Factory with fields like these:
+To create a fake apartment, we fill in the Factory with fields like these:
 
-**database/factories/RoomFactory.php**:
+**database/factories/ApartmentFactory.php**:
 ```php
-class RoomFactory extends Factory
+class ApartmentFactory extends Factory
 {
     public function definition(): array
     {
@@ -157,44 +156,43 @@ And it works!
 
 ---
 
-## Showing Only Suitable Rooms
+## Showing Only Suitable Apartments
 
-Finally in this lesson, let's add another test, checking if we don't return the rooms that are not a good fit.
+Finally in this lesson, let's add another test, checking if we don't return the apartments that are not a good fit.
 
-As you may notice, Booking.com shows the results as a list of properties, each with a list of suitable rooms. So if the hotel has both smaller and bigger rooms, it will show only bigger ones that would fit the family.
+As you may notice, Booking.com shows the results as a list of properties, each with a list of suitable apartments. So if the hotel has both smaller and bigger apartments, it will show only bigger ones that would fit the family.
 
-![Property search show rooms](images/property-search-show-rooms.png)
+![Property search show apartments](images/property-search-show-rooms.png)
 
 We already created the code for it, by using `withWhereHas()` instead of just `whereHas()`. We just need to write the test method for it, here's how it would look.
 
-**database/factories/RoomFactory.php**:
+**tests/Feature/PropertySearchTest.php**:
 ```php
-public function test_property_search_by_capacity_returns_only_suitable_rooms(): void
+public function test_property_search_by_capacity_returns_only_suitable_apartments(): void
 {
     $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
-    $user = User::factory()->create(['role_id' => Role::ROLE_USER]);
     $cityId = City::value('id');
     $property = Property::factory()->create([
         'owner_id' => $owner->id,
         'city_id' => $cityId,
     ]);
-    $smallRoom = Room::factory()->create([
+    $smallApartment = Apartment::factory()->create([
         'property_id' => $property->id,
         'capacity_adults' => 1,
         'capacity_children' => 0,
     ]);
-    $largeRoom = Room::factory()->create([
+    $largeApartment = Apartment::factory()->create([
         'property_id' => $property->id,
         'capacity_adults' => 3,
         'capacity_children' => 2,
     ]);
 
-    $response = $this->actingAs($user)->getJson('/api/user/search?city=' . $cityId . '&adults=2&children=1');
+    $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1');
 
     $response->assertStatus(200);
     $response->assertJsonCount(1);
-    $response->assertJsonCount(1, '0.rooms');
-    $response->assertJsonPath('0.rooms.0.id', $largeRoom->id);
+    $response->assertJsonCount(1, '0.apartments');
+    $response->assertJsonPath('0.apartments.0.id', $largeApartment->id);
 }
 ```
 
@@ -203,9 +201,9 @@ As you can see, we're diving deeper into the result of JSON structure testing, w
 Now, we launch the test...
 
 ```sh
-php artisan test --filter=test_property_search_by_capacity_returns_only_suitable_rooms
+php artisan test --filter=test_property_search_by_capacity_returns_only_suitable_apartments
 ```
 
 Another green light!
 
-![Rooms search by capacity](images/property-search-room-capacity-test.png)
+![Apartment search by capacity](images/property-search-apartment-capacity-test.png)

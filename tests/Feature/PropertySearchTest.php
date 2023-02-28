@@ -7,7 +7,7 @@ use App\Models\Country;
 use App\Models\Geoobject;
 use App\Models\Property;
 use App\Models\Role;
-use App\Models\Room;
+use App\Models\Apartment;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -19,7 +19,6 @@ class PropertySearchTest extends TestCase
     public function test_property_search_by_city_returns_correct_results(): void
     {
         $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
-        $user = User::factory()->create(['role_id' => Role::ROLE_USER]);
         $cities = City::take(2)->pluck('id');
         $propertyInCity = Property::factory()->create(['owner_id' => $owner->id, 'city_id' => $cities[0]]);
         $propertyInAnotherCity = Property::factory()->create(['owner_id' => $owner->id, 'city_id' => $cities[1]]);
@@ -34,7 +33,6 @@ class PropertySearchTest extends TestCase
     public function test_property_search_by_country_returns_correct_results(): void
     {
         $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
-        $user = User::factory()->create(['role_id' => Role::ROLE_USER]);
         $countries = Country::with('cities')->take(2)->get();
         $propertyInCountry = Property::factory()->create([
             'owner_id' => $owner->id,
@@ -55,7 +53,6 @@ class PropertySearchTest extends TestCase
     public function test_property_search_by_geoobject_returns_correct_results(): void
     {
         $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
-        $user = User::factory()->create(['role_id' => Role::ROLE_USER]);
         $cityId = City::value('id');
         $geoobject = Geoobject::first();
         $propertyNear = Property::factory()->create([
@@ -81,23 +78,22 @@ class PropertySearchTest extends TestCase
     public function test_property_search_by_capacity_returns_correct_results(): void
     {
         $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
-        $user = User::factory()->create(['role_id' => Role::ROLE_USER]);
         $cityId = City::value('id');
-        $propertyWithSmallRoom = Property::factory()->create([
+        $propertyWithSmallApartment = Property::factory()->create([
             'owner_id' => $owner->id,
             'city_id' => $cityId,
         ]);
-        Room::factory()->create([
-            'property_id' => $propertyWithSmallRoom->id,
+        Apartment::factory()->create([
+            'property_id' => $propertyWithSmallApartment->id,
             'capacity_adults' => 1,
             'capacity_children' => 0,
         ]);
-        $propertyWithLargeRoom = Property::factory()->create([
+        $propertyWithLargeApartment = Property::factory()->create([
             'owner_id' => $owner->id,
             'city_id' => $cityId,
         ]);
-        Room::factory()->create([
-            'property_id' => $propertyWithLargeRoom->id,
+        Apartment::factory()->create([
+            'property_id' => $propertyWithLargeApartment->id,
             'capacity_adults' => 3,
             'capacity_children' => 2,
         ]);
@@ -106,24 +102,23 @@ class PropertySearchTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJsonCount(1);
-        $response->assertJsonFragment(['id' => $propertyWithLargeRoom->id]);
+        $response->assertJsonFragment(['id' => $propertyWithLargeApartment->id]);
     }
 
-    public function test_property_search_by_capacity_returns_only_suitable_rooms(): void
+    public function test_property_search_by_capacity_returns_only_suitable_apartments(): void
     {
         $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
-        $user = User::factory()->create(['role_id' => Role::ROLE_USER]);
         $cityId = City::value('id');
         $property = Property::factory()->create([
             'owner_id' => $owner->id,
             'city_id' => $cityId,
         ]);
-        $smallRoom = Room::factory()->create([
+        $smallApartment = Apartment::factory()->create([
             'property_id' => $property->id,
             'capacity_adults' => 1,
             'capacity_children' => 0,
         ]);
-        $largeRoom = Room::factory()->create([
+        $largeApartment = Apartment::factory()->create([
             'property_id' => $property->id,
             'capacity_adults' => 3,
             'capacity_children' => 2,
@@ -133,7 +128,7 @@ class PropertySearchTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJsonCount(1);
-        $response->assertJsonCount(1, '0.rooms');
-        $response->assertJsonPath('0.rooms.0.id', $largeRoom->id);
+        $response->assertJsonCount(1, '0.apartments');
+        $response->assertJsonPath('0.apartments.0.id', $largeApartment->id);
     }
 }

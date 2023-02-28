@@ -6,9 +6,9 @@ use App\Models\Property;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Room>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Apartment>
  */
-class RoomFactory extends Factory
+class ApartmentFactory extends Factory
 {
     /**
      * Define the model's default state.

@@ -154,7 +154,6 @@ class PropertySearchTest extends TestCase
     public function test_property_search_by_city_returns_correct_results(): void
     {
         $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
-        $user = User::factory()->create(['role_id' => Role::ROLE_USER]);
         $cities = City::take(2)->pluck('id');
         $propertyInCity = Property::factory()->create(['owner_id' => $owner->id, 'city_id' => $cities[0]]);
         $propertyInAnotherCity = Property::factory()->create(['owner_id' => $owner->id, 'city_id' => $cities[1]]);
@@ -208,7 +207,6 @@ And a new test method for this scenario, with different property values and diff
 public function test_property_search_by_country_returns_correct_results(): void
 {
     $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
-    $user = User::factory()->create(['role_id' => Role::ROLE_USER]);
     $countries = Country::with('cities')->take(2)->get();
     $propertyInCountry = Property::factory()->create([
         'owner_id' => $owner->id,
@@ -280,7 +278,6 @@ Let's test it?
 public function test_property_search_by_geoobject_returns_correct_results(): void
 {
     $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
-    $user = User::factory()->create(['role_id' => Role::ROLE_USER]);
     $cityId = City::value('id');
     $geoobject = Geoobject::first();
     $propertyNear = Property::factory()->create([
