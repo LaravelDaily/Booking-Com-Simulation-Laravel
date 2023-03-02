@@ -80,11 +80,11 @@ class Apartment extends Model
 {
     protected $fillable = [
         'property_id',
-        'apartment_type_id',
+        'apartment_type_id', // [tl! ++]
         'name',
         'capacity_adults',
         'capacity_children',
-        'size',
+        'size', // [tl! ++]
     ];
 
     public function apartment_type()
@@ -115,15 +115,15 @@ These are new fields, visible in the search results now:
 
 - - - 
 
-## Apartment Rooms
+## Apartment Rooms and Beds: DB Structure
 
 Our DB structure will get a bit more complicated, with rooms within apartments:
 
 - Bedrooms (specifying beds in each one)
-- Living rooms (also can have beds)
+- Living rooms (also may have beds)
 - Bathrooms
 
-In reality, the travelers are filtering for the number of spots to sleep: large bed can usually fit 2 people, king size bed may fit even more.
+In reality, the travelers are filtering for the number of **spots to sleep**: large bed can usually fit 2 people, king size bed may fit even more.
 
 So this is exactly what the property owner should specify. I found these form screenshots online:
 
@@ -131,56 +131,364 @@ So this is exactly what the property owner should specify. I found these form sc
 
 ![](images/booking-com-bedroom-define.png)
 
-So we will add these tables to the DB:
+There are actually two types of rooms: with and without beds. So I think it's safe to assume that for no-beds rooms we're interested only in their amount.
 
+So we can add `bathrooms` as a simple field in the `apartments` table.
 
+**Migration file**:
+```php
+Schema::table('apartments', function (Blueprint $table) {
+    $table->unsignedInteger('bathrooms');
+});
+```
 
-Let's add more fields to the rooms DB table. They will all be nullable.
+Adding it to fillables in the Model.
 
-Migration
+**app/Models/Apartment.php**:
+```php
+class Apartment extends Model
+{
+    protected $fillable = [
+        'property_id',
+        'apartment_type_id',
+        'name',
+        'capacity_adults',
+        'capacity_children',
+        'size',
+        'bathrooms', // [tl! ++]
+    ];
+```
 
-And they all should be fillable.
+So this was a simple part. Now, other rooms with beds, that structure will be more complicated. 
 
-Model code
+I suggest this logic:
 
-Now, we need to specify those fields to be returned in the Room object, among the search results.
+- Separate DB table "room_types", seeding types "Bedroom" and "Living Room"
+- Separate DB table "rooms" with `belongsTo(Apartment::class)` and `belongsTo(RoomType::class)` relationships
+- Separate DB table "bed_types", seeding types like "Single bed", "Large double bed", "Extra large double bed", "Sofa bed"
+- Separate DB table "beds" with `belongsTo(Room::class)` and `belongsTo(BedType::class)` relationships
 
-So let's create a resource for the Property, with the first version of its structure, likely to have changes in the future.
+So, step by step.
 
 ```sh
-php artisan make:resource PropertyResource
-php artisan make:resource RoomResource
+php artisan make:model RoomType -m
 ```
 
-**app/Http/Resources/PropertyResource.php**:
+**Migration file**:
 ```php
-Code
+use App\Models\RoomType;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('room_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+
+        RoomType::create(['name' => 'Bedroom']);
+        RoomType::create(['name' => 'Living room']);
+    }
+};
 ```
 
-These are the main fields that we need for the fields.
+Again, a few records seeded inside the migration file itself, no need for a separate seeder.
 
-Code
+Next, fillable field in the Model.
 
-See what we've done with the rooms here? We're loading them with their own API resource, defined like this.
-
-**app/Http/Resources/RoomResource.php**:
+**app/Models/RoomType.php**:
 ```php
-Code
+class RoomType extends Model
+{
+    use HasFactory;
+
+    protected $fillable = ['name'];
+}
 ```
 
-And we use those resources in the Search Controller, like this:
+Next, the Room model.
 
-Code
+```sh
+php artisan make:model Room -m
+```
 
-Important notice: Eloquent API Resources automatically wrap all data into another layer of "data", here's the example in Postman:
+**Migration file**:
+```php
+public function up(): void
+{
+    Schema::create('rooms', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('apartment_id')->constrained();
+        $table->foreignId('room_type_id')->nullable()->constrained();
+        $table->string('name');
+        $table->timestamps();
+    });
+}
+```
 
-Image
+**app/Models/Room.php**:
+```php
+class Room extends Model
+{
+    use HasFactory;
 
-Therefore we need to change our automated tests to accept that newly changed structure.
+    protected $fillable = ['apartment_id', 'room_type_id', 'name'];
 
-Code with tl++ changes
+    public function room_type()
+    {
+        return $this->belongsTo(RoomType::class);
+    }
+}
+```
 
-Also, let's expand automated tests to check that unwanted fields are not returned in the search results.
+Let's also create a `hasMany` relationship from Apartments.
 
-Tests code
+**app/Models/Apartment.php**:
+```php
+class Apartment extends Model
+{
+    // ...
 
+    public function rooms()
+    {
+        return $this->hasMany(Room::class);
+    }
+}
+```
+
+Next, Bed Types.
+
+```sh
+php artisan make:model BedType -m
+```
+
+**Migration file**:
+```php
+use App\Models\BedType;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('bed_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+
+        BedType::create(['name' => 'Single bed']);
+        BedType::create(['name' => 'Large double bed']);
+        BedType::create(['name' => 'Extra large double bed']);
+        BedType::create(['name' => 'Sofa bed']);
+    }
+};
+```
+
+**app/Models/BedType.php**:
+```php
+class BedType extends Model
+{
+    use HasFactory;
+
+    protected $fillable = ['name'];
+}
+```
+
+Finally, the Beds model. I've been thinking whether a bed should have a **name**, but let it exists but be nullable :)
+
+```sh
+php artisan make:model Bed -m
+```
+
+**Migration file**:
+```php
+public function up(): void
+{
+    Schema::create('beds', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('room_id')->constrained();
+        $table->foreignId('bed_type_id')->constrained();
+        $table->string('name')->nullable();
+        $table->timestamps();
+    });
+}
+```
+
+**app/Models/Bed.php**:
+```php
+class Bed extends Model
+{
+    use HasFactory;
+
+    protected $fillable = ['room_id', 'bed_type_id', 'name'];
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
+
+    public function bed_type()
+    {
+        return $this->belongsTo(BedType::class);
+    }
+}
+```
+
+Also let's create a `hasMany` relationship from Rooms to Beds:
+
+**app/Models/Room.php**:
+```php
+class Room extends Model
+{
+    // ...
+
+    public function beds()
+    {
+        return $this->hasMany(Bed::class);
+    }
+}
+```
+
+Great, so we have this DB structure, visually:
+
+![DB Structure with Beds](images/room-bed-db-structure.png)
+
+---
+
+## Rooms and Beds in Search Results
+
+Now, remember, our goal is to return the search results with rooms and beds as a **summary**:
+
+![Rooms beds search results](images/rooms-beds-search-results.png)
+
+Currently, in we have this:
+
+```php
+Property::with('city', 'apartments.apartment_type')->when(...)->get();
+```
+
+So we need to expand that `with()` part with rooms and beds.
+
+**app/Http/Controllers/Public/PropertySearchController.php**:
+```php
+class PropertySearchController extends Controller
+{
+    public function __invoke(Request $request)
+    {
+        return Property::query()
+            ->with([
+                'city',
+                'apartments.apartment_type',
+                'apartments.rooms.beds.bed_type'
+            ])
+            ->when(...)
+            ->when(...)
+            ->get();
+```
+
+I've changed `with()` to accept an array and formatted the sentence with `query()` to be on a separate line.
+
+The result is a pretty huge JSON. Postman screenshot wouldn't fit, so posting the actual result.
+
+Endpoint: `/api/search?city_id=1&adults=2&children=1`
+
+Result JSON:
+
+```json
+[
+    {
+        "id": 2,
+        "owner_id": 2,
+        "name": "Central Hotel",
+        "city_id": 2,
+        "address_street": "16-18, Argyle Street, Camden",
+        "address_postcode": "WC1H 8EG",
+        "lat": "51.5291450",
+        "long": "-0.1239401",
+        "created_at": "2023-02-13T13:21:04.000000Z",
+        "updated_at": "2023-02-13T13:21:04.000000Z",
+        "city": {
+            "id": 2,
+            "country_id": 2,
+            "name": "London",
+            "lat": "51.5073510",
+            "long": "-0.1277580",
+            "created_at": "2023-02-13T09:04:51.000000Z",
+            "updated_at": "2023-02-13T09:04:51.000000Z"
+        },
+        "apartments": [
+            {
+                "id": 2,
+                "apartment_type_id": 1,
+                "property_id": 2,
+                "name": "Large Apartment",
+                "capacity_adults": 3,
+                "capacity_children": 2,
+                "created_at": "2023-02-27T11:33:41.000000Z",
+                "updated_at": "2023-02-27T11:33:41.000000Z",
+                "size": 50,
+                "bathrooms": 0,
+                "apartment_type": {
+                    "id": 1,
+                    "name": "Entire apartment",
+                    "created_at": "2023-02-28T09:02:54.000000Z",
+                    "updated_at": "2023-02-28T09:02:54.000000Z"
+                },
+                "rooms": [
+                    {
+                        "id": 1,
+                        "apartment_id": 2,
+                        "room_type_id": 1,
+                        "name": "Bedroom",
+                        "created_at": "2023-03-02T10:07:05.000000Z",
+                        "updated_at": "2023-03-02T10:07:05.000000Z",
+                        "beds": [
+                            {
+                                "id": 1,
+                                "room_id": 1,
+                                "bed_type_id": 1,
+                                "name": null,
+                                "created_at": "2023-03-02T10:08:22.000000Z",
+                                "updated_at": "2023-03-02T10:08:22.000000Z",
+                                "bed_type": {
+                                    "id": 1,
+                                    "name": "Single bed",
+                                    "created_at": "2023-03-02T07:37:43.000000Z",
+                                    "updated_at": "2023-03-02T07:37:43.000000Z"
+                                }
+                            },
+                            {
+                                "id": 2,
+                                "room_id": 1,
+                                "bed_type_id": 2,
+                                "name": null,
+                                "created_at": "2023-03-02T10:08:22.000000Z",
+                                "updated_at": "2023-03-02T10:08:22.000000Z",
+                                "bed_type": {
+                                    "id": 2,
+                                    "name": "Large double bed",
+                                    "created_at": "2023-03-02T07:37:43.000000Z",
+                                    "updated_at": "2023-03-02T07:37:43.000000Z"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "apartment_id": 2,
+                        "room_type_id": 2,
+                        "name": "Living Room",
+                        "created_at": "2023-03-02T10:07:05.000000Z",
+                        "updated_at": "2023-03-02T10:07:05.000000Z",
+                        "beds": []
+                    }
+                ]
+            }
+        ]
+    }
+]
+```
+
+Great, so we're delivering the data from the API, but that JSON size becomes a problem. In the next lesson, let's spend time optimizing it and loading what front-end **actually** needs.
