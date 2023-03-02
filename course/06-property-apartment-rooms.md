@@ -1,10 +1,8 @@
 Now, let's try to show the property and apartment information in the search results, similarly to how it's done on Booking.com website:
 
-- Every apartment may have its type, size in square meters, number of small/large/sofa beds, number of bedrooms, living rooms and bathrooms
-- In property search, we need to show only ONE apartment which is the best fit for the number of guests
-- Other apartments may be seen if someone clicks on the property, so we need to create an API endpoint for that 
+![Booking search results apartments](images/booking-com-search-results-rooms.png)
 
-Let's tackle those, one by one.
+As you can see, every apartment may have its type, size in square meters, number of small/large/sofa beds, number of bedrooms, living rooms and bathrooms. So let's return all of that.
 
 - - -
 
