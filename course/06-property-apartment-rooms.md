@@ -136,7 +136,7 @@ So we can add `bathrooms` as a simple field in the `apartments` table.
 **Migration file**:
 ```php
 Schema::table('apartments', function (Blueprint $table) {
-    $table->unsignedInteger('bathrooms');
+    $table->unsignedInteger('bathrooms')->default(0);
 });
 ```
 
