@@ -142,6 +142,9 @@ class PropertySearchTest extends TestCase
     {
         $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
         $cityId = City::value('id');
+        $roomTypes = RoomType::all();
+        $bedTypes = BedType::all();
+
         $property = Property::factory()->create([
             'owner_id' => $owner->id,
             'city_id' => $cityId,
@@ -153,15 +156,19 @@ class PropertySearchTest extends TestCase
             'capacity_children' => 0,
         ]);
 
-        $response = $this->getJson('/api/search?city=' . $cityId);
+        // ----------------------
+        // FIRST: check that bed list if empty if no beds
+        // ----------------------
 
+        $response = $this->getJson('/api/search?city=' . $cityId);
         $response->assertStatus(200);
         $response->assertJsonCount(1);
         $response->assertJsonCount(1, '0.apartments');
         $response->assertJsonPath('0.apartments.0.beds_list', '');
 
-        $roomTypes = RoomType::all();
-        $bedTypes = BedType::all();
+        // ----------------------
+        // SECOND: create 1 room with 1 bed
+        // ----------------------
 
         $room = Room::create([
             'apartment_id' => $apartment->id,
@@ -172,9 +179,14 @@ class PropertySearchTest extends TestCase
             'room_id' => $room->id,
             'bed_type_id' => $bedTypes[0]->id,
         ]);
+
         $response = $this->getJson('/api/search?city=' . $cityId);
         $response->assertStatus(200);
         $response->assertJsonPath('0.apartments.0.beds_list', '1 ' . $bedTypes[0]->name);
+
+        // ----------------------
+        // THIRD: add another bed to the same room
+        // ----------------------
 
         Bed::create([
             'room_id' => $room->id,
@@ -184,14 +196,9 @@ class PropertySearchTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonPath('0.apartments.0.beds_list', '2 ' . str($bedTypes[0]->name)->plural());
 
-        $room = Room::create([
-            'apartment_id' => $apartment->id,
-            'room_type_id' => $roomTypes[0]->id,
-            'name' => 'Living room',
-        ]);
-        $response = $this->getJson('/api/search?city=' . $cityId);
-        $response->assertStatus(200);
-        $response->assertJsonPath('0.apartments.0.beds_list', '2 ' . str($bedTypes[0]->name)->plural());
+        // ----------------------
+        // FOURTH: add second room with no beds
+        // ----------------------
 
         $secondRoom = Room::create([
             'apartment_id' => $apartment->id,
@@ -202,6 +209,10 @@ class PropertySearchTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonPath('0.apartments.0.beds_list', '2 ' . str($bedTypes[0]->name)->plural());
 
+        // ----------------------
+        // FIFTH: add one bed to that second room
+        // ----------------------
+
         Bed::create([
             'room_id' => $room->id,
             'bed_type_id' => $bedTypes[0]->id,
@@ -210,6 +221,10 @@ class PropertySearchTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonPath('0.apartments.0.beds_list', '3 ' . str($bedTypes[0]->name)->plural());
 
+        // ----------------------
+        // SIXTH: add another bed with different type to that second room
+        // ----------------------
+
         Bed::create([
             'room_id' => $room->id,
             'bed_type_id' => $bedTypes[1]->id,
@@ -217,6 +232,10 @@ class PropertySearchTest extends TestCase
         $response = $this->getJson('/api/search?city=' . $cityId);
         $response->assertStatus(200);
         $response->assertJsonPath('0.apartments.0.beds_list', '4 beds (3 ' . str($bedTypes[0]->name)->plural() . ', 1 ' . $bedTypes[1]->name . ')');
+
+        // ----------------------
+        // SEVENTH: add second bed with that new type to that second room
+        // ----------------------
 
         Bed::create([
             'room_id' => $room->id,

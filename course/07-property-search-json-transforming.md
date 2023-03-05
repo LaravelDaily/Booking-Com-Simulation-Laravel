@@ -472,11 +472,123 @@ This is the result in Postman:
 
 -----
 
-## Unit Test for Bed String
+## Feature Test for Bed String
 
 Now, as we have such complex logic, it's important to test all the possible cases, right? You can, of course, do it manually (*and should!*) but wouldn't it be better that some "robot" would do it for us? Oh right, we have automated tests set up!
 
-In this case, however, we need to create a **Unit** test and not a Feature test. What is the difference, you may ask?
+In this case, we will write quite an interesting automated test, I would call it "all-in-one". We will simulate many scenarios, assert the results and build up into more and more complex cases.
 
-In Feature tests, we're actually launching a feature - with `$this->get()` calling the API endpoint or a web URL. For this case, we need to test whether Model data is transformed correctly into correct string in all cases. It's not a "visible" feature, it's exactly a candidate for Unit tests.
+**tests/Feature/PropertySearchTest.php**:
+```php
+public function test_property_search_beds_list_all_cases(): void
+{
+    $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+    $cityId = City::value('id');
+    $roomTypes = RoomType::all();
+    $bedTypes = BedType::all();
 
+    $property = Property::factory()->create([
+        'owner_id' => $owner->id,
+        'city_id' => $cityId,
+    ]);
+    $apartment = Apartment::factory()->create([
+        'name' => 'Small apartment',
+        'property_id' => $property->id,
+        'capacity_adults' => 1,
+        'capacity_children' => 0,
+    ]);
+
+    // ----------------------
+    // FIRST: check that bed list if empty if no beds
+    // ----------------------
+
+    $response = $this->getJson('/api/search?city=' . $cityId);
+    $response->assertStatus(200);
+    $response->assertJsonCount(1);
+    $response->assertJsonCount(1, '0.apartments');
+    $response->assertJsonPath('0.apartments.0.beds_list', '');
+
+    // ----------------------
+    // SECOND: create 1 room with 1 bed
+    // ----------------------
+
+    $room = Room::create([
+        'apartment_id' => $apartment->id,
+        'room_type_id' => $roomTypes[0]->id,
+        'name' => 'Bedroom',
+    ]);
+    Bed::create([
+        'room_id' => $room->id,
+        'bed_type_id' => $bedTypes[0]->id,
+    ]);
+
+    $response = $this->getJson('/api/search?city=' . $cityId);
+    $response->assertStatus(200);
+    $response->assertJsonPath('0.apartments.0.beds_list', '1 ' . $bedTypes[0]->name);
+
+    // ----------------------
+    // THIRD: add another bed to the same room
+    // ----------------------
+
+    Bed::create([
+        'room_id' => $room->id,
+        'bed_type_id' => $bedTypes[0]->id,
+    ]);
+    $response = $this->getJson('/api/search?city=' . $cityId);
+    $response->assertStatus(200);
+    $response->assertJsonPath('0.apartments.0.beds_list', '2 ' . str($bedTypes[0]->name)->plural());
+
+    // ----------------------
+    // FOURTH: add second room with no beds
+    // ----------------------
+
+    $secondRoom = Room::create([
+        'apartment_id' => $apartment->id,
+        'room_type_id' => $roomTypes[0]->id,
+        'name' => 'Living room',
+    ]);
+    $response = $this->getJson('/api/search?city=' . $cityId);
+    $response->assertStatus(200);
+    $response->assertJsonPath('0.apartments.0.beds_list', '2 ' . str($bedTypes[0]->name)->plural());
+
+    // ----------------------
+    // FIFTH: add one bed to that second room
+    // ----------------------
+
+    Bed::create([
+        'room_id' => $room->id,
+        'bed_type_id' => $bedTypes[0]->id,
+    ]);
+    $response = $this->getJson('/api/search?city=' . $cityId);
+    $response->assertStatus(200);
+    $response->assertJsonPath('0.apartments.0.beds_list', '3 ' . str($bedTypes[0]->name)->plural());
+
+    // ----------------------
+    // SIXTH: add another bed with different type to that second room
+    // ----------------------
+
+    Bed::create([
+        'room_id' => $room->id,
+        'bed_type_id' => $bedTypes[1]->id,
+    ]);
+    $response = $this->getJson('/api/search?city=' . $cityId);
+    $response->assertStatus(200);
+    $response->assertJsonPath('0.apartments.0.beds_list', '4 beds (3 ' . str($bedTypes[0]->name)->plural() . ', 1 ' . $bedTypes[1]->name . ')');
+
+    // ----------------------
+    // SEVENTH: add second bed with that new type to that second room
+    // ----------------------
+
+    Bed::create([
+        'room_id' => $room->id,
+        'bed_type_id' => $bedTypes[1]->id,
+    ]);
+    $response = $this->getJson('/api/search?city=' . $cityId);
+    $response->assertStatus(200);
+    $response->assertJsonPath('0.apartments.0.beds_list', '5 beds (3 ' . str($bedTypes[0]->name)->plural() . ', 2 ' . str($bedTypes[1]->name)->plural() . ')');
+}
+```
+
+**Notice**: it's only **one** way to write such test, some developers would disagree with such approach, as it is believed that every test method should test one specific scenario. But I believe that, in this case, convenience is more important than theoretical principles.
+
+Another popular alternative to write such test is to have it as a **Unit** test instead of a Feature test. We could separate the Attribute into its own method and would call that method with various parameters, asserting the correct results in each time. In that case, we would not call the API or DB directly, as we would test a specific **unit** of code - method to transform rooms/beds data into a string of beds information. But in this lesson I decided not to show this approach, as it requires changing quite a lot in our structure, we better move on to creating more features of our application.
