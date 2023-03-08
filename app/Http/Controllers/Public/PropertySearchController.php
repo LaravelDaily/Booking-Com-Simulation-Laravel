@@ -41,7 +41,10 @@ class PropertySearchController extends Controller
             ->when($request->adults && $request->children, function($query) use ($request) {
                 $query->withWhereHas('apartments', function($query) use ($request) {
                     $query->where('capacity_adults', '>=', $request->adults)
-                        ->where('capacity_children', '>=', $request->children);
+                        ->where('capacity_children', '>=', $request->children)
+                        ->orderBy('capacity_adults')
+                        ->orderBy('capacity_children')
+                        ->take(1);
                 });
             })
             ->get();

@@ -1,2 +1,0 @@
-- In property search, we need to show only ONE apartment which is the best fit for the number of guests
-- Other apartments may be seen if someone clicks on the property, so we need to create an API endpoint for that 

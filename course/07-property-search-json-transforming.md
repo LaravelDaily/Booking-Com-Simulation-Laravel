@@ -592,3 +592,94 @@ public function test_property_search_beds_list_all_cases(): void
 **Notice**: it's only **one** way to write such test, some developers would disagree with such approach, as it is believed that every test method should test one specific scenario. But I believe that, in this case, convenience is more important than theoretical principles.
 
 Another popular alternative to write such test is to have it as a **Unit** test instead of a Feature test. We could separate the Attribute into its own method and would call that method with various parameters, asserting the correct results in each time. In that case, we would not call the API or DB directly, as we would test a specific **unit** of code - method to transform rooms/beds data into a string of beds information. But in this lesson I decided not to show this approach, as it requires changing quite a lot in our structure, we better move on to creating more features of our application.
+
+- - - - 
+
+## Order/Limit: Show ONE Apartment Per Property
+
+One more "unplanned" thing.
+
+While browsing booking.com I noticed something I had missed earlier: that search results shows properties with only ONE apartment each, not all apartments. 
+
+![Property search one apartment](images/property-search-one-apartment.png)
+
+So let's fix this now, while we're still working on this JSON of search results. 
+
+What is the condition of which one apartment to show? We could actually only guess, but I think it should be something like *"the most suitable"* in terms of size and capacity.
+
+For example, if I'm searching for an apartment for 2 adults and 1 child, and property has an apartment with capacity for 2 adults + 1 child, and another one for 3 adults + 2 children, guess which one we should show? Correct, the smaller one.
+
+In other words, we need to order the apartments by capacity for adults and then by capacity for children, and then take only one row.
+
+To order the apartments relationship records and take only ONE of them, we need to add the ordering condition into the `withWhereHas()` method:
+
+**app/Http/Controllers/Public/PropertySearchController.php**:
+```php
+class PropertySearchController extends Controller
+{
+    public function __invoke(Request $request)
+    {
+        $properties = Property::query()
+            // ... other ->when() conditions
+            ->when($request->adults && $request->children, function($query) use ($request) {
+                $query->withWhereHas('apartments', function($query) use ($request) {
+                    $query->where('capacity_adults', '>=', $request->adults)
+                        ->where('capacity_children', '>=', $request->children)
+                        ->orderBy('capacity_adults') // [tl! add:start]
+                        ->orderBy('capacity_children')
+                        ->take(1); // [tl! add:end] 
+                });
+            })
+            ->get();
+
+        return PropertySearchResource::collection($properties);
+    }
+}
+```
+
+Visually, our result shouldn't change, as we've been testing only the case of one apartment per property, anyway.
+
+But as a proof, let's write a feature test method for it.
+
+**tests/Feature/PropertySearchTest.php**:
+```php
+public function test_property_search_returns_one_best_apartment_per_property()
+{
+    $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+    $cityId = City::value('id');
+    $property = Property::factory()->create([
+        'owner_id' => $owner->id,
+        'city_id' => $cityId,
+    ]);
+    $largeApartment = Apartment::factory()->create([
+        'name' => 'Large apartment',
+        'property_id' => $property->id,
+        'capacity_adults' => 3,
+        'capacity_children' => 2,
+    ]);
+    $midSizeApartment = Apartment::factory()->create([
+        'name' => 'Mid size apartment',
+        'property_id' => $property->id,
+        'capacity_adults' => 2,
+        'capacity_children' => 1,
+    ]);
+    $smallApartment = Apartment::factory()->create([
+        'name' => 'Small apartment',
+        'property_id' => $property->id,
+        'capacity_adults' => 1,
+        'capacity_children' => 0,
+    ]);
+
+    $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1');
+
+    $response->assertStatus(200);
+    $response->assertJsonCount(1, '0.apartments');
+    $response->assertJsonPath('0.apartments.0.name', $midSizeApartment->name);
+}
+```
+
+I deliberately created the larger apartment first, so the SQL query would naturally return it first if it's not reordered, which is a proof that our "best size fit" ordering works well.
+
+We're launching the test, and... green.
+
+![Property search one apartment test](images/property-search-one-apartment-test.png)
