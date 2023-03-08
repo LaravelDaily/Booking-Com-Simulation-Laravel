@@ -6,6 +6,7 @@ The **Facility** model will be a new top in this lesson. Here's the plan:
 
 - First, we will build Facility DB/relationship structure
 - Then, show facilities in the new Property endpoint
+- Then, show facilities by categories in the new Apartment endpoint
 - Then add the facilities into search filters
 - Of course, all covered by tests
 
@@ -243,5 +244,155 @@ Let's get back to the initial screenshot from Booking.com, in the beginning of t
 
 This is the page that you get after clicking on a specific property from search result. We don't have that endpoint yet, so let's create it.
 
-It will be a new controller, a public one, to show properties.
+It will be a new controller, a public one, to show property details.
 
+```sh
+php artisan make:controller Public/PropertyController --invokable
+```
+
+Similarly to Search, it will be an **invokable** Controller, with only one method. The difference here is that we will use Route Model Binding to pass `properties.id` as a parameter.
+
+And, for now, let's just try to re-use the same API Resource of Search to return the response.
+
+**app/Http/Controllers/Public/PropertyController.php**:
+```php
+namespace App\Http\Controllers\Public;
+
+use App\Http\Controllers\Controller;
+use App\Http\Resources\PropertySearchResource;
+use App\Models\Property;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+
+class PropertyController extends Controller
+{
+    public function __invoke(Property $property, Request $request): Response
+    {
+        return new PropertySearchResource($property);
+    }
+}
+```
+
+Next, let's build the API route for this:
+
+**routes/api.php**:
+```php
+Route::get('search',
+    \App\Http\Controllers\Public\PropertySearchController::class);
+Route::get('properties/{property}',
+    \App\Http\Controllers\Public\PropertyController::class);
+```
+
+And if we launch it in Postman, the result is this:
+
+![Property show Postman first try](images/property-show-first-postman.png)
+
+Success! Simple, right?
+
+But not so fast, we need to make one tweak here: show only **suitable** apartments from search.
+
+We do need to still pass the same parameters of search like `adults` and `children`. If you made a search, you would like the same search query to remain inside the property page, right?
+
+So, here's where our `Request $request` parameter comes in, we filter and order the property apartments in a similar way, like in search. 
+
+**app/Http/Controllers/Public/PropertyController.php**:
+```php
+public function __invoke(Property $property, Request $request)
+{
+    if ($request->adults && $request->children) {
+        $property->load(['apartments' => function ($query) use ($request) {
+            $query->where('capacity_adults', '>=', $request->adults)
+                ->where('capacity_children', '>=', $request->children)
+                ->orderBy('capacity_adults')
+                ->orderBy('capacity_children');
+        }]);
+    }
+
+    return new PropertySearchResource($property);
+}
+```
+
+Here, we use `->load()` instead of `->withWhereHas()` because we don't need to search anymore, we already know that property is suitable, and we have its object in `$property`, so we just need to **load** the relationship, which isn't loaded by default with route model binding.
+
+Now, we can call this API endpoint like this: `/api/properties/1?adults=3&children=2`.
+
+Next, we get to showing the main topic of this lesson: showing **facilities**.
+
+Of course, we can load them with the relationship, right?
+
+But first, to show the facilities, let's create their own API Resource:
+
+```sh
+php artisan make:resource FacilityResource
+```
+
+For now, let's just show the name of the facility.
+
+**app/Http/Resources/FacilityResource.php**:
+```php
+class FacilityResource extends JsonResource
+{
+    public function toArray(Request $request): array
+    {
+        return [
+            'name' => $this->name,
+        ];
+    }
+}
+```
+
+Then, we load that FacilityResource as a part of another `ApartmentSearchResource`:
+
+**app/Http/Resources/ApartmentSearchResource.php**:
+```php
+class ApartmentSearchResource extends JsonResource
+{
+    public function toArray(Request $request): array
+    {
+        return [
+            'name' => $this->name,
+            'type' => $this->apartment_type?->name,
+            'size' => $this->size,
+            'beds_list' => $this->beds_list,
+            'bathrooms' => $this->bathrooms,
+            'facilities' => $this->whenLoaded('facilities', FacilityResource::collection($this->facilities)),
+        ];
+    }
+}
+```
+
+See that `$this->whenLoaded()`? It means that it will show `facilities` field only if it's eager-loaded from the Controller. This is a performance optimization to avoid too many queries and loading too much of unneeded data.
+
+So this is exactly what we'll do in Controller.
+
+**app/Http/Controllers/Public/PropertyController.php**:
+```php
+class PropertyController extends Controller
+{
+    public function __invoke(Property $property, Request $request)
+    {
+        if ($request->adults && $request->children) {
+            $property->load(['apartments' => function ($query) use ($request) {
+                $query->where('capacity_adults', '>=', $request->adults)
+                    ->where('capacity_children', '>=', $request->children)
+                    ->orderBy('capacity_adults')
+                    ->orderBy('capacity_children');
+            }]);
+        }
+
+        $property->load('apartments.facilities');
+
+        return new PropertySearchResource($property);
+    }
+}
+```
+
+So we're loading facilities all the time, and if there are adults/children parameters, we also load and filter the apartments.
+
+Result in Postman:
+
+![Property show facilities](images/property-show-facilities-postman.png)
+
+Hooray, we see the list of facilities!
+
+Now, let's write automated tests for this?
