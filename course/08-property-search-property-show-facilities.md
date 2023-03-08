@@ -371,23 +371,25 @@ class PropertyController extends Controller
 {
     public function __invoke(Property $property, Request $request)
     {
+        $property->load('apartments.facilities');
+
         if ($request->adults && $request->children) {
             $property->load(['apartments' => function ($query) use ($request) {
                 $query->where('capacity_adults', '>=', $request->adults)
                     ->where('capacity_children', '>=', $request->children)
                     ->orderBy('capacity_adults')
                     ->orderBy('capacity_children');
-            }]);
+            }, 'apartments.facilities']);
         }
-
-        $property->load('apartments.facilities');
 
         return new PropertySearchResource($property);
     }
 }
 ```
 
-So we're loading facilities all the time, and if there are adults/children parameters, we also load and filter the apartments.
+So we're loading facilities all the time, and if there are adults/children parameters, we override the value of apartments and filter them.
+
+**Notice**: perhaps there's a way to filter the results with Collection instead of doing `$property->load()` but during my experiments I didn't manage to make the Collection filter/reject methods work correctly.
 
 Result in Postman:
 
@@ -395,4 +397,92 @@ Result in Postman:
 
 Hooray, we see the list of facilities!
 
-Now, let's write automated tests for this?
+Now, let's write automated tests for this? We need to check a few things:
+
+- Property endpoint works and loads the correct property
+- It works with or without adults/children parameters
+- It loads the facilities correctly
+- It doesn't load the facilities in the Search
+
+
+```sh
+php artisan make:test PropertyShowTest
+```
+
+**tests/Feature/PropertyShowTest.php**:
+```php
+namespace Tests\Feature;
+
+use App\Models\Apartment;
+use App\Models\City;
+use App\Models\Facility;
+use App\Models\FacilityCategory;
+use App\Models\Property;
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
+
+class PropertyShowTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_property_show_loads_property_correctly()
+    {
+        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $cityId = City::value('id');
+        $property = Property::factory()->create([
+            'owner_id' => $owner->id,
+            'city_id' => $cityId,
+        ]);
+        $largeApartment = Apartment::factory()->create([
+            'name' => 'Large apartment',
+            'property_id' => $property->id,
+            'capacity_adults' => 3,
+            'capacity_children' => 2,
+        ]);
+        $midSizeApartment = Apartment::factory()->create([
+            'name' => 'Mid size apartment',
+            'property_id' => $property->id,
+            'capacity_adults' => 2,
+            'capacity_children' => 1,
+        ]);
+        $smallApartment = Apartment::factory()->create([
+            'name' => 'Small apartment',
+            'property_id' => $property->id,
+            'capacity_adults' => 1,
+            'capacity_children' => 0,
+        ]);
+
+        $facilityCategory = FacilityCategory::create([
+            'name' => 'Some category'
+        ]);
+        $facility = Facility::create([
+            'category_id' => $facilityCategory->id,
+            'name' => 'Some facility'
+        ]);
+        $midSizeApartment->facilities()->attach($facility->id);
+
+        $response = $this->getJson('/api/properties/'.$property->id);
+        $response->assertStatus(200);
+        $response->assertJsonCount(3, 'apartments');
+        $response->assertJsonPath('name', $property->name);
+
+        $response = $this->getJson('/api/properties/'.$property->id.'?adults=2&children=1');
+        $response->assertStatus(200);
+        $response->assertJsonCount(2, 'apartments');
+        $response->assertJsonPath('name', $property->name);
+        $response->assertJsonPath('apartments.0.facilities.0.name', $facility->name);
+        $response->assertJsonCount(0, 'apartments.1.facilities');
+
+        $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1');
+        $response->assertStatus(200);
+        $response->assertJsonPath('0.apartments.0.facilities', NULL);
+    }
+}
+```
+
+We're making two API requests: with and without adults/children parameters.
+
+Notice specifically the last lines: we're testing that facilities are shown correctly in the JSON result for both property endpoint and in search result.
