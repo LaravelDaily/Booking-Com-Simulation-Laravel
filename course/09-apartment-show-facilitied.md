@@ -1,6 +1,13 @@
 Now, let's move to the detailed view of the specific Apartment which would show facilities grouped by category.
 
-Again, from the previous lesson, here's how it looks on mobile:
+This will be a bit shorter lesson compared to others: 
+
+- One new endpoint
+- Grouping the result
+- And automated test for it
+
+
+Again, from the previous lesson, here's how apartment detail facilities screen looks on mobile:
 
 ![property show mobile facilities](images/property-show-mobile-facilities.png)
 
