@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Public;
 
 Route::post('auth/register', \App\Http\Controllers\Auth\RegisterController::class);
 
@@ -18,7 +19,6 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 });
 
-Route::get('search',
-    \App\Http\Controllers\Public\PropertySearchController::class);
-Route::get('properties/{property}',
-    \App\Http\Controllers\Public\PropertyController::class);
+Route::get('search', Public\PropertySearchController::class);
+Route::get('properties/{property}', Public\PropertyController::class);
+Route::get('apartments/{apartment}', Public\ApartmentController::class);
