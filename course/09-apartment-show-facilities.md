@@ -87,26 +87,25 @@ class ApartmentDetailsResource extends JsonResource
 }
 ```
 
-See the `facility_categories`? How do we populate that? Here's one of the options:
+See the `facility_categories`? How do we populate that? Here's one of the options, using `mapWithKeys()` on the Collection:
 
 ```php
+namespace App\Http\Controllers\Public;
+
+use App\Http\Controllers\Controller;
+use App\Http\Resources\ApartmentDetailsResource;
+use App\Models\Apartment;
+
 class ApartmentController extends Controller
 {
     public function __invoke(Apartment $apartment)
     {
         $apartment->load('facilities.category');
-        $facilityCategories = $apartment->facilities
-            ->groupBy('category.name');
 
-        $categories = [];
-        foreach ($facilityCategories as $category => $facilities) {
-            $facilityNames = [];
-            foreach ($facilities as $facility) {
-                $facilityNames[] = $facility->name;
-            }
-            $categories[$category] = $facilityNames;
-        }
-        $apartment->facility_categories = $categories;
+        $apartment->setAttribute(
+            'facility_categories',
+            $apartment->facilities->groupBy('category.name')->mapWithKeys(fn ($items, $key) => [$key => $items->pluck('name')])
+        );
 
         return new ApartmentDetailsResource($apartment);
     }
@@ -114,6 +113,12 @@ class ApartmentController extends Controller
 ```
 
 As you can see, we're minimizing the load of facilities to load only their **names**, as we don't need the full data with IDs, timestamps and pivot tables.
+
+The visual result:
+
+![Apartment show facilities Postman](images/apartment-show-facilities-postman.png)
+
+---
 
 Now let's create the automated test to check if the facilities are shown correctly.
 

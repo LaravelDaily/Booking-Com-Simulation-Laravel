@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApartmentDetailsResource;
 use App\Models\Apartment;
-use App\Models\Facility;
 
 class ApartmentController extends Controller
 {
