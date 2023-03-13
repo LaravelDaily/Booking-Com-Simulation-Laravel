@@ -55,7 +55,7 @@ class PropertySearchController extends Controller
             ->mapWithKeys(function ($facility) use ($allFacilities) {
                 return [$facility->name => $allFacilities->where('name', $facility->name)->count()];
             })
-            ->sortByDesc(null);
+            ->sortDesc();
 
         return [
             'properties' => PropertySearchResource::collection($properties),
