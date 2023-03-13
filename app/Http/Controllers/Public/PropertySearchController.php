@@ -19,13 +19,13 @@ class PropertySearchController extends Controller
                 'apartments.rooms.beds.bed_type',
                 'facilities',
             ])
-            ->when($request->city, function($query) use ($request) {
+            ->when($request->city, function ($query) use ($request) {
                 $query->where('city_id', $request->city);
             })
-            ->when($request->country, function($query) use ($request) {
+            ->when($request->country, function ($query) use ($request) {
                 $query->whereHas('city', fn($q) => $q->where('country_id', $request->country));
             })
-            ->when($request->geoobject, function($query) use ($request) {
+            ->when($request->geoobject, function ($query) use ($request) {
                 $geoobject = Geoobject::find($request->geoobject);
                 if ($geoobject) {
                     $condition = "(
@@ -39,8 +39,8 @@ class PropertySearchController extends Controller
                     $query->whereRaw($condition);
                 }
             })
-            ->when($request->adults && $request->children, function($query) use ($request) {
-                $query->withWhereHas('apartments', function($query) use ($request) {
+            ->when($request->adults && $request->children, function ($query) use ($request) {
+                $query->withWhereHas('apartments', function ($query) use ($request) {
                     $query->where('capacity_adults', '>=', $request->adults)
                         ->where('capacity_children', '>=', $request->children)
                         ->orderBy('capacity_adults')
@@ -49,9 +49,17 @@ class PropertySearchController extends Controller
             })
             ->get();
 
+        $allFacilities = $properties->pluck('facilities')->flatten();
+
+        $facilities = $allFacilities->unique('name')
+            ->mapWithKeys(function ($facility) use ($allFacilities) {
+                return [$facility->name => $allFacilities->where('name', $facility->name)->count()];
+            })
+            ->sortByDesc(null);
+
         return [
             'properties' => PropertySearchResource::collection($properties),
-            'facilities' => [], // ???
+            'facilities' => $facilities,
         ];
     }
 }
