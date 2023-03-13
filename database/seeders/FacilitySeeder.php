@@ -26,5 +26,13 @@ class FacilitySeeder extends Seeder
         Facility::create(['category_id' => 5, 'name' => 'Fan']);
         Facility::create(['category_id' => 6, 'name' => 'WiFi']);
         Facility::create(['category_id' => 6, 'name' => 'TV']);
+
+        // Property facilities:
+        Facility::create(['name' => 'Family rooms']);
+        Facility::create(['name' => 'Free WiFi']);
+        Facility::create(['name' => 'Parking']);
+        Facility::create(['name' => 'Pets allowed']);
+        Facility::create(['name' => 'Swimming pool']);
+
     }
 }

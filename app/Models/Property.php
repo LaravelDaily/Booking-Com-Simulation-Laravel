@@ -44,4 +44,9 @@ class Property extends Model
             get: fn () => $this->address_street .', ' . $this->address_postcode . ', ' . $this->city->name
         );
     }
+
+    public function facilities()
+    {
+        return $this->belongsToMany(Facility::class);
+    }
 }
