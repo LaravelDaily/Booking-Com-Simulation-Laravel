@@ -20,7 +20,7 @@ class PropertySearchResource extends JsonResource
             'address' => $this->address,
             'lat' => $this->lat,
             'long' => $this->long,
-            'apartments' => ApartmentSearchResource::collection($this->apartments->take(1)),
+            'apartments' => ApartmentSearchResource::collection($this->apartments),
         ];
     }
 }

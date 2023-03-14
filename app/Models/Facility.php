@@ -15,4 +15,9 @@ class Facility extends Model
     {
         return $this->belongsTo(FacilityCategory::class, 'category_id');
     }
+
+    public function properties()
+    {
+        return $this->belongsToMany(Property::class);
+    }
 }

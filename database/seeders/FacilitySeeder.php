@@ -33,6 +33,5 @@ class FacilitySeeder extends Seeder
         Facility::create(['name' => 'Parking']);
         Facility::create(['name' => 'Pets allowed']);
         Facility::create(['name' => 'Swimming pool']);
-
     }
 }
