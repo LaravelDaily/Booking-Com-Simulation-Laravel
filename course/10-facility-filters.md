@@ -16,6 +16,7 @@ How to structure this in the DB? Here's my brainstorming process:
 
 Let's seed a few of them, I will add them into the same already existing seeder.
 
+**database/seeders/FacilitySeeder.php**:
 ```php
 class FacilitySeeder extends Seeder
 {
@@ -245,8 +246,8 @@ Now let's use those facilities to actually filter the properties. Our search end
 
 It will be another new `when()` condition in the Controller, quite simple.
 
+**app/Http/Controllers/Public/PropertySearchController.php**:
 ```php
-<?php
 class PropertySearchController extends Controller
 {
     public function __invoke(Request $request)

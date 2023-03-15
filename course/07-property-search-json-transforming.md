@@ -683,3 +683,5 @@ I deliberately created the larger apartment first, so the SQL query would natura
 We're launching the test, and... green.
 
 ![Property search one apartment test](images/property-search-one-apartment-test.png)
+
+**Notice**: this is future Povilas writing. Here, with `take(1)` I actually introduced a bug, it works differently than I expected. But I will deliberately leave it here, as we will fix it in a few lessons, at the time when I actually discover that bug.

@@ -261,6 +261,19 @@ class PropertySearchTest extends TestCase
             'capacity_adults' => 3,
             'capacity_children' => 2,
         ]);
+        $midSizeApartment = Apartment::factory()->create([
+            'name' => 'Mid size apartment',
+            'property_id' => $property->id,
+            'capacity_adults' => 2,
+            'capacity_children' => 1,
+        ]);
+        $smallApartment = Apartment::factory()->create([
+            'name' => 'Small apartment',
+            'property_id' => $property->id,
+            'capacity_adults' => 1,
+            'capacity_children' => 0,
+        ]);
+
         $property2 = Property::factory()->create([
             'owner_id' => $owner->id,
             'city_id' => $cityId,
@@ -280,18 +293,6 @@ class PropertySearchTest extends TestCase
         Apartment::factory()->create([
             'name' => 'Small apartment 2',
             'property_id' => $property2->id,
-            'capacity_adults' => 1,
-            'capacity_children' => 0,
-        ]);
-        $midSizeApartment = Apartment::factory()->create([
-            'name' => 'Mid size apartment',
-            'property_id' => $property->id,
-            'capacity_adults' => 2,
-            'capacity_children' => 1,
-        ]);
-        $smallApartment = Apartment::factory()->create([
-            'name' => 'Small apartment',
-            'property_id' => $property->id,
             'capacity_adults' => 1,
             'capacity_children' => 0,
         ]);
