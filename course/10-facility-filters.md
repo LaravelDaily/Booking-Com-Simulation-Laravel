@@ -239,5 +239,100 @@ After doing such changes, we run `php artisan test` again, and... we're back to 
 
 - - - - - - 
 
-## TODO: Filter endpoint with PROPERTY filters.
+## Property Filter by Facility
 
+Now let's use those facilities to actually filter the properties. Our search endpoint will now additially accept the **array** of facility IDs.
+
+It will be another new `when()` condition in the Controller, quite simple.
+
+```php
+<?php
+class PropertySearchController extends Controller
+{
+    public function __invoke(Request $request)
+    {
+        $properties = Property::query()
+            // ->with(...)
+            // ->when(...)
+            // ->when(...)
+            // ->when(...)
+            ->when($request->facilities, function($query) use ($request) {
+                $query->whereHas('facilities', function($query) use ($request) {
+                    $query->whereIn('facilities.id', $request->facilities);
+                });
+            })
+            ->get();
+
+        return [
+            'properties' => PropertySearchResource::collection($properties),
+            'facilities' => $facilities,
+        ];
+    }
+}
+```
+
+Now we will call the endpoint something like this:
+`/api/search?city_id=1&adults=2&children=1&facilities[]=14&facilities[]=15`
+
+Also, let's write an automated test method to ensure that 0/1/2 properties are returned in different cases.
+
+**tests/Feature/PropertySearchTest.php**:
+```php
+class PropertySearchTest extends TestCase
+{
+    // ...
+
+    public function test_property_search_filters_by_facilities()
+    {
+        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $cityId = City::value('id');
+        $property = Property::factory()->create([
+            'owner_id' => $owner->id,
+            'city_id' => $cityId,
+        ]);
+        Apartment::factory()->create([
+            'name' => 'Mid size apartment',
+            'property_id' => $property->id,
+            'capacity_adults' => 2,
+            'capacity_children' => 1,
+        ]);
+        $property2 = Property::factory()->create([
+            'owner_id' => $owner->id,
+            'city_id' => $cityId,
+        ]);
+        Apartment::factory()->create([
+            'name' => 'Mid size apartment',
+            'property_id' => $property2->id,
+            'capacity_adults' => 2,
+            'capacity_children' => 1,
+        ]);
+
+        // First case - no facilities exist
+        $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1');
+        $response->assertStatus(200);
+        $response->assertJsonCount(2, 'properties');
+
+        // Second case - filter by facility, 0 properties returned
+        $facility = Facility::create(['name' => 'First facility']);
+        $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1&facilities[]=' . $facility->id);
+        $response->assertStatus(200);
+        $response->assertJsonCount(0, 'properties');
+
+        // Third case - attach facility to property, filter by facility, 1 property returned
+        $property->facilities()->attach($facility->id);
+        $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1&facilities[]=' . $facility->id);
+        $response->assertStatus(200);
+        $response->assertJsonCount(1, 'properties');
+
+        // Fourth case - attach facility to DIFFERENT property, filter by facility, 2 properties returned
+        $property2->facilities()->attach($facility->id);
+        $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1&facilities[]=' . $facility->id);
+        $response->assertStatus(200);
+        $response->assertJsonCount(2, 'properties');
+    }
+}
+```
+
+And... it works!
+
+![Property search filter by facilities test](images/property-search-fitler-test.png)

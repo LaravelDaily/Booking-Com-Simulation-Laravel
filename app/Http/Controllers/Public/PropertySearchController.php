@@ -49,6 +49,11 @@ class PropertySearchController extends Controller
                         ->take(1);
                 });
             })
+            ->when($request->facilities, function($query) use ($request) {
+                $query->whereHas('facilities', function($query) use ($request) {
+                    $query->whereIn('facilities.id', $request->facilities);
+                });
+            })
             ->get();
 
         $facilities = Facility::query()
