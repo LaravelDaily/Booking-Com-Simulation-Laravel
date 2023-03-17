@@ -11,6 +11,8 @@ Route::middleware('auth:sanctum')->group(function () {
             [\App\Http\Controllers\Owner\PropertyController::class, 'index']);
         Route::post('properties',
             [\App\Http\Controllers\Owner\PropertyController::class, 'store']);
+        Route::post('properties/{property}/photos',
+            [\App\Http\Controllers\Owner\PropertyPhotoController::class, 'store']);
     });
 
     Route::prefix('user')->group(function () {
