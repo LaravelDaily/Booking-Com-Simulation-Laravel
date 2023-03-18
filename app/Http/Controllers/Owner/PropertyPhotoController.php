@@ -10,8 +10,19 @@ class PropertyPhotoController extends Controller
 {
     public function store(Property $property, Request $request)
     {
-        $property->addMediaFromRequest('photo')->toMediaCollection('photos');
+        $request->validate([
+            'photo' => ['image', 'max:5000']
+        ]);
 
-        return $property;
+        if ($property->owner_id != auth()->id()) {
+            abort(403);
+        }
+
+        $photo = $property->addMediaFromRequest('photo')->toMediaCollection('photos');
+
+        return [
+            'filename' => $photo->getUrl(),
+            'thumbnail' => $photo->getUrl('thumbnail')
+        ];
     }
 }

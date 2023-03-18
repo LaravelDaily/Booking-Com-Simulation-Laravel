@@ -3,9 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\City;
+use App\Models\Property;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class PropertiesTest extends TestCase
@@ -40,5 +43,27 @@ class PropertiesTest extends TestCase
 
         $response->assertSuccessful();
         $response->assertJsonFragment(['name' => 'My property']);
+    }
+
+    public function test_property_owner_can_add_photo_to_property()
+    {
+        Storage::fake();
+
+        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $cityId = City::value('id');
+        $property = Property::factory()->create([
+            'owner_id' => $owner->id,
+            'city_id' => $cityId,
+        ]);
+
+        $response = $this->actingAs($owner)->postJson('/api/owner/properties/' . $property->id . '/photos', [
+            'photo' => UploadedFile::fake()->image('photo.png')
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'filename' => config('app.url') . '/storage/1/photo.png',
+            'thumbnail' => config('app.url') . '/storage/1/conversions/photo-thumbnail.jpg',
+        ]);
     }
 }
