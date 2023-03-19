@@ -356,4 +356,56 @@ public function test_property_owner_can_reorder_photos_in_property()
 
 Notice how I use `$photo1->json('position')` instead of hardcoding the reordering so that instead of `$newPosition` I would just use the number "2"? That is deliberate, as the test methods should be independent from other test methods: what if some other test method already uploaded the file with number 2? Then our test would fail. So, I use the variables from the test itself, to make sure it's consistent.
 
+From time to time it's worth launching the full test suite instead of individual methods, so let's do exactly that. Is it still green? Yes!
+
+![](images/artisan-test-after-photos.png)
+
 ---
+
+## Showing Photos in Search and Property Detail
+
+Finally in this lesson, we need to actually return the thumbnails in two API endpoints: search results and individual property.
+
+**app/Http/Controllers/Public/PropertySearchController.php**:
+```php
+public function __invoke(Request $request)
+{
+    $properties = Property::query()
+        ->with([
+            'city',
+            'apartments.apartment_type',
+            'apartments.rooms.beds.bed_type',
+            'facilities',
+            // We add only this eager loading by position here
+            'media' => fn($query) => $query->orderBy('position'),
+        ])
+        // And we don't need to change anything else
+        // ->when(...)
+        // ->when(...)
+        // ->when(...)
+        ->get();
+}
+```
+
+Then, in the API resource, we're loading all the media file URLs in `photos`, the front-end will pick the first one if needed.
+
+**app/Http/Resources/PropertySearchResource.php**:
+```php
+public function toArray(Request $request): array
+{
+    return [
+        'id' => $this->id,
+        'name' => $this->name,
+        'address' => $this->address,
+        'lat' => $this->lat,
+        'long' => $this->long,
+        'apartments' => ApartmentSearchResource::collection($this->apartments),
+        'photos' => $this->media->map(fn($media) => $media->getUrl('thumbnail')),
+    ];
+}
+```
+
+Result in Postman:
+
+![](images/property-photo-show-resource.png)
+
