@@ -13,6 +13,8 @@ Route::middleware('auth:sanctum')->group(function () {
             [\App\Http\Controllers\Owner\PropertyController::class, 'store']);
         Route::post('properties/{property}/photos',
             [\App\Http\Controllers\Owner\PropertyPhotoController::class, 'store']);
+        Route::post('properties/{property}/photos/{photo}/reorder/{newPosition}',
+            [\App\Http\Controllers\Owner\PropertyPhotoController::class, 'reorder']);
     });
 
     Route::prefix('user')->group(function () {
