@@ -68,4 +68,15 @@ class Apartment extends Model
     {
         return $this->belongsToMany(Facility::class);
     }
+
+    public function prices()
+    {
+        return $this->hasMany(ApartmentPrice::class);
+    }
+
+    public function calculatePriceForDates($startDate, $endDate) {
+        // Some manipulation with $this->prices
+
+        return 0; // temporary
+    }
 }
