@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -74,9 +75,37 @@ class Apartment extends Model
         return $this->hasMany(ApartmentPrice::class);
     }
 
-    public function calculatePriceForDates($startDate, $endDate) {
-        // Some manipulation with $this->prices
+    public function calculatePriceForDates($startDate, $endDate)
+    {
+        // Convert to Carbon if not already
+        if (!$startDate instanceof Carbon) {
+            $startDate = Carbon::parse($startDate)->startOfDay();
+        }
+        if (!$endDate instanceof Carbon) {
+            $endDate = Carbon::parse($endDate)->endOfDay();
+        }
 
-        return 0; // temporary
+        $cost = 0;
+
+        // Get the prices for the dates
+        $prices = $this->prices()
+            ->validForRange([$startDate, $endDate])
+            ->get();
+
+        // Set the pricing start date for the loop
+        $pricingStart = $startDate->copy();
+
+        while ($pricingStart->lte($endDate)) {
+            // Search the price that matches the date
+            $price = $prices->where(static function (ApartmentPrice $price) use ($pricingStart) {
+                return $price->start_date->lte($pricingStart) && $price->end_date->gte($pricingStart);
+            })->first();
+            if ($price) {
+                $cost += $price->price;
+            }
+            $pricingStart->addDay();
+        }
+
+        return $cost;
     }
 }
