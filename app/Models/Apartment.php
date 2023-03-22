@@ -87,17 +87,10 @@ class Apartment extends Model
 
         $cost = 0;
 
-        // Get the prices for the dates
-        $prices = $this->prices()
-            ->validForRange([$startDate, $endDate])
-            ->get();
-
         while ($startDate->lte($endDate)) {
-            // Search the price that matches the date
-            $price = $prices->where(function (ApartmentPrice $price) use ($startDate) {
+            $cost += $this->prices->where(function (ApartmentPrice $price) use ($startDate) {
                 return $price->start_date->lte($startDate) && $price->end_date->gte($startDate);
             })->value('price');
-            $cost += $price;
             $startDate->addDay();
         }
 
