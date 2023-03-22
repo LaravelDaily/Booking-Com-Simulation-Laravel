@@ -92,18 +92,13 @@ class Apartment extends Model
             ->validForRange([$startDate, $endDate])
             ->get();
 
-        // Set the pricing start date for the loop
-        $pricingStart = $startDate->copy();
-
-        while ($pricingStart->lte($endDate)) {
+        while ($startDate->lte($endDate)) {
             // Search the price that matches the date
-            $price = $prices->where(static function (ApartmentPrice $price) use ($pricingStart) {
-                return $price->start_date->lte($pricingStart) && $price->end_date->gte($pricingStart);
-            })->first();
-            if ($price) {
-                $cost += $price->price;
-            }
-            $pricingStart->addDay();
+            $price = $prices->where(function (ApartmentPrice $price) use ($startDate) {
+                return $price->start_date->lte($startDate) && $price->end_date->gte($startDate);
+            })->value('price');
+            $cost += $price;
+            $startDate->addDay();
         }
 
         return $cost;
