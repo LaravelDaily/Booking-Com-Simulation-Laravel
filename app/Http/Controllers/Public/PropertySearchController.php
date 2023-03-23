@@ -61,6 +61,16 @@ class PropertySearchController extends Controller
                     $query->whereIn('facilities.id', $request->facilities);
                 });
             })
+            ->when($request->price_from, function($query) use ($request) {
+                $query->whereHas('apartments.prices', function($query) use ($request) {
+                    $query->where('price', '>=', $request->price_from);
+                });
+            })
+            ->when($request->price_to, function($query) use ($request) {
+                $query->whereHas('apartments.prices', function($query) use ($request) {
+                    $query->where('price', '<=', $request->price_to);
+                });
+            })
             ->get();
 
         $facilities = Facility::query()
