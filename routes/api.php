@@ -18,8 +18,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('user')->group(function () {
-        Route::get('bookings',
-            [\App\Http\Controllers\User\BookingController::class, 'index']);
+        Route::resource('bookings', \App\Http\Controllers\User\BookingController::class);
     });
 });
 
