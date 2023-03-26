@@ -14,8 +14,11 @@ class BookingController extends Controller
     {
         $this->authorize('bookings-manage');
 
-        // Will implement booking management later
-        return response()->json(['success' => true]);
+        $bookings = auth()->user()->bookings()
+            ->withTrashed()
+            ->orderBy('start_date')
+            ->get();
+        return BookingResource::collection($bookings);
     }
 
     public function store(StoreBookingRequest $request)
