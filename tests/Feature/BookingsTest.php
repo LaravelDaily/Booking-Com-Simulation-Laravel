@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Apartment;
+use App\Models\Booking;
 use App\Models\City;
 use App\Models\Property;
 use App\Models\Role;
@@ -31,12 +32,32 @@ class BookingsTest extends TestCase
         ]);
     }
 
-    public function test_user_has_access_to_bookings_feature()
+    public function test_user_can_get_only_their_bookings()
     {
-        $user = User::factory()->create(['role_id' => Role::ROLE_USER]);
-        $response = $this->actingAs($user)->getJson('/api/user/bookings');
+        $user1 = User::factory()->create(['role_id' => Role::ROLE_USER]);
+        $user2 = User::factory()->create(['role_id' => Role::ROLE_USER]);
+        $apartment = $this->create_apartment();
+        Booking::create([
+            'apartment_id' => $apartment->id,
+            'user_id' => $user1->id,
+            'start_date' => now()->addDay(),
+            'end_date' => now()->addDays(2),
+            'guests_adults' => 1,
+            'guests_children' => 0,
+        ]);
+        Booking::create([
+            'apartment_id' => $apartment->id,
+            'user_id' => $user2->id,
+            'start_date' => now()->addDay(3),
+            'end_date' => now()->addDays(4),
+            'guests_adults' => 2,
+            'guests_children' => 1,
+        ]);
 
+        $response = $this->actingAs($user1)->getJson('/api/user/bookings');
         $response->assertStatus(200);
+        $response->assertJsonCount(1);
+        $response->assertJsonFragment(['guests_adults' => 1]);
     }
 
     public function test_property_owner_does_not_have_access_to_bookings_feature()
