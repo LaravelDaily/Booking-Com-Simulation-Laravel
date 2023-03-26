@@ -28,4 +28,28 @@ class BookingController extends Controller
 
         return new BookingResource($booking);
     }
+
+    public function show(Booking $booking)
+    {
+        $this->authorize('bookings-manage');
+
+        if ($booking->user_id != auth()->id()) {
+            abort(403);
+        }
+
+        return new BookingResource($booking);
+    }
+
+    public function destroy(Booking $booking)
+    {
+        $this->authorize('bookings-manage');
+
+        if ($booking->user_id != auth()->id()) {
+            abort(403);
+        }
+
+        $booking->delete();
+
+        return response()->noContent();
+    }
 }

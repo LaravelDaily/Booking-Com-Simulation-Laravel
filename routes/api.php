@@ -18,7 +18,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('user')->group(function () {
-        Route::resource('bookings', \App\Http\Controllers\User\BookingController::class);
+        Route::resource('bookings', \App\Http\Controllers\User\BookingController::class)->withTrashed();
     });
 });
 
