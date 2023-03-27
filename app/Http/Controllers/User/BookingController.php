@@ -15,6 +15,7 @@ class BookingController extends Controller
         $this->authorize('bookings-manage');
 
         $bookings = auth()->user()->bookings()
+            ->with('apartment.property')
             ->withTrashed()
             ->orderBy('start_date')
             ->get();
@@ -24,7 +25,6 @@ class BookingController extends Controller
     public function store(StoreBookingRequest $request)
     {
         $booking = auth()->user()->bookings()->create($request->validated());
-        $booking->load('apartment.property');
 
         return new BookingResource($booking);
     }
