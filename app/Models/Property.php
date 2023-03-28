@@ -61,4 +61,9 @@ class Property extends Model implements HasMedia
         $this->addMediaConversion('thumbnail')
             ->width(800);
     }
+
+    public function bookings()
+    {
+        return $this->hasManyThrough(Booking::class, Apartment::class);
+    }
 }
