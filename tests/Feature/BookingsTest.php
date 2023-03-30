@@ -129,4 +129,41 @@ class BookingsTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonFragment(['cancelled_at' => now()->toDateString()]);
     }
+
+    public function test_user_can_post_rating_for_their_booking()
+    {
+        $user1 = User::factory()->create(['role_id' => Role::ROLE_USER]);
+        $user2 = User::factory()->create(['role_id' => Role::ROLE_USER]);
+        $apartment = $this->create_apartment();
+        $booking = Booking::create([
+            'apartment_id' => $apartment->id,
+            'user_id' => $user1->id,
+            'start_date' => now()->addDay(),
+            'end_date' => now()->addDays(2),
+            'guests_adults' => 1,
+            'guests_children' => 0,
+        ]);
+
+        $response = $this->actingAs($user2)->putJson('/api/user/bookings/' . $booking->id, []);
+        $response->assertStatus(403);
+
+        $response = $this->actingAs($user1)->putJson('/api/user/bookings/' . $booking->id, [
+            'rating' => 11
+        ]);
+        $response->assertStatus(422);
+
+        $response = $this->actingAs($user1)->putJson('/api/user/bookings/' . $booking->id, [
+            'rating' => 10,
+            'review_comment' => 'Too short comment.'
+        ]);
+        $response->assertStatus(422);
+
+        $correctData = [
+            'rating' => 10,
+            'review_comment' => 'Comment with a good length to be accepted.'
+        ];
+        $response = $this->actingAs($user1)->putJson('/api/user/bookings/' . $booking->id, $correctData);
+        $response->assertStatus(200);
+        $response->assertJsonFragment($correctData);
+    }
 }
