@@ -477,4 +477,53 @@ class PropertySearchTest extends TestCase
         $this->assertEquals(8, $response->json('properties')[0]['avg_rating']);
         $this->assertEquals(7, $response->json('properties')[1]['avg_rating']);
     }
+
+    public function test_search_shows_only_apartments_available_for_dates()
+    {
+        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $cityId = City::value('id');
+        $property = Property::factory()->create([
+            'owner_id' => $owner->id,
+            'city_id' => $cityId,
+        ]);
+        $apartment1 = Apartment::factory()->create([
+            'name' => 'Cheap apartment',
+            'property_id' => $property->id,
+            'capacity_adults' => 2,
+            'capacity_children' => 1,
+        ]);
+        $property2 = Property::factory()->create([
+            'owner_id' => $owner->id,
+            'city_id' => $cityId,
+        ]);
+        $apartment2 = Apartment::factory()->create([
+            'name' => 'Mid size apartment',
+            'property_id' => $property2->id,
+            'capacity_adults' => 2,
+            'capacity_children' => 1,
+        ]);
+        $user1 = User::factory()->create(['role_id' => Role::ROLE_USER]);
+
+        $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1&start_date=' . now()->addDay() . '&end_date=' . now()->addDays(2));
+        $response->assertStatus(200);
+        $response->assertJsonCount(2, 'properties');
+
+        Booking::create([
+            'apartment_id' => $apartment1->id,
+            'user_id' => $user1->id,
+            'start_date' => now()->addDay(),
+            'end_date' => now()->addDays(2),
+            'guests_adults' => 1,
+            'guests_children' => 0,
+        ]);
+
+        $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1&start_date=' . now()->addDay() . '&end_date=' . now()->addDays(2));
+        $response->assertStatus(200);
+        $response->assertJsonCount(1, 'properties');
+        $this->assertEquals($property2->id, $response->json('properties')[0]['id']);
+
+        $response = $this->getJson('/api/properties/' . $property2->id . '?city=' . $cityId . '&adults=2&children=1&start_date=' . now()->addDay() . '&end_date=' . now()->addDays(2));
+        $response->assertStatus(200);
+        $this->assertEquals($property2->id, $response->json('id'));
+    }
 }

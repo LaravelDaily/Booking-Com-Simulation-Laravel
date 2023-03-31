@@ -52,6 +52,9 @@ class PropertySearchController extends Controller
                 $query->withWhereHas('apartments', function($query) use ($request) {
                     $query->where('capacity_adults', '>=', $request->adults)
                         ->where('capacity_children', '>=', $request->children)
+                        ->whereDoesntHave('bookings', function($q) use ($request) {
+                            $q->validForRange([$request->start_date, $request->end_date]);
+                        })
                         ->orderBy('capacity_adults')
                         ->orderBy('capacity_children')
                         ->take(1);
