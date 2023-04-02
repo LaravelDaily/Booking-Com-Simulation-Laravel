@@ -75,6 +75,10 @@ class Property extends Model
 }
 ```
 
+---
+
+## New when() Condition in Controller
+
 Now, we can extend our search with two more fields: `adults` and `children`. It adds another `when()` condition to our Eloquent query.
 
 **app/Http/Controllers/User/PropertySearchController.php**:
@@ -104,6 +108,10 @@ Here, we're using a `->withWhereHas()` method that appeared in Laravel 9.17, see
 Here's the result in Postman:
 
 ![](images/property-search-city-apartments.png)
+
+---
+
+## New Method in PHPUnit Test
 
 Finally, let's test if it works. We add another method to our Search Testing class.
 
