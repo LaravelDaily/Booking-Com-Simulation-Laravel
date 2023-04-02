@@ -4,6 +4,22 @@ Now we're moving to the next filter in the search: people are looking for proper
 
 Here's where we get to the next concept: **apartments**. Each property may have multiple apartments, not only for hotels but also for bigger houses are often divided into separate apartments for booking.
 
+---
+
+## Goals of This Lesson
+
+- Create DB structure and Model for Apartment
+- Add property search condition to look for apartments within properties, suitable for the number of people
+- Extend PHPUnit tests for new search condition
+
+By the end of this lesson, we will have this test passing:
+
+![Apartment search by capacity](images/property-search-apartment-capacity-test.png)
+
+---
+
+## Apartment DB Structure
+
 So, our search needs to accept the number of adults and children and filter the properties by apartments that are fit for that number of people.
 
 First, we create the Apartment model/migration, also adding a Factory for testing.
