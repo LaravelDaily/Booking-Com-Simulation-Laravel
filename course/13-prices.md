@@ -1,8 +1,21 @@
-Time to actually start booking properties. But first, how much would they cost? Let's introduce pricing structure. 
+Time to actually start booking properties. But first, how much would they cost? Let's introduce **pricing** structure. 
 
 To be honest, if we try to implement all possible pricing features from Booking.com, that alone would take weeks to write/read: various "genius levels" for discounts, different prices per guests, etc.
 
-So let's focus on the core functionality: pricing per calendar days. It's pretty typical that some resort would cost more in July than in January, so let's work on modeling exactly that.
+So let's focus on the core functionality: pricing **per calendar days**. It's pretty typical that some resort would cost more in July than in January, so let's work on modeling exactly that.
+
+---
+
+## Goals of This Lesson
+
+- Prices DB structure
+- Showing prices in search results
+- Filter by price range
+- Automated test for pricing
+
+By the end of this lesson, we will have this price calculated and shown in Postman:
+
+![](images/property-search-show-price.png)
 
 ---
 
