@@ -1,4 +1,4 @@
-The next thing we'll work on is adding **real estate properties**: houses/homes to rent. In this particular lesson, we will focus on adding the **geographical data** and build a simple search by city, country and latitude/longitude.
+The next thing we'll work on is adding **real estate properties**: houses/homes to rent. In this particular lesson, we will focus on adding the **geographical data** for city, country and latitude/longitude.
 
 ---
 
