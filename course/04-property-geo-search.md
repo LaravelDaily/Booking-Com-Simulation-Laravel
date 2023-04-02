@@ -1,12 +1,25 @@
-Now, as we have properties in our database, let's start building the search.
+Now, as we have properties in our database, let's start building the **search**.
 
-For starters, we will try these criteria:
+![Booking.com search by geographical object](images/booking-com-search-geoobject.png)
+
+---
+
+## Goals of This Lesson
+
+- Create API endpoint (Route + Controller) for searching the properties by city, country or geographical object
+- Write PHPUnit tests for all those cases
+
+By the end of this lesson, we will see these tests passing in Terminal:
+
+![Property search test](images/test-suite-after-property-geosearch.png)
+
+---
+
+In later lessons we will have more parameters for the search, but we have to start somewhere. So, for starters, we will try these criteria:
 
 - By city
 - By country
 - Close to geographical object (by its latitude/longitude)
-
-![Booking.com search by geographical object](images/booking-com-search-geoobject.png)
 
 Let's build the controller and method for this.
 
