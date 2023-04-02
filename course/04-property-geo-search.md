@@ -15,6 +15,8 @@ By the end of this lesson, we will see these tests passing in Terminal:
 
 ---
 
+## Creating Controller and Route
+
 In later lessons we will have more parameters for the search, but we have to start somewhere. So, for starters, we will try these criteria:
 
 - By city
