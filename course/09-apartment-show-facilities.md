@@ -1,15 +1,26 @@
 Now, let's move to the detailed view of the specific Apartment which would show facilities grouped by category.
 
-This will be a bit shorter lesson compared to others: 
+This will be a bit shorter lesson compared to others.
 
-- One new endpoint
-- Grouping the result
-- And automated test for it
+---
 
+## Goals of This Lesson
+
+- New endpoint to Show Apartment
+- Grouping the facility data
+- PHPUnit test for it
+
+By the end of this lesson, we will have this in Postman:
+
+![Apartment show facilities Postman](images/apartment-show-facilities-postman.png)
+
+---
+
+## New Endpoint: Show Apartment
 
 Again, from the previous lesson, here's how apartment detail facilities screen looks on mobile:
 
-![property show mobile facilities](images/property-show-mobile-facilities.png)
+![property show mobile facilities](images/property-show-mobile-facilities.jpg)
 
 For that, we create a new Controller.
 
@@ -119,6 +130,8 @@ The visual result:
 ![Apartment show facilities Postman](images/apartment-show-facilities-postman.png)
 
 ---
+
+## Automated Test
 
 Now let's create the automated test to check if the facilities are shown correctly.
 
