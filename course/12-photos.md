@@ -1,4 +1,17 @@
-Now it's time to take care of the **photos** for the properties. Each property may have multiple photos, assign order to them, and one of them should be marked "main". Simple, right?
+Now it's time to take care of the **photos** for the properties. Each property may have multiple photos, assign order position to them, and one of them should be marked "main". Simple, right?
+
+---
+
+## Goals of This Lesson
+
+- Add photo upload feature with Spatie Laravel Media Library package
+- Endpoint to reorder the photos
+- Show photos in search results and property detail endpoints
+
+By the end of this lesson, we will have this list of photos returned in Postman:
+
+![](images/property-photo-show-resource.png)
+
 
 ---
 
