@@ -2,6 +2,18 @@ Let's take a look at another side of the users system: profile fields. The main 
 
 In other words, should the property owner profile fields be in the same table as simple user fields, or do we need separate tables?
 
+---
+
+## Goals of This Lesson
+
+- Think about different ways of structuring profiles in DB
+- Add the necessary fields
+- Look at a different project scenario: doctors/patients
+
+By the end of this lesson, we will have this DB structure:
+
+![User profile DB schema](profile-db-schema.png)
+
 - - - - -
 
 ## Users Table or Profile Table?
