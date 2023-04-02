@@ -322,3 +322,5 @@ public function test_properties_show_correct_rating_and_ordered_by_it()
 Let's launch our full test suite... It works including the ratings now!
 
 ![](images/test-after-ratings.png)
+
+Reminder: you can check all the code in [this GitHub repository](https://github.com/LaravelDaily/Booking-Com-Simulation-Laravel).
