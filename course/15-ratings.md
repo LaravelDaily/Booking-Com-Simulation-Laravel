@@ -1,4 +1,21 @@
-Time for us to talk about rating of the apartments. After their stay, users are asked to rate the property. In this lesson, we will save those ratings, show them in the search results and order by them, showing the top-rated properties first.
+Time for us to talk about **rating** of the apartments. After their stay, users are asked to rate the property. 
+
+---
+
+## Goals of This Lesson
+
+- Rating DB structure
+- Endpoint for saving the ratings and reviews
+- Show ratings in the search results
+- Order search results by ratings
+
+By the end of this lesson, we will have this in Postman - see last two fields returned:
+
+![](images/booking-put-rating-postman.png)
+
+---
+
+## Ratings DB Schema
 
 While browsing Booking.com, I found out that only one main number of the user's rating is actually calculated in the average of the property. Users are asked to rate separately many more features - cleanliness, friendly staff, etc - but we will not implement that. We will simplify it to this:
 
@@ -6,10 +23,6 @@ While browsing Booking.com, I found out that only one main number of the user's 
 - This rating is attached to the booking for the **apartment**, but in the search result we need to calculate the average for all the apartments of the **property**
 
 So, step by step.
-
----
-
-## DB Schema
 
 At first I thought to save the ratings separately, but in reality, we need just two new columns in the same DB table.
 
