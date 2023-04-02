@@ -1,4 +1,22 @@
-A quick reminder: we ended up the previous lesson with returning a huge JSON from the property search results.
+We ended up the previous lesson with returning a **huge** JSON from the property search results. Let's spend this lesson optimizing it and showing only the data that we **really** need to return.
+
+---
+
+## Goals of This Lesson
+
+- Transform the returned data using Eloquent API Resources
+- Create Accessors to show Address and Beds list in a human-friendly way
+- Fix search results order/limit: showing only ONE apartment per property
+
+By the end of this lesson, we will have this nice JSON structure in search results:
+
+![Property search beds](images/property-search-beds-attribute.png)
+
+---
+
+## Shorter JSON: Eloquent API Resources
+
+Quick reminder how it looks now.
 
 Endpoint: `/api/search?city_id=1&adults=2&children=1`
 
@@ -407,7 +425,7 @@ Everything is pretty clear here, except maybe noticing that `->apartment_type?` 
 
 Result is MUCH better now, even fits on the screen to provide the Postman screenshot!
 
-![Property search postman fields](property-search-fields-postman.png)
+![Property search postman fields](images/property-search-fields-postman.png)
 
 Now, the `beds_list` part.
 
