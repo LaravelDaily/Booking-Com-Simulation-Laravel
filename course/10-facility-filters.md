@@ -7,7 +7,7 @@ Now we're getting to the facility **filtering**. Imagine you search for a proper
 ## Goals of This Lesson
 
 - Create a DB Structure for Property Facilities
-- Build a list of most popular facilities - two ways
+- Build a list of the most popular facilities - two ways
 - Restructure search results to include facilities
 - Property filter by facility
 
@@ -21,13 +21,13 @@ By the end of this lesson, we will have this test passing in Terminal:
 
 Browsing through Booking.com, I realized one more thing: these are all facilities, but they don't belong to the apartments. There are also **property facilities**, more global things like parking, non-smoking areas, etc.
 
-Those are not shown at the apartment level, but rather used as a filtering mechanism in the search, which is exactly the topic of the current lesson.
+Those are not shown at the apartment level but rather used as a filtering mechanism in the search, which is exactly the topic of the current lesson.
 
 How to structure this in the DB? Here's my brainstorming process:
 
-- __Option 1__: No changes in `facilities`, but just a new pivot table `facility_property`? But then all the facilities will be in the same list for property owners and they wouldn't be able to differentiate when filling in the forms.
-- __Option 2__: New record in `facility_categories` with a name like "Property facilities" and then use `where` statements when needed by its name or ID? But hardcoring name or ID didn't feel like the right thing.
-- __And then I realized__: we have `facilities.category_id` as a `nullable` field! BINGO! So all such facilities with `category_id = NULL` will be treated as a property facilities.
+- __Option 1__: No changes in `facilities`, but just a new pivot table `facility_property`? But then all the facilities will be on the same list for property owners and they wouldn't be able to differentiate when filling in the forms.
+- __Option 2__: New record in `facility_categories` with a name like "Property facilities" and then use `where` statements when needed by its name or ID? But hardcoding name or ID didn't feel like the right thing.
+- __And then I realized__: we have `facilities.category_id` as a `nullable` field! BINGO! So all such facilities with `category_id = NULL` will be treated as property facilities.
 
 Let's seed a few of them, I will add them into the same already existing seeder.
 
@@ -103,11 +103,11 @@ Cool, we have the schema. Now, what do we do with it?
 
 Those property facilities are not just used for filtering, it's also important how those filters are **presented**. I saw that with the search results, we also need to return **the most popular facilities** among those particular properties found.
 
-Here's how it looks on the left side of the web-page:
+Here's how it looks on the left side of the web page:
 
 ![Property search top facilities](images/property-search-top-facilities.png)
 
-So, we need to change the return structure of the search results and add facilities into it. Which means we also need to change the automated tests to check that "new reality".
+So, we need to change the return structure of the search results and add facilities to it. This means we also need to change the automated tests to check that "new reality".
 
 This is the updated Controller return structure:
 
@@ -135,13 +135,13 @@ class PropertySearchController extends Controller
 }
 ```
 
-Next question becomes, how to we get the most popular facilities of those specific properties. I thought of two ways: with Collections and with Second DB Query. 
+The next question becomes, how do we get the most popular facilities of those specific properties? I thought of two ways: with Collections and with Second DB Query. 
 
 Here, I will show you both, it's your personal preference which to use. Technically, we have all the data already in properties, so we can filter them in Collections, but I haven't found a very easily-readable chain of Collection methods to get the same result. So to me personally, it's ok to launch another DB query specifically for facilities.
 
 ### Option 1. Filtering with Collections
 
-Here's how the method would look like:
+Here's what the method would look like:
 
 **app/Http/Controllers/Public/PropertySearchController.php**:
 ```php
@@ -175,7 +175,7 @@ public function __invoke(Request $request)
 
 Do you like this chain of `pluck()->flatten()` and then `unique()->mapWithKeys()->sortDesc()`?
 
-To understand it better, you may try to debug it yourself and see what values you have after each method in the chain, like I did for many examples in the course [Laravel Collections Chains: 15 Real Examples](https://laraveldaily.com/course/laravel-collections).
+To understand it better, you may try to debug it yourself and see what values you have after each method in the chain as I did for many examples in the course [Laravel Collections Chains: 15 Real Examples](https://laraveldaily.com/course/laravel-collections).
 
 But personally, I don't see this as very readable. Or, maybe there's a better way with Collection? Shoot in the comments section, then.
 
@@ -227,9 +227,9 @@ But not so fast, now our tests are failing. If we launch `php artisan test` for 
 
 ![Property search test failing](images/property-search-top-facilities-tests-fail.png)
 
-So let's fix that one. We need to go through our tests, and add "properties" to the search results structure.
+So let's fix that one. We need to go through our tests and add "properties" to the search results structure.
 
-Here are combined examples of changes in multiple methods of `PropertySearchTest.php` file.
+Here are combined examples of changes in multiple methods of the `PropertySearchTest.php` file.
 
 Before:
 ```php
@@ -249,7 +249,7 @@ $response->assertJsonPath('properties.0.apartments.0.name', $largeApartment->nam
 $response->assertJsonPath('properties.0.apartments.0.beds_list', '...');
 ```
 
-After doing such changes, we run `php artisan test` again, and... we're back to green color:
+After doing such changes, we run `php artisan test` again, and... we're back to the green color:
 
 ![Property search tests fixed](images/property-search-tests-fixed.png)
 
@@ -257,7 +257,7 @@ After doing such changes, we run `php artisan test` again, and... we're back to 
 
 ## Property Filter by Facility
 
-Now let's use those facilities to actually filter the properties. Our search endpoint will now additially accept the **array** of facility IDs.
+Now let's use those facilities to actually filter the properties. Our search endpoint will now additionally accept the **array** of facility IDs.
 
 It will be another new `when()` condition in the Controller, quite simple.
 
@@ -340,7 +340,7 @@ class PropertySearchTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonCount(1, 'properties');
 
-        // Fourth case - attach facility to DIFFERENT property, filter by facility, 2 properties returned
+        // Fourth case - attach facility to a DIFFERENT property, filter by facility, 2 properties returned
         $property2->facilities()->attach($facility->id);
         $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1&facilities[]=' . $facility->id);
         $response->assertStatus(200);

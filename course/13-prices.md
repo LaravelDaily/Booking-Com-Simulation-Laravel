@@ -1,8 +1,8 @@
-Time to actually start booking properties. But first, how much would they cost? Let's introduce **pricing** structure. 
+Time to actually start booking properties. But first, how much would they cost? Let's introduce the **pricing** structure. 
 
-To be honest, if we try to implement all possible pricing features from Booking.com, that alone would take weeks to write/read: various "genius levels" for discounts, different prices per guests, etc.
+To be honest, if we try to implement all possible pricing features from Booking.com, that alone would take weeks to write/read: various "genius levels" for discounts, different prices per guest, etc.
 
-So let's focus on the core functionality: pricing **per calendar days**. It's pretty typical that some resort would cost more in July than in January, so let's work on modeling exactly that.
+So let's focus on the core functionality: pricing **per calendar days**. Typically, some resorts would cost more in July than in January, so let's work on modeling exactly that.
 
 ---
 
@@ -21,7 +21,7 @@ By the end of this lesson, we will have this price calculated and shown in Postm
 
 ## Prices DB Structure
 
-We will attach the price not to the property but to the **Apartment** level. Apartment may have many prices, depending on dates, so here's our DB structure for it:
+We will attach the price not to the property but to the **Apartment** level. The apartment may have many prices, depending on dates, so here's our DB structure for it:
 
 ```sh
 php artisan make:model ApartmentPrice -m
@@ -42,7 +42,7 @@ public function up(): void
 }
 ```
 
-For the purpose of this tutorial, let's simplify that all prices are in dollars/euros/whatever but without cents, so **integer**. At least, I haven't seen cents mentioned anywhere on the pages:
+For this tutorial, let's simplify that all prices are in dollars/euros/whatever but without cents, so **integer**. At least, I haven't seen cents mentioned anywhere on the pages:
 
 ![](images/booking-com-prices-integer.png)
 
@@ -86,11 +86,11 @@ If I enter some data in the database, it would look something like this:
 
 ## Showing Prices in Search Results
 
-The next thing we need to do is to calculate the price of a specific apartment on the specific date interval.
+The next thing we need to do is to calculate the price of a specific apartment on a specific date interval.
 
 Speaking of which... I just realized our search doesn't have the most important parameters: **WHEN** you want to book a property!
 
-So, in addition to the `city/country/geoobject` and `adults/children`, we will expect two more parameters to the GET request of `/api/search` endpoint: `start_date` and `end_date`.
+So, in addition to the `city/country/geoobject` and `adults/children`, we will expect two more parameters to the GET request of the `/api/search` endpoint: `start_date` and `end_date`.
 
 Then, our task becomes to show the apartments with total prices for **that** date interval. And this is more complicated than you would think.
 
@@ -102,15 +102,15 @@ Imagine this scenario:
 
 So, we need to calculate that "on the fly", depending on the date parameters.
 
-I was thinking for a long time where to put that method with logic of calculation. Here's my logic of brainstorming:
+I was thinking for a long time about where to put that method with the logic of calculation. Here's my logic for brainstorming:
 
-1. It's an ApartmentPrice feature so it could be an Accessor on the Model? But accessors don't accept parameters like `start_date` and `end_date`.
-2. Could be a method in the Apartment Model? But then how can we make sure to avoid N+1 query of loading apartments with/without pricing?
+1. It's an ApartmentPrice feature so it could be an Accessor on the Model. But accessors don't accept parameters like `start_date` and `end_date`.
+2. Could be a method in the Apartment Model? But then how can we make sure to avoid the N+1 query of loading apartments with/without pricing?
 3. ... (*head explodes*)
 
 So, after consulting with a few colleagues and playing around, here's the solution I came up with.
 
-In the Controller, to avoid N+1 query problem, we load the apartments with their prices, but ONLY for the dates that we need.
+In the Controller, to avoid the N+1 query problem, we load the apartments with their prices, but ONLY for the dates that we need.
 
 **app/Http/Controllers/Public/PropertySearchController.php**:
 ```php
@@ -166,9 +166,9 @@ class ApartmentPrice extends Model
 }
 ```
 
-Ok, so we loaded only the prices that we need, avoiding N+1 query problem. Now, how do we actually calculate the final price?
+Ok, so we loaded only the prices that we need, avoiding the N+1 query problem. Now, how do we actually calculate the final price?
 
-For that, I decided to go with a custom method (not accessor) on the Eloquent Model of Apartment. Take a look.
+For that, I decided to go with a custom method (not an accessor) on the Eloquent Model of Apartment. Take a look.
 
 **app/Models/Apartment.php**:
 ```php
@@ -205,7 +205,7 @@ class Apartment extends Model
 }
 ```
 
-With the help of Carbon features like `->lte()` comparison (remember we used `$casts` above?) and Collection filtering, we can calculate a price making a loop through the eager-loaded `$this->prices`, adding a price day by day.
+With the help of Carbon features like `->lte()` comparison (remember we used `$casts` above?) and Collection filtering, we can calculate a price by making a loop through the eager-loaded `$this->prices`, adding a price day by day.
 
 It may look complicated, and maybe even inefficient, but that's the solution I came up with: if you want to challenge that with your own variant, shoot in the comments!
 
@@ -244,7 +244,7 @@ It works!
 
 Of course, there are various cases of pricing, and we should test them. So let's get back to our PHPUnit suite and add a few methods there.
 
-We could test it as a feature of search results, but instead let's test one layer deeper - the method itself. So, we create some records in the DB and check if the calculation method returns the correct result. 
+We could test it as a feature of search results, but instead, let's test one layer deeper - the method itself. So, we create some records in the DB and check if the calculation method returns the correct result. 
 
 Whether that result is later used in the search or elsewhere, doesn't matter to us. It would be almost like a Unit test instead of a Feature test, but the strict definition of a Unit test would be that it wouldn't touch the database and just work with "inline variables", and I will admit I'm lazy to set that up. So it will be another Feature test, just not calling any endpoints.
 
@@ -352,17 +352,17 @@ The result after `php artisan test` for that specific test file:
 
 ![](images/apartment-price-test-phpunit.png)
 
-Great, we're showing correct prices in the search results!
+Great, we're showing the correct prices in the search results!
 
 ---
 
 ## Filter by Price Range
 
-Finally, let's filter the properties in the search results by price. Here's how it's done on Booking.com page itself:
+Finally, let's filter the properties in the search results by price. Here's how it's done on the Booking.com page itself:
 
 ![Property search price filter](images/property-search-price-filter.png)
 
-For that, we will add another two `->when()` conditions to the search query, for min-max range.
+For that, we will add another two `->when()` conditions to the search query, for the min-max range.
 
 **app/Http/Controllers/Public/PropertySearchController.php**:
 ```php

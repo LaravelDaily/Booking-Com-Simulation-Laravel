@@ -9,7 +9,7 @@ Time for us to talk about **rating** of the apartments. After their stay, users 
 - Show ratings in the search results
 - Order search results by ratings
 
-By the end of this lesson, we will have this in Postman - see last two fields returned:
+By the end of this lesson, we will have this in Postman - see the last two fields returned:
 
 ![](images/booking-put-rating-postman.png)
 
@@ -17,14 +17,14 @@ By the end of this lesson, we will have this in Postman - see last two fields re
 
 ## Ratings DB Schema
 
-While browsing Booking.com, I found out that only one main number of the user's rating is actually calculated in the average of the property. Users are asked to rate separately many more features - cleanliness, friendly staff, etc - but we will not implement that. We will simplify it to this:
+While browsing Booking.com, I found out that only one main number of the user's ratings is actually calculated in the average of the property. Users are asked to rate separately many more features - cleanliness, friendly staff, etc - but we will not implement that. We will simplify it into this:
 
 - Every booking may have a rating (1-10) and a text-form review comment
 - This rating is attached to the booking for the **apartment**, but in the search result we need to calculate the average for all the apartments of the **property**
 
 So, step by step.
 
-At first I thought to save the ratings separately, but in reality, we need just two new columns in the same DB table.
+At first, I thought to save the ratings separately, but in reality, we need just two new columns in the same DB table.
 
 ```sh
 php artisan make:migration add_rating_fields_to_bookings_table
@@ -68,7 +68,7 @@ class Booking extends Model
 
 While thinking about what method to create for posting the rating, I realized it's actually updating the booking, just with two specific fields of `rating` and `review_comment`.
 
-In general, I quite like the philosophy called "CRUDdy By Design" by Adam Wathan, which means that majority of actions should be one of 7 typical Resource Controller methods: index/create/store/edit/update/destroy.
+In general, I quite like the philosophy called "CRUDdy By Design" by Adam Wathan, which means that the majority of actions should be one of 7 typical Resource Controller methods: index/create/store/edit/update/destroy.
 
 So, in our case, we will just add a method to the `BookingController`. We already have this Controller under `Route::resource()`, so we don't need to change anything in the Routes.
 
@@ -121,7 +121,7 @@ class UpdateBookingRequest extends FormRequest
 }
 ```
 
-**Important notice**: if you use just "between" validation rule without "integer", it will incorrectly validate the **size** of the number as string, and not the number itself. Don't ask me how I found out :)
+**Important notice**: if you use just the "between" validation rule without "integer", it will incorrectly validate the **size** of the number as a string, and not the number itself. Don't ask me how I found out :)
 
 Finally, let's add those fields to the `BookingResource` to be returned.
 
@@ -130,7 +130,7 @@ Finally, let's add those fields to the `BookingResource` to be returned.
 public function toArray(Request $request): array
 {
     return [
-    	// ... other fields
+        // ... other fields
 
         'rating' => $this->rating,
         'review_comment' => $this->review_comment,
@@ -192,11 +192,11 @@ public function test_user_can_post_rating_for_their_booking()
 
 ## Search Results: Property Average Rating
 
-What do we do with those ratings? Of course, we need to show then in the search results, and also order by them, showing top-rated properties on top.
+What do we do with those ratings? Of course, we need to show them in the search results, and also order by them, showing top-rated properties on top.
 
 The tricky part is that we need to show the average rating of a **property**, calculating the average of all ratings of all its apartments.
 
-Luckily, Laravel allows us to perform it quite easily, using `withAvg()` method.
+Luckily, Laravel allows us to perform it quite easily, using the `withAvg()` method.
 
 First, we create a `hasManyThrough` relationship from Property directly to Booking:
 
@@ -208,7 +208,7 @@ public function bookings()
 }
 ```
 
-And then we can use that `bookings()` method as a part of `withAvg()` function.
+And then we can use that `bookings()` method as a part of the `withAvg()` function.
 
 Not only that, we can immediately order by that average rating!
 
@@ -253,7 +253,7 @@ class PropertySearchResource extends JsonResource
 
 The result in Postman won't fit on the screen but trust me, it works. 
 
-As a proof, here's the automated test for this, added into the PropertySearchTest.
+As proof, here's the automated test for this, added to the PropertySearchTest.
 
 **tests/Feature/PropertySearchTest.php**:
 ```php

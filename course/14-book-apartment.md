@@ -6,11 +6,11 @@ We're finally at the point when we can **make bookings**, yay.
 
 - Booking DB Model/Migration
 - API endpoint & first successful booking
-- Calculating total price of booking
+- Calculating the total price of booking
 - Validation: apartment capacity and availability
 - Viewing and canceling user's bookings
 
-As usual covered by tests, so by the end of this lesson, we will have these tests passing:
+As usual, covered by tests, so by the end of this lesson, we will have these tests passing:
 
 ![](images/bookings-tests-all.png)
 
@@ -73,7 +73,7 @@ class Booking extends Model
 }
 ```
 
-Also, let's create a migration from User and Apartment models. I have a feeling we will use both.
+Also, let's create a migration from the User and Apartment models. I have a feeling we will use both.
 
 **app/Models/User.php**:
 ```php
@@ -97,7 +97,7 @@ Next, the Route for the endpoint.
 
 ## API Endpoint & First Successful Booking
 
-In fact, we already have the `User/BookingController.php`, but we used it only for testing the permissions in the very beginning of the course.
+In fact, we already have the `User/BookingController.php`, but we used it only for testing the permissions at the very beginning of the course.
 
 So now, instead of just one `Route::get()`, let's transform it into a proper Resourceful Controller.
 
@@ -190,7 +190,7 @@ And when we launch `POST api/user/bookings` with the correct user's Bearer Token
 
 ![](images/booking-post-postman.png)
 
-Looks great, it works! Now look at the screenshot carefully: how is the `total_price` calculated automatically?
+Looks great, it works! Now, look at the screenshot carefully: how is the `total_price` calculated automatically?
 
 ---
 
@@ -222,7 +222,7 @@ class AppServiceProvider extends ServiceProvider
 }
 ```
 
-Now, what we would do inside the Observer is calling the same method we had created in the lesson earlier.
+Now, what we would do inside the Observer is call the same method we had created in the lesson earlier.
 
 **app/Observers/BookingObserver.php**:
 ```php
@@ -275,9 +275,9 @@ class StoreBookingRequest extends FormRequest
     {
         return [
             'apartment_id' => [
-            	'required', 
-            	'exists:apartments,id', 
-            	new ApartmentAvailableRule()
+                'required', 
+                'exists:apartments,id', 
+                new ApartmentAvailableRule()
             ],
 
             // ... other rules
@@ -330,13 +330,13 @@ class ApartmentAvailableRule implements ValidationRule, DataAwareRule
 }
 ```
 
-Our parameter to this rule is `$value` which contains Apartment ID. We need to fetch the apartment and see if it's capacity is good.
+Our parameter to this rule is `$value` which contains the Apartment ID. We need to fetch the apartment and see if its capacity is good.
 
 Also, we need to check the bookings for those dates if there aren't any already.
 
 In all those cases, if something is invalid, we just call `$fail('error message text')`. This is how Laravel 9+ validation rules work.
 
-Also, to access other fields in addition to the `apartment_id`, we use `$this->data` array. For that to work, we need add two things:
+Also, to access other fields in addition to the `apartment_id`, we use the `$this->data` array. For that to work, we need to add two things:
 
 - Class should implement `DataAwareRule` and add it in the `use` section
 - Class should have `$data` property and `setData()` method, exactly as it is written in the example above
@@ -374,7 +374,7 @@ class ApartmentPrice extends Model
 
 Guess what: now we need the same filter for checking the range of Bookings, too!
 
-So we could repeat the same scope in the second Model by copy-pasting, but such a big snippet of repeating code is not a good practice. To refactor that separately and use the same scope in multiple model, we will move it to a **Trait** and use that Trait in both Models.
+So we could repeat the same scope in the second Model by copy-pasting, but such a big snippet of repeating code is not a good practice. To refactor that separately and use the same scope in multiple models, we will move it to a **Trait** and use that Trait in both Models.
 
 So, we create this Trait file manually in the IDE, there's no `php artisan make:trait` command, unfortunately. Also, you can put Traits anywhere you want, I prefer the direct `app/Traits` folder.
 
@@ -451,7 +451,7 @@ Ta-daaa!
 
 ## Automated Tests for Successful/Invalid Bookings
 
-Let's cover what we've coded so far, with feature tests. I will just actually paste the code here, pretty sure it will be clear to read, almost as in English language, so not much comments needed.
+Let's cover what we've coded so far, with feature tests. I will just actually paste the code here, pretty sure it will be clear to read, almost as in the English language, so not many comments are needed.
 
 I will add the all-in-one method to the existing `BookingsTest`, also creating a helper method to create an apartment.
 
@@ -587,7 +587,7 @@ class BookingController extends Controller
 
 Some things to explain:
 
-- We're using Route Model Binding with `Booking $booking` parameter, but we still need to check if the booking's user is the same as the logged-in one, otherwise we `abort(403)` as forbidden
+- We're using Route Model Binding with the `Booking $booking` parameter, but we still need to check if the booking's user is the same as the logged-in one, otherwise we `abort(403)` as forbidden
 - In case of deleting, we use that method for canceling, and we don't have anything to return as the result, so `noContent()` would automatically return the 204 status code
 
 Finally, automated tests for all of the above:
@@ -665,7 +665,7 @@ class BookingsTest extends TestCase
 }
 ```
 
-So two methods, that are both self-explainatory, in my opinion, we're testing all the scenarios I mentioned before, including these:
+So two methods, that are both self-explanatory, in my opinion, we're testing all the scenarios I mentioned before, including these:
 
 - Users can view/manage only **their** bookings
 - Users can cancel bookings but still see them in the list
@@ -674,4 +674,4 @@ The result for all the tests:
 
 ![](images/bookings-tests-all.png)
 
-And that's it for managing the bookings. Of course, the real Booking.com version has much more functionality, but I will leave the rest for you as a "homework" depending on your free time available for further experiments.
+And that's it for managing the bookings. Of course, the real Booking.com version has much more functionality, but I will leave the rest for you as "homework" depending on your free time available for further experiments.

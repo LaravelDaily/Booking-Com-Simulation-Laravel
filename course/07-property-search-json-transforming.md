@@ -1,11 +1,11 @@
-We ended up the previous lesson with returning a **huge** JSON from the property search results. Let's spend this lesson optimizing it and showing only the data that we **really** need to return.
+We ended up the previous lesson by returning a **huge** JSON from the property search results. Let's spend this lesson optimizing it and showing only the data that we **really** need to return.
 
 ---
 
 ## Goals of This Lesson
 
 - Transform the returned data using Eloquent API Resources
-- Create Accessors to show Address and Beds list in a human-friendly way
+- Create Accessors to show Addresses and Beds list in a human-friendly way
 - Fix search results order/limit: showing only ONE apartment per property
 
 By the end of this lesson, we will have this nice JSON structure in search results:
@@ -16,7 +16,7 @@ By the end of this lesson, we will have this nice JSON structure in search resul
 
 ## Shorter JSON: Eloquent API Resources
 
-Quick reminder how it looks now.
+A quick reminder of how it looks now.
 
 Endpoint: `/api/search?city_id=1&adults=2&children=1`
 
@@ -118,7 +118,7 @@ Endpoint: `/api/search?city_id=1&adults=2&children=1`
 
 Great, so we're delivering the data from the API, now front-end client may actually calculate how many beds there are and what type/size, right?
 
-But maybe we can help and calculate it on-the-fly on server? 
+But maybe we can help and calculate it on-the-fly on the server? 
 
 Of course, it's a personal preference, but another argument would be that JSON result is really getting huge, although if we strip out all the things that we don't need, we're left with something like this:
 
@@ -173,7 +173,7 @@ Of course, it's a personal preference, but another argument would be that JSON r
 ]
 ```
 
-And not even that, what our front-end actually needs is this summary:
+And not even that, but what our front-end actually needs is this summary:
 
 ```json
 [
@@ -209,7 +209,7 @@ php artisan make:resource ApartmentSearchResource
 
 As you can see, we deliberately named them **Search** Resources, because in other cases, those models may need to return other fields, as we likely see later in this course.
 
-Then, personally I like to disable the default [wrapping feature](https://laravel.com/docs/10.x/eloquent-resources#data-wrapping) of API Resources, so it wouldn't return "data" layer by default. We add this code to the Service Provider.
+Then, personally, I like to disable the default [wrapping feature](https://laravel.com/docs/10.x/eloquent-resources#data-wrapping) of API Resources, so it wouldn't return the "data" layer by default. We add this code to the Service Provider.
 
 **app/Providers/AppServiceProvider.php**:
 ```php
@@ -246,7 +246,7 @@ class PropertySearchResource extends JsonResource
 
 So, we return only the fields we want, transform the address (*more on that below*) and return the apartments list, too.
 
-We will get to the apartments a bit later, but for now let's stop on the **address**. There's no such direct column in the DB, so we need to create an Attribute to concat that string from address street, postcode and city.
+We will get to the apartments a bit later, but for now, let's stop at the **address**. There's no such direct column in the DB, so we need to create an Attribute to concat that string from the street address, postcode, and city.
 
 **app/Models/Property.php**:
 ```php
@@ -287,7 +287,7 @@ class PropertySearchController extends Controller
 }
 ```
 
-At this point, as we haven't done anything with Apartments, the result in Postman would still look huge. See below: we've taken care of the property fields like address, but apartments is still a big array.
+At this point, as we haven't done anything with Apartments, the result in Postman would still look huge. See below: we've taken care of the property fields like address, but apartments are still a big array.
 
 ```json
 [
@@ -423,7 +423,7 @@ class ApartmentSearchResource extends JsonResource
 
 Everything is pretty clear here, except maybe noticing that `->apartment_type?` is with a question mark, as it may be nullable, so we want to prevent errors. Read more about it [in this article](https://laraveldaily.com/post/laravel-relation-attempt-to-read-property-on-null-error).
 
-Result is MUCH better now, even fits on the screen to provide the Postman screenshot!
+The result is MUCH better now, even fits on the screen to provide the Postman screenshot!
 
 ![Property search postman fields](images/property-search-fields-postman.png)
 
@@ -435,7 +435,7 @@ Now, the `beds_list` part.
 
 This string of the list of beds is more complicated than seemed to me at first. Here are possible cases:
 
-- No beds at all: `beds_list` should return empty string
+- No beds at all: `beds_list` should return an empty string
 - One bed: should return "1 [bed_type.name]" like `1 Single bed`
 - Two beds of the same type: return "X [bed_type.name]s" pluralized like `2 Single beds`
 - 2+ beds of different types: return "X beds (Y [type 1], Z [type 2])" like `2 beds (1 single bed, 1 large bed)`
@@ -476,12 +476,12 @@ class Apartment extends Model
 }
 ```
 
-Looks complex, doesn't it? This is what I came up with, after a few rewrites, maybe you would have even better solution.
+Looks complex, doesn't it? This is what I came up with, after a few rewrites, maybe you would have an even better solution.
 
 A few things to explain here:
 
-- I created a separate `hasManyThrough()` relationship to beds, for more convenient query like `$this->beds`, read about HasManyThrough in [Laravel docs](https://laravel.com/docs/10.x/eloquent-relationships#has-many-through)
-- When we query that Collection, I use `groupBy()` method on the Collection, to have them grouped by type. And then if it's one type - then just show that type as string, otherwise - do a `foreach` loop to contatenate the final string
+- I created a separate `hasManyThrough()` relationship to beds, for a more convenient query like `$this->beds`, read about HasManyThrough in [Laravel docs](https://laravel.com/docs/10.x/eloquent-relationships#has-many-through)
+- When we query that Collection, I use the `groupBy()` method on the Collection, to have them grouped by type. And then if it's one type - then just show that type as a string, otherwise - do a `foreach` loop to concatenate the final string
 - For pluralizing, I use `str($string)->plural($number)` Laravel helper, which would transform `str("bed")->plural(2)` into `beds`
 
 This is the result in Postman:
@@ -557,7 +557,7 @@ public function test_property_search_beds_list_all_cases(): void
     $response->assertJsonPath('0.apartments.0.beds_list', '2 ' . str($bedTypes[0]->name)->plural());
 
     // ----------------------
-    // FOURTH: add second room with no beds
+    // FOURTH: add a second room with no beds
     // ----------------------
 
     $secondRoom = Room::create([
@@ -582,7 +582,7 @@ public function test_property_search_beds_list_all_cases(): void
     $response->assertJsonPath('0.apartments.0.beds_list', '3 ' . str($bedTypes[0]->name)->plural());
 
     // ----------------------
-    // SIXTH: add another bed with different type to that second room
+    // SIXTH: add another bed with a different type to that second room
     // ----------------------
 
     Bed::create([
@@ -594,7 +594,7 @@ public function test_property_search_beds_list_all_cases(): void
     $response->assertJsonPath('0.apartments.0.beds_list', '4 beds (3 ' . str($bedTypes[0]->name)->plural() . ', 1 ' . $bedTypes[1]->name . ')');
 
     // ----------------------
-    // SEVENTH: add second bed with that new type to that second room
+    // SEVENTH: add a second bed with that new type to that second room
     // ----------------------
 
     Bed::create([
@@ -607,9 +607,9 @@ public function test_property_search_beds_list_all_cases(): void
 }
 ```
 
-**Notice**: it's only **one** way to write such test, some developers would disagree with such approach, as it is believed that every test method should test one specific scenario. But I believe that, in this case, convenience is more important than theoretical principles.
+**Notice**: it's only **one** way to write such a test, some developers would disagree with such an approach, as it is believed that every test method should test one specific scenario. But I believe that, in this case, convenience is more important than theoretical principles.
 
-Another popular alternative to write such test is to have it as a **Unit** test instead of a Feature test. We could separate the Attribute into its own method and would call that method with various parameters, asserting the correct results in each time. In that case, we would not call the API or DB directly, as we would test a specific **unit** of code - method to transform rooms/beds data into a string of beds information. But in this lesson I decided not to show this approach, as it requires changing quite a lot in our structure, we better move on to creating more features of our application.
+Another popular alternative to writing such a test is to have it as a **Unit** test instead of a Feature test. We could separate the Attribute into its own method and would call that method with various parameters, asserting the correct results each time. In that case, we would not call the API or DB directly, as we would test a specific **unit** of code - method to transform rooms/beds data into a string of beds information. But in this lesson I decided not to show this approach, as it requires changing quite a lot in our structure, we better move on to creating more features of our application.
 
 - - - - 
 
@@ -617,7 +617,7 @@ Another popular alternative to write such test is to have it as a **Unit** test 
 
 One more "unplanned" thing.
 
-While browsing booking.com I noticed something I had missed earlier: that search results shows properties with only ONE apartment each, not all apartments. 
+While browsing booking.com I noticed something I had missed earlier: that search results show properties with only ONE apartment each, not all apartments. 
 
 ![Property search one apartment](images/property-search-one-apartment.png)
 
@@ -625,7 +625,7 @@ So let's fix this now, while we're still working on this JSON of search results.
 
 What is the condition of which one apartment to show? We could actually only guess, but I think it should be something like *"the most suitable"* in terms of size and capacity.
 
-For example, if I'm searching for an apartment for 2 adults and 1 child, and property has an apartment with capacity for 2 adults + 1 child, and another one for 3 adults + 2 children, guess which one we should show? Correct, the smaller one.
+For example, if I'm searching for an apartment for 2 adults and 1 child, and the property has an apartment with a capacity for 2 adults + 1 child, and another one for 3 adults + 2 children, guess which one we should show? Correct, the smaller one.
 
 In other words, we need to order the apartments by capacity for adults and then by capacity for children, and then take only one row.
 
@@ -657,7 +657,7 @@ class PropertySearchController extends Controller
 
 Visually, our result shouldn't change, as we've been testing only the case of one apartment per property, anyway.
 
-But as a proof, let's write a feature test method for it.
+But as proof, let's write a feature test method for it.
 
 **tests/Feature/PropertySearchTest.php**:
 ```php
@@ -696,7 +696,7 @@ public function test_property_search_returns_one_best_apartment_per_property()
 }
 ```
 
-I deliberately created the larger apartment first, so the SQL query would naturally return it first if it's not reordered, which is a proof that our "best size fit" ordering works well.
+I deliberately created the larger apartment first, so the SQL query would naturally return it first if it's not reordered, which is proof that our "best size fit" ordering works well.
 
 We're launching the test, and... green.
 

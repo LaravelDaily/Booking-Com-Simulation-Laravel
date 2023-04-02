@@ -1,4 +1,4 @@
-Now imagine the user clicks on the property to choose the apartment. Inside of the property view, we need to show the full list of available apartments, with their **facilities**:
+Now imagine the user clicking on the property to choose the apartment. Inside the property view, we need to show the full list of available apartments, with their **facilities**:
 
 ![Property show facilities](images/property-show-facilities.png)
 
@@ -19,13 +19,13 @@ By the end of this lesson, we will have this list of facilities showing in Postm
 
 ## Facilities: DB Structure
 
-An obvious question: what are those facilities, what are the different options and categories for them! There could be dozens or even hundreds of various facilities.
+An obvious question: what are those facilities, and what are the different options and categories for them? There could be dozens or even hundreds of various facilities.
 
 I've found the answer to this question while browsing the **mobile** version of Booking.com, which showed the apartment facilities in a well-structured way:
 
 ![property show mobile facilities](images/property-show-mobile-facilities.jpg)
 
-So I imagine structure something like this:
+So I imagine structuring something like this:
 
 **facility_categories**:
 
@@ -120,7 +120,7 @@ public function up(): void
 }
 ```
 
-Notice that I specify `nullable()` this time, just in case - maybe there will be separate facility without categories.
+Notice that I specify `nullable()` this time, just in case - maybe there will be a separate facility without categories.
 
 Also, instead of `constrained()`, I specify `references()->on()`, because the table name is not `categories`, as the default `facilities.category_id` field name would expect.
 
@@ -241,11 +241,11 @@ Ok great, now we have the data. Next, how do we **show** that data?
 
 ## Property: Show Apartments with Facilities
 
-Let's get back to the initial screenshot from Booking.com, in the beginning of this lesson. I will repeat it here.
+Let's get back to the initial screenshot from Booking.com, at the beginning of this lesson. I will repeat it here.
 
 ![Property show facilities](images/property-show-facilities.png)
 
-This is the page that you get after clicking on a specific property from search result. We don't have that endpoint yet, so let's create it.
+This is the page that you get after clicking on a specific property from the search result. We don't have that endpoint yet, so let's create it.
 
 It will be a new controller, a public one, to show property details.
 
@@ -292,9 +292,9 @@ And if we launch it in Postman, the result is this:
 
 Success! Simple, right?
 
-But not so fast, we need to make one tweak here: show only **suitable** apartments from search.
+But not so fast, we need to make one tweak here: show only **suitable** apartments from the search.
 
-We do need to still pass the same parameters of search like `adults` and `children`. If you made a search, you would like the same search query to remain inside the property page, right?
+We do need to still pass the same parameters of search like `adults` and `children`. If you searched, you would like the same search query to remain inside the property page, right?
 
 So, here's where our `Request $request` parameter comes in, we filter and order the property apartments in a similar way, like in search. 
 
@@ -319,7 +319,7 @@ Here, we use `->load()` instead of `->withWhereHas()` because we don't need to s
 
 Now, we can call this API endpoint like this: `/api/properties/1?adults=3&children=2`.
 
-Next, we get to showing the main topic of this lesson: showing **facilities**.
+Next, we get to show the main topic of this lesson: showing **facilities**.
 
 Of course, we can load them with the relationship, right?
 
@@ -364,7 +364,7 @@ class ApartmentSearchResource extends JsonResource
 }
 ```
 
-See that `$this->whenLoaded()`? It means that it will show `facilities` field only if it's eager-loaded from the Controller. This is a performance optimization to avoid too many queries and loading too much of unneeded data.
+See that `$this->whenLoaded()`? It means that it will show the `facilities` field only if it's eager-loaded from the Controller. This is a performance optimization to avoid too many queries and loading too much unneeded data.
 
 So this is exactly what we'll do in Controller.
 
@@ -390,9 +390,9 @@ class PropertyController extends Controller
 }
 ```
 
-So we're loading facilities all the time, and if there are adults/children parameters, we override the value of apartments and filter them.
+So we're loading facilities all the time, and if there are adult/children parameters, we override the value of apartments and filter them.
 
-**Notice**: perhaps there's a way to filter the results with Collection instead of doing `$property->load()` but during my experiments I didn't manage to make the Collection filter/reject methods work correctly.
+**Notice**: perhaps there's a way to filter the results with Collection instead of doing `$property->load()` but during my experiments, I didn't manage to make the Collection filter/reject methods work correctly.
 
 Result in Postman:
 
@@ -400,10 +400,10 @@ Result in Postman:
 
 Hooray, we see the list of facilities!
 
-Now, let's write automated tests for this? We need to check a few things:
+Now, let's write automated tests for this. We need to check a few things:
 
 - Property endpoint works and loads the correct property
-- It works with or without adults/children parameters
+- It works with or without adult/children parameters
 - It loads the facilities correctly
 - It doesn't load the facilities in the Search
 
@@ -486,6 +486,6 @@ class PropertyShowTest extends TestCase
 }
 ```
 
-We're making two API requests: with and without adults/children parameters.
+We're making two API requests: with and without adult/children parameters.
 
-Notice specifically the last lines: we're testing that facilities are shown correctly in the JSON result for both property endpoint and in search result.
+Notice specifically the last lines: we're testing that facilities are shown correctly in the JSON result for both the property endpoint and in search result.

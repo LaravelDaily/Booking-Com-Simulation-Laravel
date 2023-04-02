@@ -1,10 +1,10 @@
-The next thing we'll work on is adding **real estate properties**: houses/homes to rent. In this particular lesson, we will focus on adding the **geographical data** for city, country and latitude/longitude.
+The next thing we'll work on is adding **real estate properties**: houses/homes to rent. In this particular lesson, we will focus on adding the **geographical data** for city, country, and latitude/longitude.
 
 ---
 
 ## Goals of This Lesson
 
-- Build a DB schema for countries, cities and geographical objects, with seeding a few of each
+- Build a DB schema for countries, cities, and geographical objects, seeding a few of each
 - Build a first version of DB schema for properties, with geographical data
 - Automatically set property latitude/longitude based on the address, with Observer and Google Maps API
 - First version of API endpoint to create a property, covered by PHPUnit test
@@ -252,7 +252,7 @@ Now, when someone enters a new property, wouldn't it be nice if lat/long fields 
 
 I have a [separate tutorial](https://laraveldaily.com/post/laravel-get-latitude-longitude-from-address-geocoder) on how to do that with Google Maps API (*warning: API is not free!*), and will make a re-cap of it here in this lesson.
 
-We will use a package called [GeocoderLaravel](https://github.com/geocoder-php/GeocoderLaravel) that allows to easily integrate Google Maps API in your Laravel project.
+We will use a package called [GeocoderLaravel](https://github.com/geocoder-php/GeocoderLaravel) that allows you to easily integrate Google Maps API in your Laravel project.
 
 ```sh
 composer require toin0u/geocoder-laravel
@@ -400,7 +400,7 @@ We try it out in Postman:
 
 ![Property Create](images/property-create.png)
 
-Finally in this lesson, let's add the automatic test that it actually works.
+Finally, in this lesson, let's add the automatic test that it actually works.
 
 **tests/Feature/PropertiesTest.php**:
 ```php
@@ -449,5 +449,5 @@ In other words, while testing, if we don't provide the lat/long for the new prop
 
 ![Property Create Test](images/property-create-test.png)
 
-We may create another **Unit** test that will assert that the API works, or Mock/Fake data, but this is outside of the scope of this course. For that, please read the tutorial [Laravel Testing: Mocking/Faking External 3rd Party APIs
+We may create another **Unit** test that will assert that the API works or Mock/Fake data, but this is outside of the scope of this course. For that, please read the tutorial [Laravel Testing: Mocking/Faking External 3rd Party APIs
 ](https://laraveldaily.com/post/laravel-testing-mocking-faking-external-api).

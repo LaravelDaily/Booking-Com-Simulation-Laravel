@@ -1,8 +1,8 @@
-Now, let's try to show the property and apartment information in the search results, similarly to how it's done on Booking.com website:
+Now, let's try to show the property and apartment information in the search results, similarly to how it's done on the Booking.com website:
 
 ![Booking search results apartments](images/booking-com-search-results-rooms.png)
 
-As you can see, every apartment may have its type, size in square meters, number of small/large/sofa beds, number of bedrooms, living rooms and bathrooms. So let's return all of that.
+As you can see, every apartment may have its type, size in square meters, number of small/large/sofa beds, and number of bedrooms, living rooms, and bathrooms. So let's return all of that.
 
 ---
 
@@ -134,7 +134,7 @@ Our DB structure will get a bit more complicated, with rooms within apartments:
 - Living rooms (also may have beds)
 - Bathrooms
 
-In reality, the travelers are filtering for the number of **spots to sleep**: large bed can usually fit 2 people, king size bed may fit even more.
+In reality, travelers are filtering for the number of **spots to sleep**: a large bed can usually fit 2 people, king size bed may fit even more.
 
 So this is exactly what the property owner should specify. I found these form screenshots online:
 
@@ -170,7 +170,7 @@ class Apartment extends Model
     ];
 ```
 
-So this was a simple part. Now, other rooms with beds, that structure will be more complicated. 
+So this was a simple part. Now, in other rooms with beds, that structure will be more complicated. 
 
 I suggest this logic:
 
@@ -205,9 +205,9 @@ return new class extends Migration
 };
 ```
 
-Again, a few records seeded inside the migration file itself, no need for a separate seeder.
+Again, a few records are seeded inside the migration file itself, no need for a separate seeder.
 
-Next, fillable field in the Model.
+Next, the fillable field in the Model.
 
 **app/Models/RoomType.php**:
 ```php
@@ -254,7 +254,7 @@ class Room extends Model
 }
 ```
 
-Let's also create a `hasMany` relationship from Apartments.
+Let's also create a `hasMany` relationship with Apartments.
 
 **app/Models/Apartment.php**:
 ```php
@@ -347,7 +347,7 @@ class Bed extends Model
 }
 ```
 
-Also let's create a `hasMany` relationship from Rooms to Beds:
+Also, let's create a `hasMany` relationship from Rooms to Beds:
 
 **app/Models/Room.php**:
 ```php
@@ -502,4 +502,4 @@ Result JSON:
 ]
 ```
 
-Great, so we're delivering the data from the API, but that JSON size becomes a problem. In the next lesson, let's spend time optimizing it and loading what front-end **actually** needs.
+Great, so we're delivering the data from the API, but that JSON size becomes a problem. In the next lesson, let's spend time optimizing it and loading what the front-end **actually** needs.

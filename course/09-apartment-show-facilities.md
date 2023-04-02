@@ -18,7 +18,7 @@ By the end of this lesson, we will have this in Postman:
 
 ## New Endpoint: Show Apartment
 
-Again, from the previous lesson, here's how apartment detail facilities screen looks on mobile:
+Again, from the previous lesson, here's how the apartment detail facilities screen looks on mobile:
 
 ![property show mobile facilities](images/property-show-mobile-facilities.jpg)
 
@@ -51,7 +51,7 @@ Route::get('properties/{property}', Public\PropertyController::class);
 Route::get('apartments/{apartment}', Public\ApartmentController::class);
 ```
 
-So, not `use` a specific Controller, but the whole namespace instead. Cool, right?
+So, do not `use` a specific Controller, but the whole namespace instead. Cool, right?
 
 Now, inside the Controller, we could simply do something like this, reusing the same resource as in search:
 
@@ -73,7 +73,7 @@ class ApartmentController extends Controller
 }
 ```
 
-But the problem is that we need **different** structure to be returned, with facilities grouped into categories. So, we generate another API resource - for the same Apartment model, but for different purpose.
+But the problem is that we need a **different** structure to be returned, with facilities grouped into categories. So, we generate another API resource - for the same Apartment model, but for a different purpose.
 
 ```sh
 php artisan make:resource ApartmentDetailsResource
@@ -123,7 +123,7 @@ class ApartmentController extends Controller
 }
 ```
 
-As you can see, we're minimizing the load of facilities to load only their **names**, as we don't need the full data with IDs, timestamps and pivot tables.
+As you can see, we're minimizing a load of facilities to load only their **names**, as we don't need the full data with IDs, timestamps, and pivot tables.
 
 The visual result:
 

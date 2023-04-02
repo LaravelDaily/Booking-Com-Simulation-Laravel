@@ -1,4 +1,4 @@
-Now, as we have properties in our database, let's start building the **search**.
+Now, that we have properties in our database, let's start building the **search**.
 
 ![Booking.com search by geographical object](images/booking-com-search-geoobject.png)
 
@@ -6,7 +6,7 @@ Now, as we have properties in our database, let's start building the **search**.
 
 ## Goals of This Lesson
 
-- Create API endpoint (Route + Controller) for searching the properties by city, country or geographical object
+- Create API endpoint (Route + Controller) for searching the properties by city, country, or geographical object
 - Write PHPUnit tests for all those cases
 
 By the end of this lesson, we will see these tests passing in Terminal:
@@ -17,11 +17,11 @@ By the end of this lesson, we will see these tests passing in Terminal:
 
 ## Creating Controller and Route
 
-In later lessons we will have more parameters for the search, but we have to start somewhere. So, for starters, we will try these criteria:
+In later lessons, we will have more parameters for the search, but we have to start somewhere. So, for starters, we will try these criteria:
 
 - By city
 - By country
-- Close to geographical object (by its latitude/longitude)
+- Close to a geographical object (by its latitude/longitude)
 
 Let's build the controller and method for this.
 
@@ -48,7 +48,7 @@ class PropertySearchController extends Controller
 }
 ```
 
-As you can see, we're adding another namespace of `/Public`, so we'll have three zones: owner, user and public.
+As you can see, we're adding another namespace of `/Public`, so we'll have three zones: owner, user, and public.
 
 And let's add the route, also grouping the owner/user routes with prefixes.
 
@@ -73,9 +73,9 @@ Route::get('search',
     \App\Http\Controllers\Public\PropertySearchController::class);
 ```
 
-Our search should be public for everyone, without any registration, so we put that route outside of `auth:sanctum` Middleware group.
+Our search should be public for everyone, without any registration, so we put that route outside of the `auth:sanctum` Middleware group.
 
-Now, let's start filling in various search cases. For what we will use Eloquent syntax of `Model::when()` with different conditions.
+Now, let's start filling in various search cases. For that, we will use the Eloquent syntax of `Model::when()` with different conditions.
 
 ---
 
@@ -98,9 +98,9 @@ class PropertySearchController extends Controller
 }
 ```
 
-**Notice**: for now, let's return all the results without pagination and ordering, we will improve those in the future lessons.
+**Notice**: for now, let's return all the results without pagination and ordering, we will improve those in future lessons.
 
-Here's how the result looks like in Postman:
+Here's what the result looks like in Postman:
 
 ![](images/property-search-city.png)
 
@@ -110,7 +110,7 @@ And let's immediately write the test for it.
 php artisan make:test PropertySearchTest
 ```
 
-In the test method, we create two properties with different cities, and check that only ONE is returned from the search.
+In the test method, we create two properties with different cities and check that only ONE is returned from the search.
 
 To create those fake properties, we also need to create a Factory for creating the test properties: 
 
@@ -148,7 +148,7 @@ class PropertyFactory extends Factory
 
 The method `value('id')` is a shorter way of doing `->first()->id`.
 
-And then, we can finally write such test method:
+And then, we can finally write such a test method:
 
 **tests/Feature/PropertySearchTest.php**:
 ```php
@@ -185,7 +185,7 @@ class PropertySearchTest extends TestCase
 
 As you can see, we're overriding a few factory values, to create properties in different cities.
 
-**Reminder**: we have `$this->seed()` as a part of our Base TestCase, so we do have the cties in the database from those seeds.
+**Reminder**: we have `$this->seed()` as a part of our Base TestCase, so we do have the cities in the database from those seeds.
 
 ![Screenshot of launched test](images/property-search-city-test.png)
 
@@ -193,7 +193,7 @@ As you can see, we're overriding a few factory values, to create properties in d
 
 ## Search by Country 
 
-Same sequence of action, same logic, just different filter of data in the controller.
+The same sequence of action, the same logic, just a different filter of data in the controller.
 
 This is our controller method now, with country search added, using `whereHas()` Eloquent method:
 
@@ -286,7 +286,7 @@ class PropertySearchController extends Controller
 
 That raw SQL query of `$condition` is taken from [this article](https://inovector.com/blog/get-locations-nearest-the-user-location-with-mysql-php-in-laravel): in our case, we're looking for properties within 10 km distance of our geoobject.
 
-Let's test it?
+Let's test it.
 
 **tests/Feature/PropertySearchTest.php**:
 ```php
@@ -316,9 +316,9 @@ public function test_property_search_by_geoobject_returns_correct_results(): voi
 }
 ```
 
-Again, we're creating two properties: when is at the same location of the geoobject, and another one far from it. Only one should be found in the search results.
+Again, we're creating two properties: when is at the same location as the geoobject, and another one far from it. Only one should be found in the search results.
 
-And this is how our current test suite looks like: green!
+And this is what our current test suite looks like: green!
 
 ![Property search test](images/test-suite-after-property-geosearch.png)
 

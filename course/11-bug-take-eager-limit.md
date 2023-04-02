@@ -1,6 +1,6 @@
 This will be kind of an "offtopic" lesson: I realized I introduced a bug quite a long time ago, and decided to dedicate a full separate lesson about not only how to fix it, but how to properly write tests.
 
-Remember in the property search lesson I realized that we need to return one apartment per property? I fixed it like this, with using `take(1)`. Well, "fixed", I will show you why this approach is incorrect.
+Remember in the property search lesson I realized that we need to return one apartment per property? I fixed it like this, by using `take(1)`. Well, "fixed", I will show you why this approach is incorrect.
 
 **app/Http/Controllers/Public/PropertySearchController.php**:
 ```php
@@ -27,7 +27,7 @@ class PropertySearchController extends Controller
 }
 ```
 
-See that `->take(1)` inside? So yeah, it limited so that only one apartment per property is returned, and I've tested that it actually worked:
+See that `->take(1)` inside? So yeah, it is limited so that only one apartment per property is returned, and I've tested that it actually worked:
 
 ```json
 {
@@ -52,9 +52,9 @@ See that `->take(1)` inside? So yeah, it limited so that only one apartment per 
 }
 ```
 
-Only "Large apartment" is returned, although there are more apartments in that property. Correct, right?
+Only the "Large apartment" is returned, although there are more apartments in that property. Correct, right?
 
-Moreover, I have an automated test method that proofs it:
+Moreover, I have an automated test method that proves it:
 
 **tests/Feature/PropertySearchTest.php**:
 ```php
@@ -117,7 +117,7 @@ public function test_property_search_returns_one_best_apartment_per_property()
 
 But what I missed is I didn't test it with **multiple properties returned**.
 
-Then I would have seen that `take(1)` actually means not "one apartment per property" but rather "one apartment in total"! So, if there are multiple properties returned and each of them has apartments, it will NOT return the apartments for second, third and other properties:
+Then I would have seen that `take(1)` actually means not "one apartment per property" but rather "one apartment in total"! So, if there are multiple properties returned and each of them has apartments, it will NOT return the apartments for the second, third, and other properties:
 
 ```json
 {
@@ -236,7 +236,7 @@ public function test_property_search_returns_one_best_apartment_per_property()
 }
 ```
 
-There we go, test failed!
+There we go, the test failed!
 
 ![Take limit bug test](images/take-limit-bug-test.png)
 
@@ -246,7 +246,7 @@ Quite a "hidden" bug, huh? Now let's fix it.
 
 **Good news**: there's a Laravel package that would solve our problem.
 
-Presenting to you [staudenmeir/eloquent-eager-limit](https://github.com/staudenmeir/eloquent-eager-limit) package!
+Presenting to you the [staudenmeir/eloquent-eager-limit](https://github.com/staudenmeir/eloquent-eager-limit) package!
 
 It does exactly what its name says, quoting from its Readme: "This Laravel Eloquent extension allows limiting the number of eager loading results per parent using window functions."
 
@@ -333,6 +333,6 @@ And if we run `php artisan test`, our tests are back to green.
 So, as I said, a separate full lesson dedicated to that bug, just to show you a few things:
 
 - If you have automated tests, it doesn't mean you're testing the right scenarios
-- Laravel has limitations but have great packages that you can use
+- Laravel has limitations but has great packages that you can use
 
-Now let's get back on track of building new features in our project, again.
+Now let's get back on track with building new features in our project, again.
