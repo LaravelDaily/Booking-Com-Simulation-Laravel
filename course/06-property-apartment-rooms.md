@@ -4,6 +4,19 @@ Now, let's try to show the property and apartment information in the search resu
 
 As you can see, every apartment may have its type, size in square meters, number of small/large/sofa beds, number of bedrooms, living rooms and bathrooms. So let's return all of that.
 
+---
+
+## Goals of This Lesson
+
+- Create DB structure for Apartment Type and size
+- Create DB structure for Rooms and Beds with Bed Types
+- Showing Rooms and Beds in Search Results
+- Look at a different project scenario: doctors/patients
+
+By the end of this lesson, we will have this DB structure:
+
+![DB Structure with Beds](images/room-bed-db-structure.png)
+
 - - -
 
 ## DB Structure: Apartment Type and Size
