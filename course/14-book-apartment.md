@@ -1,8 +1,24 @@
-We're finally at the point when we can **make bookings**. First, the database structure for that.
+We're finally at the point when we can **make bookings**, yay. 
+
+---
+
+## Goals of This Lesson
+
+- Booking DB Model/Migration
+- API endpoint & first successful booking
+- Calculating total price of booking
+- Validation: apartment capacity and availability
+- Viewing and canceling user's bookings
+
+As usual covered by tests, so by the end of this lesson, we will have these tests passing:
+
+![](images/bookings-tests-all.png)
 
 ---
 
 ## Booking DB Model/Migration
+
+First, the database structure for that.
 
 ```sh
 php artisan make:model Booking -m
