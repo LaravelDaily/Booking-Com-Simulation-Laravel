@@ -1,5 +1,20 @@
 Now we're getting to the facility **filtering**. Imagine you search for a property, you have a list, and then you want to have additional filters: swimming pool, pets allowed, etc.
 
+![Property search top facilities](images/property-search-top-facilities.png)
+
+---
+
+## Goals of This Lesson
+
+- Create a DB Structure for Property Facilities
+- Build a list of most popular facilities - two ways
+- Restructure search results to include facilities
+- Property filter by facility
+
+By the end of this lesson, we will have this test passing in Terminal:
+
+![Property search filter by facilities test](images/property-search-fitler-test.png)
+
 ---
 
 ## New "Type": Property Facilities 
