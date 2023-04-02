@@ -306,19 +306,11 @@ php artisan migrate --seed
 
 ![First migrate seed](images/first-migrate-seed.png)
 
-- - - - -
-
-## Registration API and Tests
-
-In our project, we will simulate the Booking.com behavior **as an API**, so it would potentially be used by whichever client: web front-end or mobile apps.
-
-The goal in our course, in general, is to create a DB structure with working API, covered by automated tests which would simulate the real behavior.
-
-So, our first goal is to implement the registration API and test that users get their roles correctly.
+Our next goal is to implement the registration API and test that users get their roles correctly.
 
 - - - - - 
 
-## Assign Permissions and Test Them
+## Registration API: Assign Permissions and Test Them
 
 Let's say that we will have two registration forms: one for a simple user, and another for the property owner. So, let's simulate both of them, and write automated tests that would check if users get the correct role/permissions.
 
