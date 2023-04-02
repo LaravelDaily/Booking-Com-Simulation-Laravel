@@ -12,7 +12,7 @@ In other words, should the property owner profile fields be in the same table as
 
 By the end of this lesson, we will have this DB structure:
 
-![User profile DB schema](profile-db-schema.png)
+![User profile DB schema](images/profile-db-schema.png)
 
 - - - - -
 
@@ -179,7 +179,7 @@ Schema::create('user_profiles', function (Blueprint $table) {
 
 If we put it visually:
 
-![User profile DB schema](profile-db-schema.png)
+![User profile DB schema](images/profile-db-schema.png)
 
 For this feature, I don't think it's worth creating API endpoints and tests, as it's just a simple DB table to query.
 
@@ -276,7 +276,7 @@ Schema::create('doctors', function (Blueprint $table) {
 
 Visually:
 
-![User doctors patients DB schema](doctors-patients.png)
+![User doctors patients DB schema](images/doctors-patients.png)
 
 You may ask, why not separate table for **repeating** profile fields like birth_date / gender / photo? 
 
