@@ -11,7 +11,7 @@ Many tutorials start with roles and then go to permissions, but I will start fro
 
 As a result of this lesson, we will launch the automated tests and see this result:
 
-![Auth Test Permissions](auth-test-permissions.png)
+![Auth Test Permissions](images/auth-test-permissions.png)
 
 
 - - - - -
@@ -494,7 +494,7 @@ As you can see, we have three methods, each of them tests the registration with 
 
 The result: our registration works!
 
-![Auth Test Registration](auth-test-registration.png)
+![Auth Test Registration](images/auth-test-registration.png)
 
 - - - - - 
 
@@ -781,7 +781,7 @@ class BookingsTest extends TestCase
 
 Now, we launch `php artisan test`, and...
 
-![Auth Test Permissions](auth-test-permissions.png)
+![Auth Test Permissions](images/auth-test-permissions.png)
 
 We successfully simulated the registration for two user roles, and their permissions for specific API endpoints!
 
