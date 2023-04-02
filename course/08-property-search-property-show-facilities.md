@@ -2,15 +2,18 @@ Now imagine the user clicks on the property to choose the apartment. Inside of t
 
 ![Property show facilities](images/property-show-facilities.png)
 
-The **Facility** model will be a new top in this lesson. Here's the plan: 
+The **Facility** model will be a new thing in this lesson. 
 
-- First, we will build Facility DB/relationship structure
-- Then, show facilities in the new Property endpoint
-- Then, show facilities by categories in the new Apartment endpoint
-- Then add the facilities into search filters
-- Of course, all covered by tests
+---
 
-Let's go! 
+## Goals of This Lesson
+
+- Build Facility DB/relationship structure
+- Show facilities in the new Show Property endpoint
+
+By the end of this lesson, we will have this list of facilities showing in Postman:
+
+![Property show facilities](images/property-show-facilities-postman.png)
 
 ---
 
@@ -20,7 +23,7 @@ An obvious question: what are those facilities, what are the different options a
 
 I've found the answer to this question while browsing the **mobile** version of Booking.com, which showed the apartment facilities in a well-structured way:
 
-![property show mobile facilities](images/property-show-mobile-facilities.png)
+![property show mobile facilities](images/property-show-mobile-facilities.jpg)
 
 So I imagine structure something like this:
 
