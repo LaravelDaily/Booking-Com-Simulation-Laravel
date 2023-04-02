@@ -1,4 +1,4 @@
-Let's take a look at another side of the users system: profile fields. Some of the fields are in this screenshot:
+Let's take a look at another side of the user system: profile fields. Some of the fields are in this screenshot:
 
 ![Booking profile fields](images/profile-fields.png)
 
@@ -22,7 +22,7 @@ By the end of this lesson, we will have this DB structure:
 
 ## Users Table or Profile Table?
 
-After browsing through the booking.com website, mobile app and help docs, I've identified these profile fields for each user role.
+After browsing through the booking.com website, mobile app, and help docs, I've identified these profile fields for each user role.
 
 **Notice**: we don't really need any profile fields for administrators, as they are not visible anywhere on the app/website.
 
@@ -84,13 +84,13 @@ But, hmm, isn't the `users` table becoming too big, then? Should ALL of those fi
 
 And this is where we come back to the word "simulation" again. Let's simulate what queries would there be, and what fields would actually be selected?
 
-For viewing user's profile somewhere, we may need `display_name` and `photo` - those should be pretty common.
+For viewing a user's profile somewhere, we may need `display_name` and `photo` - those should be pretty common.
 
 But what about the data for the **invoices**? Isn't it used ONLY for invoices? And how often do we generate the invoices, once a month? Or maybe even less than that, if the user is not actively paying for anything.
 
-So we can leave the invoice fields in the users table, but then we're risking that some other developer would blindly do `User::all()` or similar statement, without specifying the fields, and then it would unnecessary download all those fields into memory.
+So we can leave the invoice fields in the users table, but then we're risking that some other developer would blindly do `User::all()` or a similar statement, without specifying the fields, and then it would unnecessarily download all those fields into memory.
 
-So, what I would suggest is to create a separate DB table "user_profiles" with more rarely used fields. For now, we will put only invoice related fields there, but later may add more.
+So, what I would suggest is to create a separate DB table "user_profiles" with more rarely used fields. For now, we will put only invoice-related fields there but later may add more.
 
 So, if we change the migration above, my suggestion is this:
 
@@ -134,9 +134,9 @@ Schema::create('user_profiles', function (Blueprint $table) {
 
 Now, the `User::all()` in the code would return only the main User fields, and if someone wants to know the invoice details, they would do `User::with('profile')->get()`.
 
-Another open discussion could be around `phone` and `phone_verified_at` fields: should they be in `users` or `user_profiles`? It depends on how you actually use them in the application. For Booking.com, they are often used as authentication/verification mechanism, so pretty important as a **user** field. But if in your app you use them only sometimes for displaying them in the profile, then I would move them into the profile.
+Another open discussion could be around the `phone` and `phone_verified_at` fields: should they be in `users` or `user_profiles`? It depends on how you actually use them in the application. For Booking.com, they are often used as an authentication/verification mechanism, so pretty important as a **user** field. But if in your app you use them only sometimes for displaying them in the profile, then I would move them into the profile.
 
-Finally, you may want to ask why I called the DB table `user_profiles` instead of something like `user_invoice_details`? To answer that, let's talk about extra individual fields.
+Finally, you may want to ask why I called the DB table `user_profiles` instead of something like `user_invoice_details`. To answer that, let's talk about extra individual fields.
 
 -----
 
@@ -153,7 +153,7 @@ Quite often, I see people want to create separate DB tables for every role, like
 
 I would give two pieces of advice/opinion about this:
 
-1. A little step-back, but: you should almost never replace `users` table with multiple tables for **authentication**, repeating email/password in each of them. While it's technically possible, with [Guards](https://laravel.com/docs/9.x/authentication#specifying-a-guard), it becomes a huge headache to later maintain the same functionality in more than one place. Any doctor/patient/teacher is a User of the system, first and foremost, and individual profiles are implemented in other DB tables, with relationship to "users" table.
+1. A little step-back, but: you should almost never replace the `users` table with multiple tables for **authentication**, repeating email/password in each of them. While it's technically possible, with [Guards](https://laravel.com/docs/9.x/authentication#specifying-a-guard), it becomes a huge headache to later maintain the same functionality in more than one place. Any doctor/patient/teacher is a User of the system, first and foremost, and individual profiles are implemented in other DB tables, with a relationship to the "users" table.
 
 2. It makes sense to separate the profile tables only if they have many fields (10+), with most of them different per role. Otherwise, for a few fields, it's totally fine to use the same table, making some fields nullable.
 
@@ -197,7 +197,7 @@ So, let's try to simulate what we would do for a typical doctor appointment syst
 
 Again, first and foremost, both doctors and patients are **users** of the system, so we don't change anything in the `users` DB table, except for maybe adding more common and often used fields like `phone_number`.
 
-Then, there will be two profiles with a lot of extra fields: some will be the same, some will be different for patients and doctors.
+Then, there will be two profiles with a lot of extra fields: some will be the same, and some will be different for patients and doctors.
 
 **Patients:**
 
@@ -231,7 +231,7 @@ There may be more fields, but let's stop at those, you get the picture: 10+ fiel
 In this case, we obviously shouldn't make one `user_profile` table, for two reasons:
 
 - Too many unused fields
-- Those will be queried on the different pages and API endpoints, so often patient data will be queried without the need of any doctor's record
+- Those will be queried on the different pages and API endpoints, so often patient data will be queried without the need for any doctor's record
 
 So, what I would suggest:
 
@@ -278,8 +278,8 @@ Visually:
 
 ![User doctors patients DB schema](images/doctors-patients.png)
 
-You may ask, why not separate table for **repeating** profile fields like birth_date / gender / photo? 
+You may ask, why not separate a table for **repeating** profile fields like birth_date / gender / photo? 
 
-Those ones are debatable and personal preference, you may even save them in the `users` table if you use them often. I don't see anything wrong if the fields with the same names are repeated in a few tables, if they naturally belong there.
+Those ones are debatable and personal preference, you may even save them in the `users` table if you use them often. I don't see anything wrong if the fields with the same names are repeated in a few tables if they naturally belong there.
 
-**Final thought**: I would probably suggest the same DB schema for similar situations like teachers/students, employees/employers and others. I mean, have one `users` DB table and separate profile tables for each of the role.
+**Final thought**: I would probably suggest the same DB schema for similar situations like teachers/students, employees/employers, and others. I mean, have one `users` DB table and separate profile tables for each of the roles.
