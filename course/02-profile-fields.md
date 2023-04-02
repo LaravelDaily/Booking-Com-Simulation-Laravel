@@ -1,4 +1,8 @@
-Let's take a look at another side of the users system: profile fields. The main question is where do we store them and how to structure the tables, for multiple user roles?
+Let's take a look at another side of the users system: profile fields. Some of the fields are in this screenshot:
+
+![Booking profile fields](images/profile-fields.png)
+
+The main question is where do we store them and how to structure the tables, for multiple user roles?
 
 In other words, should the property owner profile fields be in the same table as simple user fields, or do we need separate tables?
 
@@ -36,10 +40,6 @@ Simple users have these extra "individual" fields:
 - Gender
 - Nationality
 - Date of birth
-
-Some of the fields are in this screenshot:
-
-![Booking profile fields](images/profile-fields.png)
 
 Then, property owners don't have to specify gender/nationality/birth date, but they have only one "special" extra field: **description** about themselves.
 
