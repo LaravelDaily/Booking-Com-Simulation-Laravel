@@ -9,7 +9,7 @@ Many tutorials start with roles and then go to permissions, but I will start fro
 - Create our simple DB structure for roles/permissions
 - Create first API endpoints and PHPUnit Tests for registration
 - Simulate API endpoints for logged-in users and write tests to check permissions
-- Alternative: look at spatie/laravel-permission package
+- Alternative: look at the spatie/laravel-permission package
 
 As a result of this lesson, we will launch the automated tests and see this result:
 
@@ -24,16 +24,16 @@ In our application, we will have features like:
 
 - Manage properties
 - Make booking
-- Change user's password
+- Change the user's password
 - etc.
 
-Those are all **permissions**. Every user may or may not have the permission for some action.
+Those are all **permissions**. Every user may or may not have permission for some action.
 
 In Laravel's language, permissions are almost the same as [Gates](https://laravel.com/docs/9.x/authorization#gates). 
 
 So, technically speaking, **simple applications may be created with just Users and Gates, without separate Roles/Permissions DB tables**.
 
-In a simple app, if you have just `users.is_admin` DB column with 0/1 values, you can define:
+In a simple app, if you have just a `users.is_admin` DB column with 0/1 values, you can define:
 
 **app/Providers/AppServiceProvider.php**:
 ```php
@@ -116,7 +116,7 @@ class Role extends Model
 }
 ```
 
-And then immediately I would suggest to add a **Seeder** to seed the main roles for the beginning. You noticed that I generated `make:model` with `-s` at the end? So yeah, it generated the Seeder file, which we will in like this:
+And then immediately I would suggest adding a **Seeder** to seed the main roles for the beginning. You noticed that I generated `make:model` with `-s` at the end. So yeah, it generated the Seeder file, which we will in like this:
 
 **database/seeders/RoleSeeder.php**:
 ```php
@@ -156,7 +156,7 @@ class Permission extends Model
 }
 ```
 
-Now, the relationship. It should be a many-to-many, because both each role may have many permission, and also each permission may belong to many roles.
+Now, the relationship. It should be a many-to-many, because both each role may have many permissions, and also each permission may belong to many roles.
 
 ```sh
 php artisan make:migration create_permission_role_table
@@ -208,9 +208,9 @@ Ok, great, we have the relationship between roles and permissions. Now, how do w
 Typically, there are two layers of managing permissions:
 
 - Admin adds the permissions and then specifies which roles have certain permissions
-- For users, admin/system assigns the ROLES to them, which in itself includes the permissions
+- For users, the admin/system assigns the ROLES to them, which in itself includes the permissions
 
-In other words, we don't assign the permissions to the users, we assign only the roles.
+In other words, we don't assign permissions to the users, we assign only the roles.
 
 So, we need to create the relationship from User to Role. And here's where we have a million-dollar question:
 
@@ -222,7 +222,7 @@ I've seen applications that allow multiple roles, like the same person can be an
 
 So, I would vote that, in most cases, you would first choose a more simple approach of one role per user.
 
-I've checked the Booking.com itself, and they require **separate** registrations as a user and as a property owner, so you can be either one or another.
+I've checked Booking.com itself, and they require **separate** registrations as a user and as a property owner, so you can be either one or another.
 
 That's why we will go for just a `belongsTo` relationship here.
 
@@ -259,9 +259,9 @@ class User extends Authenticatable
 }
 ```
 
-So, at the moment of the registration, our new user will choose whether they are looking for a property to rent, or want to publish their own property for a rent.
+So, at the moment of the registration, our new users will choose whether they are looking for a property to rent, or want to publish their own property for rent.
 
-As for the Administrator, I suggest to create a special Seeder to already have one Administrator in the DB after the project install:
+As for the Administrator, I suggest creating a special Seeder to already have one Administrator in the DB after the project install:
 
 ```sh
 php artisan make:seeder AdminUserSeeder
@@ -314,9 +314,9 @@ Our next goal is to implement the registration API and test that users get their
 
 ## Registration API: Assign Permissions and Test Them
 
-Let's say that we will have two registration forms: one for a simple user, and another for the property owner. So, let's simulate both of them, and write automated tests that would check if users get the correct role/permissions.
+Let's say that we will have two registration forms: one for a simple user, and another for the property owner. So, let's simulate both of them and write automated tests that would check if users get the correct role/permissions.
 
-For now, let's group them into one endpoint `POST /api/auth/register`, because the user registration would be almost identical. In the future lessons, we will talk about differences in the profile fields, but both users and property owners are Users with the same fields of name/email/password.
+For now, let's group them into one endpoint `POST /api/auth/register`, because the user registration would be almost identical. In future lessons, we will talk about differences in the profile fields, but both users and property owners are Users with the same fields of name/email/password.
 
 ```sh
 php artisan make:controller Auth/RegisterController
@@ -368,7 +368,7 @@ Here I'm assuming we use Laravel Sanctum for the Auth, so we just return the acc
 
 So, after the validation, we can create the User with `role_id => 3`, which is the Simple User, according to our Seeder above.
 
-In the validation, we have that `Rule::in(2, 3)` hardcoded. You would probably agree that this `2, 3` isn't readable or understandable from the first glance to a new developer, as it's hard to remember which role is ID 2 or 3. Let's introduce a few constants inside a Role model.
+In the validation, we have that `Rule::in(2, 3)` hardcoded. You would probably agree that this `2, 3` isn't readable or understandable at the first glance to a new developer, as it's hard to remember which role is ID 2 or 3. Let's introduce a few constants inside a Role model.
 
 ```php
 class Role extends Model
@@ -419,7 +419,7 @@ Also, I edit the default `phpunit.xml` file to uncomment these two lines:
 <env name="DB_DATABASE" value=":memory:"/>
 ```
 
-**Notice**: For demo projects like this one, it's typically fine to use in-memory database, but in the real world scenario I often set up a separate testing MySQL database to run tests on.
+**Notice**: For demo projects like this one, it's typically fine to use an in-memory database, but in the real-world scenario I often set up a separate testing MySQL database to run tests on.
 
 Ok, and now, let's generate our first test that would check if the registration works.
 
@@ -484,7 +484,7 @@ class AuthTest extends TestCase
 }
 ```
 
-As you can see, we have three methods, each of them tests the registration with each of the roles. By the way, see how constants like `Role::ROLE_OWNER` paid off here as well, the test code is really readable.
+As you can see, we have three methods, each of which tests the registration with each of the roles. By the way, see how constants like `Role::ROLE_OWNER` paid off here as well, the test code is really readable.
 
 The result: our registration works!
 
@@ -492,9 +492,9 @@ The result: our registration works!
 
 - - - - - 
 
-Finally in this lesson, let's create a few endpoints for the **logged-in users** and test if we have correct access to them.
+Finally, in this lesson, let's create a few endpoints for the **logged-in users** and test if we have the correct access to them.
 
-Let's say that our property owner will have access to the list of their properties, and regular user will have access to their bookings. 
+Let's say that our property owner will have access to the list of their properties, and the regular user will have access to their bookings. 
 
 So we will create those endpoints, without any functionality for now, just with the `Gates` to check the permissions.
 
@@ -557,7 +557,7 @@ php artisan make:controller User/BookingController
 Route::post('auth/register', \App\Http\Controllers\Auth\RegisterController::class);
 
 Route::middleware('auth:sanctum')->group(function() {
-    // No owner/user grouping for now, will do it later with more routes
+    // No owner/user grouping, for now, will do it later with more routes
     Route::get('owner/properties',
         [\App\Http\Controllers\Owner\PropertyController::class, 'index']);
     Route::get('user/bookings',
@@ -605,7 +605,7 @@ class BookingController extends Controller
 }
 ```
 
-Now, for `$this->authorize()` to work, we need to actually **define** the Gates for the application. Currently the permissions are in our database, but depending on the current user's role, we need to set every Gate to true/false value for the user.
+Now, for `$this->authorize()` to work, we need to actually **define** the Gates for the application. Currently, the permissions are in our database, but depending on the current user's role, we need to set every Gate to a true/false value for the user.
 
 We will generate a Middleware specifically for that and enable that Middleware to run on every API request.
 
@@ -641,7 +641,7 @@ class GateDefineMiddleware
 }
 ```
 
-As you can see, we launch `Gate::define()` only on those permissions that are assigned to the `role_id` of the logged in user. For other permissions, the Gate will not be defined, so it will return `false` when checking for that permission.
+As you can see, we launch `Gate::define()` only on those permissions that are assigned to the `role_id` of the logged-in user. For other permissions, the Gate will not be defined, so it will return `false` when checking for that permission.
 
 We register our middleware to run in the `api` group.
 
@@ -670,7 +670,7 @@ class Kernel extends HttpKernel
 }
 ```
 
-Now, all we need to do to check if the middleware is working, is to launch the API endpoints for the user and the property owner separately, with the Bearer Token that we received from the registration endpoint.
+Now, all we need to do to check if the middleware is working is to launch the API endpoints for the user and the property owner separately, with the Bearer Token that we received from the registration endpoint.
 
 Here's how it looks in Postman:
 
@@ -777,13 +777,13 @@ Now, we launch `php artisan test`, and...
 
 ![Auth Test Permissions](images/auth-test-permissions.png)
 
-We successfully simulated the registration for two user roles, and their permissions for specific API endpoints!
+We successfully simulated the registration for two user roles and their permissions for specific API endpoints!
 
 - - - - -
 
 ## Alternative: Spatie Permission Package
 
-There's another popular approach to add roles/permissions to Laravel projects: package [spatie/laravel-permission](https://github.com/spatie/laravel-permission).
+There's another popular approach to adding roles/permissions to Laravel projects: package [spatie/laravel-permission](https://github.com/spatie/laravel-permission).
 
 It would replace our own DB structure, and instead of manually attaching/detaching permissions, we will work with the package functions like `$user->assignRole('Administrator')` and similar ones.
 
@@ -811,9 +811,9 @@ Next, the Models. Again, we don't need our own models, because the package has i
 
 So, we delete the `App\Models\Permission.php` file.
 
-With the Role model, it's a bit more tricky, because we've added extra feature: the constants like `Role::ROLE_OWNER` which we use all over our project. 
+With the Role model, it's a bit more tricky, because we've added an extra feature: the constants like `Role::ROLE_OWNER` which we use all over our project. 
 
-So we leave the Role model inside our project, just instead of extending the Model from Eloquent, we extend Spatie package Role model.
+So we leave the Role model inside our project, just instead of extending the Model from Eloquent, we extend the Spatie package Role model.
 
 **app/Models/Role.php**:
 ```php
@@ -955,11 +955,11 @@ class PropertiesTest extends TestCase
 
 And if we relaunch `php artisan test`, the test should all pass!
 
-Notice that we haven't changed anything in the Owner/User Controllers? It's all still the same: `$this->authorize('properties-manage');` and `$this->authorize('bookings-manage');`.
+Notice that we haven't changed anything in the Owner/User Controllers. It's all still the same: `$this->authorize('properties-manage');` and `$this->authorize('bookings-manage');`.
 
 That's because Spatie uses the same Gate mechanism as we did before using the package, it just adds its own DB layer on top.
 
-The main difference, however, is the database structure and the queries executed. In Spatie package case, it's trying to be very flexible, using polymorphic relations and allowing users to have multiple roles (*which we don't need, as discussed earlier*). 
+The main difference, however, is the database structure and the queries executed. In the Spatie package case, it's trying to be very flexible, using polymorphic relations and allowing users to have multiple roles (*which we don't need, as discussed earlier*). 
 
 Also, the package is running queries in "live mode" when checking the permissions. In our case, we're running the DB query only once in the Middleware, and then comparing the Gates whenever we need to check them.
 
@@ -982,7 +982,7 @@ where
   )
 ```
 
-A typical query of Spatie package - get all permissions by user:
+A typical query of the Spatie package - get all permissions by user:
 ```
 select
   "permissions".*,
