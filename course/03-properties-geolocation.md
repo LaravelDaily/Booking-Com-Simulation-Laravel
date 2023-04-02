@@ -1,4 +1,17 @@
-The next thing we'll work on is adding **real estate properties**: houses/homes to rent. In this lesson, we will focus on adding the geographical data and build a simple search by city, country and latitude/longitude.
+The next thing we'll work on is adding **real estate properties**: houses/homes to rent. In this particular lesson, we will focus on adding the **geographical data** and build a simple search by city, country and latitude/longitude.
+
+---
+
+## Goals of This Lesson
+
+- Build a DB schema for countries, cities and geographical objects, with seeding a few of each
+- Build a first version of DB schema for properties, with geographical data
+- Automatically set property latitude/longitude based on the address, with Observer and Google Maps API
+- First version of API endpoint to create a property, covered by PHPUnit test
+
+By the end of this lesson, we will see this in Postman:
+
+![](images/property-create.png)
 
 ---
 

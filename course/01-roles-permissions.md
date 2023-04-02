@@ -2,6 +2,8 @@ Default Laravel comes with the "users" table, and we need to add roles and permi
 
 Many tutorials start with roles and then go to permissions, but I will start from the other side: let's reverse-engineer what we need roles/permissions FOR.
 
+---
+
 ## Goals of This Lesson
 
 - Create our simple DB structure for roles/permissions
