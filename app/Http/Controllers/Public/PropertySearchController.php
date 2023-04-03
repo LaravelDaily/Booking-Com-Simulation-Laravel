@@ -77,8 +77,7 @@ class PropertySearchController extends Controller
                     $query->where('price', '<=', $request->price_to);
                 });
             })
-            ->orderBy('bookings_avg_rating', 'desc')
-            ->get();
+            ->orderBy('bookings_avg_rating', 'desc');
 
         $facilities = Facility::query()
             ->withCount(['properties' => function ($property) use ($properties) {
@@ -90,7 +89,7 @@ class PropertySearchController extends Controller
             ->pluck('properties_count', 'name');
 
         return [
-            'properties' => PropertySearchResource::collection($properties),
+            'properties' => PropertySearchResource::collection($properties->paginate(10))->response()->getData(true),
             'facilities' => $facilities,
         ];
     }
