@@ -829,6 +829,19 @@ class Role extends \Spatie\Permission\Models\Role
 }
 ```
 
+Finally, we need to add a Trait in the User model:
+
+**app/Models/User.php**:
+```php
+use Spatie\Permission\Traits\HasRoles;
+
+class User extends Authenticatable
+{
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+
+    // ...
+```
+
 Next, the Seeds. They will look a bit different, cause we need to switch from our own DB structure to use the package's features. Only the `RoleSeeder` doesn't change at all, the other ones will look like this.
 
 **database/seeders/AdminUserSeeder.php**:
