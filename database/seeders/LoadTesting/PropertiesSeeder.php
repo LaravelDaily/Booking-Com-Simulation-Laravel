@@ -13,7 +13,7 @@ class PropertiesSeeder extends Seeder
     {
         $users = User::where('role_id', Role::ROLE_OWNER)->pluck('id');
 
-        for ($i = 0; $i < 10_000; $i++) {
+        for ($i = 0; $i < 50_000; $i++) {
             Property::factory()->create([
                 'owner_id' => $users->random(),
             ]);

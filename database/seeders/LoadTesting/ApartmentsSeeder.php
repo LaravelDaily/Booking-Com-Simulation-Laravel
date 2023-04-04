@@ -12,7 +12,7 @@ class ApartmentsSeeder extends Seeder
     {
         $properties = Property::pluck('id');
 
-        for ($i = 0; $i <= 20_000; $i++) {
+        for ($i = 0; $i <= 100_000; $i++) {
             Apartment::factory()
                 ->create([
                     'property_id' => $properties->random(),

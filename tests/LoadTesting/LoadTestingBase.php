@@ -17,7 +17,7 @@ class LoadTestingBase extends BaseTestCase
         parent::setUp();
 
         $bookingsCount = Booking::count();
-        if ($bookingsCount !== 100_000) {
+        if ($bookingsCount !== 1_000_000) {
             $this->artisan('migrate:fresh');
             $this->seed(DatabaseSeeder::class);
             $this->seed(LoadSeeder::class);

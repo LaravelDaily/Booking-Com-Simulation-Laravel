@@ -22,9 +22,9 @@ class LoadSeeder extends Seeder
             CountriesSeeder::class, // 100
             CitiesSeeder::class, // 1k
             GeoObjectsSeeder::class, // 1k
-            PropertiesSeeder::class, // 10k
-            ApartmentsSeeder::class, // 20k
-            BookingsSeeder::class, // 100k (50k no rating, 50k with rating)
+            PropertiesSeeder::class, // 50k
+            ApartmentsSeeder::class, // 100k
+            BookingsSeeder::class, // 1M (500k no rating, 500k with rating)
         ]);
     }
 }

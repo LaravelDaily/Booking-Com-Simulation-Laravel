@@ -15,7 +15,7 @@ class BookingsSeeder extends Seeder
         $apartments = Apartment::pluck('id');
         $users = User::where('role_id', Role::ROLE_USER)->pluck('id');
 
-        for ($i = 0; $i < 50_000; $i++) {
+        for ($i = 0; $i < 500_000; $i++) {
             Booking::factory()
                 ->create([
                     'apartment_id' => $apartments->random(),
@@ -24,7 +24,7 @@ class BookingsSeeder extends Seeder
                 ]);
         }
 
-        for ($i = 0; $i < 50_000; $i++) {
+        for ($i = 0; $i < 500_000; $i++) {
             Booking::factory()
                 ->create([
                     'apartment_id' => $apartments->random(),
