@@ -10,11 +10,13 @@ class CitiesSeeder extends Seeder
 {
     public function run(): void
     {
-        $countries = Country::pluck('id');
+        if (City::count() < 1_000) {
+            $countries = Country::pluck('id');
 
-        for ($i = 0; $i < 1_000; $i++) {
-            City::factory()
-                ->create(['country_id' => $countries->random()]);
+            for ($i = 0; $i < 1_000; $i++) {
+                City::factory()
+                    ->create(['country_id' => $countries->random()]);
+            }
         }
     }
 }

@@ -10,12 +10,14 @@ class GeoObjectsSeeder extends Seeder
 {
     public function run(): void
     {
-        $cities = City::pluck('id');
-        for ($i = 0; $i < 1_000; $i++) {
-            Geoobject::factory()
-                ->create([
-                    'city_id' => $cities->random(),
-                ]);
+        if (Geoobject::count() < 1_000) {
+            $cities = City::pluck('id');
+            for ($i = 0; $i < 1_000; $i++) {
+                Geoobject::factory()
+                    ->create([
+                        'city_id' => $cities->random(),
+                    ]);
+            }
         }
     }
 }

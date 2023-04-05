@@ -10,13 +10,16 @@ class ApartmentsSeeder extends Seeder
 {
     public function run(): void
     {
-        $properties = Property::pluck('id');
+        $count = Apartment::count();
+        if ($count < 100_000) {
+            $properties = Property::pluck('id');
 
-        for ($i = 0; $i <= 100_000; $i++) {
-            Apartment::factory()
-                ->create([
-                    'property_id' => $properties->random(),
-                ]);
+            for ($i = 0; $i <= 100_000 - $count; $i++) {
+                Apartment::factory()
+                    ->create([
+                        'property_id' => $properties->random(),
+                    ]);
+            }
         }
     }
 }

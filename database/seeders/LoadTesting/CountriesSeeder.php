@@ -9,8 +9,10 @@ class CountriesSeeder extends Seeder
 {
     public function run(): void
     {
-        Country::factory()
-            ->count(100)
-            ->create();
+        if (Country::count() < 100) {
+            Country::factory()
+                ->count(100)
+                ->create();
+        }
     }
 }

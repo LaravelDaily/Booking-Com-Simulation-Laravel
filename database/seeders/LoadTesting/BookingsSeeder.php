@@ -14,23 +14,29 @@ class BookingsSeeder extends Seeder
     {
         $apartments = Apartment::pluck('id');
         $users = User::where('role_id', Role::ROLE_USER)->pluck('id');
+        $noRating = Booking::whereNull('rating')->count();
+        if ($noRating < 500_000) {
 
-        for ($i = 0; $i < 500_000; $i++) {
-            Booking::factory()
-                ->create([
-                    'apartment_id' => $apartments->random(),
-                    'user_id' => $users->random(),
-                    'rating' => null
-                ]);
+            for ($i = 0; $i < 500_000 - $noRating; $i++) {
+                Booking::factory()
+                    ->create([
+                        'apartment_id' => $apartments->random(),
+                        'user_id' => $users->random(),
+                        'rating' => null
+                    ]);
+            }
         }
 
-        for ($i = 0; $i < 500_000; $i++) {
-            Booking::factory()
-                ->create([
-                    'apartment_id' => $apartments->random(),
-                    'user_id' => $users->random(),
-                    'rating' => random_int(1, 10)
-                ]);
+        $hasRating = Booking::whereNotNull('rating')->count();
+        if ($hasRating < 500_000) {
+            for ($i = 0; $i < 500_000 - $hasRating; $i++) {
+                Booking::factory()
+                    ->create([
+                        'apartment_id' => $apartments->random(),
+                        'user_id' => $users->random(),
+                        'rating' => random_int(1, 10)
+                    ]);
+            }
         }
     }
 }
