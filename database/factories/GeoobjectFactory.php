@@ -3,14 +3,12 @@
 namespace Database\Factories;
 
 use App\Models\City;
-use App\Models\Role;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Property>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Geoobject>
  */
-class PropertyFactory extends Factory
+class GeoobjectFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -20,9 +18,8 @@ class PropertyFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->text(20),
-            'address_street' => fake()->streetAddress(),
-            'address_postcode' => fake()->postcode(),
+            'city_id' => City::inRandomOrder()->value('id'),
+            'name' => fake()->name(),
             'lat' => fake()->latitude(),
             'long' => fake()->longitude(),
         ];

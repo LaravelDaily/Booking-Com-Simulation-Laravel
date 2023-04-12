@@ -2,13 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\Property;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Apartment>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Country>
  */
-class ApartmentFactory extends Factory
+class CountryFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,9 +17,9 @@ class ApartmentFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->text(20),
-            'capacity_adults' => rand(1, 5),
-            'capacity_children' => rand(1, 5),
+            'name' => fake()->name(),
+            'lat' => fake()->latitude(),
+            'long' => fake()->longitude(),
         ];
     }
 }
