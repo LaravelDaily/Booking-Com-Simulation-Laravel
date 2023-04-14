@@ -10,7 +10,7 @@ For testing, I've used the seeder from the previous lesson a few times, with eve
 - 600 000 apartments (2 apartments per property)
 - 1 200 000 bookings
 
-And here's a reminder of how the Search Controller method looks like:
+And here's a reminder of what the Search Controller method looks like:
 
 **app/Http/Controllers/Public/PropertySearchController.php**:
 ```php
@@ -111,13 +111,13 @@ First, let's just try to launch the endpoint in Postman:
 
 Returns result in `0.593s`. Is it good or bad?
 
-In theory, the response under 1 second should be good. But imagine hundreds of users browsing the website/app at the same time, and it can accumulate quite fast. So let's still try to optimize and lower that number down as much as we can.
+In theory, a response under 1 second should be good. But imagine hundreds of users browsing the website/app at the same time, and it can accumulate quite fast. So let's still try to optimize and lower that number down as much as we can.
 
 ---
 
 ## First Run with Laravel Telescope
 
-How can we measure the Eloquent queries? In a visual website project, we would install [Laravel Debugbar](https://github.com/barryvdh/laravel-debugbar) and look at the numbers at the bottom of a webpage. But here we have API, so what tool should we use?
+How can we measure Eloquent queries? In a visual website project, we would install [Laravel Debugbar](https://github.com/barryvdh/laravel-debugbar) and look at the numbers at the bottom of a webpage. But here we have API, so what tool should we use?
 
 [Laravel Telescope](https://laravel.com/docs/10.x/telescope) is one of the options. 
 
@@ -127,13 +127,13 @@ php artisan telescope:install
 php artisan migrate
 ```
 
-As a result of this, we will have a few new DB tables with prefix `telescope_*****` where it would store everything it monitors (it's much more than just DB queries).
+As a result of this, we will have a few new DB tables with the prefix `telescope_*****` where it would store everything it monitors (it's much more than just DB queries).
 
 ![](images/telescope-entries-db.png)
 
 ---
 
-**Side note**: important change for seeders. Since Laravel Telescope will monitor/measure every DB query, we need to disable that behavior in seeders, otherwise we will have huge polluted logs with millions of irrelevant `insert` statements.
+**Side note**: important change for seeders. Since Laravel Telescope will monitor/measure every DB query, we need to disable that behavior in seeders, otherwise, we will have huge polluted logs with millions of irrelevant `insert` statements.
 
 **database/seeders/PerformanceTestingSeeder.php**:
 ```php
@@ -164,7 +164,7 @@ So we load `/telescope/queries` in the browser and see this:
 So, we see 20 SQL queries. What can we identify as problem(s)?
 
 1. An obvious [N+1 Query](https://laraveldaily.com/tag/n1-query) problem, loading `beds` and `rooms` from DB for each of the 10 properties
-2. Three queries identified as `slow` (see screenshow below), so we will investigate/improve them later in this lesson
+2. Three queries were identified as `slow` (see screenshot below), so we will investigate/improve them later in this lesson
 
 Those "slow" queries are, by default, identified as ones running **over 100ms**. But for this tutorial, I've changed that default value to `50ms`:
 
@@ -223,7 +223,7 @@ public function beds()
 }
 ```
 
-So you can load the Beds from this relationship, or from this one:
+So you can load the Beds from this relationship, or that one:
 
 **app/Models/Room.php**:
 ```php
@@ -256,7 +256,7 @@ public function bedsList(): Attribute
 
 See that `$this->beds`? We're using the `hasManyThrough` relationship. But in the Controller we're loading the longer way, including `rooms`, which we actually don't need in the search results.
 
-All that long explanation to show that we need to make this small change:
+All that long explanation shows that we need to make this small change:
 
 ```php
 $propertiesQuery = Property::query()
@@ -271,21 +271,21 @@ Let's reload the Postman endpoint, and we shouldn't see those extra queries.
 
 ![](images/telescope-fixed-n1.png)
 
-Great, first optimization done!
+Great, the first optimization done!
 
 ---
 
 ## One Small Improvement for AVERAGE
 
-From what I see, we have two slowest queries, so let's focus on those two, which are nearly identical.
+From what I see, we have the two slowest queries, so let's focus on those two, which are nearly identical.
 
-I will remind you the decision we made earlier:
+I will remind you of the decision we made earlier:
 
 - We form a Query Builder query `$propertiesQuery` but not launching it yet
 - We get the IDs of properties with `$propertiesQuery->pluck('id')` for the facilities - so that's one DB query
 - And then we take 10 paginated properties with `$propertiesQuery->paginate(10)` - so that's another DB query
 
-The good thing is that on DB level some of those conditions will be cached and the second almost-identical query will run faster just because of that.
+The good thing is that on the DB level, some of those conditions will be cached and the second almost-identical query will run faster just because of that.
 
 So we're dealing with this SQL query - it looks like a beast at the first glance, but actually it's pretty normal:
 
@@ -360,7 +360,7 @@ order by
 
 And what I've noticed now is that we're calculating the **rating** for both queries, although we need it only for the paginated query, and not for the ID facility query.
 
-So let's move those rating things from the first query, to the level where we actually paginate the results.
+So let's move those rating things from the first query to the level where we actually paginate the results.
 
 So, instead of:
 
@@ -436,7 +436,7 @@ limit
   10 offset 0
 ```
 
-The result is not pretty, it's just one line/column with huge amount of text.
+The result is not pretty, it's just one line/column with a huge amount of text.
 
 ```
 -> Limit: 10 row(s)  (actual time=620.680..620.683 rows=10 loops=1)
@@ -447,21 +447,21 @@ The result is not pretty, it's just one line/column with huge amount of text.
 // ... much more text
 ```
 
-There are tools to help you vizualize that, like DataGrip, for example:
+There are tools to help you visualize that, like DataGrip, for example:
 
 ![](images/datagrip-analyze.png)
 
-Running the query from the above would show result something like this:
+Running the query from the above would show a result something like this:
 
 ![](images/datagrip-analyze-result.png)
 
-But, aside from tools, I want you to understand the actual raw result so you would be able to make decision from it, without any external tools.
+But, aside from tools, I want you to understand the actual raw result so you would be able to decide it, without any external tools.
 
 The most important to understand is the **cost** number: the bigger cost of the query operation, the slower it is.
 
-And each operation has its sub-operations, in a tree-like struture.
+And each operation has its sub-operations, in a tree-like structure.
 
-So I've format it a little bit, removed the "less significant" information, and let's take a look at this:
+So I've formatted it a little bit, removed the "less significant" information, and let's take a look at this:
 
 ```
 -> Limit: 10 row(s)  (actual time=187.219..187.223 rows=10 loops=1)
@@ -557,7 +557,7 @@ But we actually really need that rating, we do want to show the TOP properties t
 
 ## Storing and Re-Calculating Ratings
 
-Here's where we can implement a sort of a "caching" mechanism. It won't a direct Laravel `Cache::get()` or some other Cache driver, but what I mean is we can "cache" the value of property rating directly on the `properties` DB table, until someone else rates one of their apartments.
+Here's where we can implement a sort of "caching" mechanism. It won't be a direct Laravel `Cache::get()` or some other Cache driver, but what I mean is we can "cache" the value of property rating directly on the `properties` DB table until someone else rates one of their apartments.
 
 Yes, I mean re-calculating that value with every new rating, that may be also called a kind of caching.
 
@@ -639,7 +639,7 @@ class UpdatePropertyRatingJob implements ShouldQueue
 }
 ```
 
-And we call this job each time the apartment gets rated, in the Controller.
+And we call this job each time the apartment gets rated, by the Controller.
 
 **app/Http/Controllers/User/BookingController.php**:
 ```php
@@ -685,6 +685,6 @@ And we still have three slower queries, but they are all under 100ms now:
 
 ![](images/queries-optimized.png)
 
-So, I guess we'll be fine for this optimization, from `0.59s` in the very beginning of the lesson to `0.43s`. 
+So, I guess we'll be fine for this optimization, from `0.59s` at the very beginning of the lesson to `0.43s`. 
 
 Or would you suggest something more? Shoot in the comments below.
