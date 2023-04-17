@@ -443,31 +443,38 @@ class PropertySearchTest extends TestCase
         ]);
         $user1 = User::factory()->create(['role_id' => Role::ROLE_USER]);
         $user2 = User::factory()->create(['role_id' => Role::ROLE_USER]);
-        Booking::create([
+        $booking1 = Booking::create([
             'apartment_id' => $apartment1->id,
             'user_id' => $user1->id,
             'start_date' => now()->addDay(),
             'end_date' => now()->addDays(2),
             'guests_adults' => 1,
             'guests_children' => 0,
+        ]);
+        $this->actingAs($user1)->putJson('/api/user/bookings/' . $booking1->id, [
             'rating' => 7
         ]);
-        Booking::create([
+        $booking2 = Booking::create([
             'apartment_id' => $apartment2->id,
             'user_id' => $user1->id,
             'start_date' => now()->addDay(),
             'end_date' => now()->addDays(2),
             'guests_adults' => 1,
             'guests_children' => 0,
+        ]);
+        $this->actingAs($user1)->putJson('/api/user/bookings/' . $booking2->id, [
             'rating' => 9
         ]);
-        Booking::create([
+        $booking3 = Booking::create([
             'apartment_id' => $apartment2->id,
             'user_id' => $user2->id,
             'start_date' => now()->addDay(),
             'end_date' => now()->addDays(2),
             'guests_adults' => 1,
             'guests_children' => 0,
+            'rating' => 7
+        ]);
+        $this->actingAs($user2)->putJson('/api/user/bookings/' . $booking3->id, [
             'rating' => 7
         ]);
 

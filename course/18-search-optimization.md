@@ -688,3 +688,96 @@ And we still have three slower queries, but they are all under 100ms now:
 So, I guess we'll be fine for this optimization, from `0.59s` at the very beginning of the lesson to `0.43s`. 
 
 Or would you suggest something more? Shoot in the comments below.
+
+---
+
+## Bonus: Fixing Tests
+
+After making this change, we also need to fix one automated test in the `PropertySearchTest` file. In the method `test_properties_show_correct_rating_and_ordered_by_it()` we simulated the data while creating the Bookings already with ratings:
+
+```php
+Booking::create([
+    'apartment_id' => $apartment2->id,
+    // ...
+
+    'rating' => 7
+]);
+```
+
+It means that the property rating will not be re-calculated. And the test fails:
+
+![](images/test-rating-failed.png)
+
+We need to change the test to creating the booking **without** the rating, and then calling the actual PUT endpoint to post that rating.
+
+Here's the updated code of that method:
+
+```php
+public function test_properties_show_correct_rating_and_ordered_by_it()
+{
+    $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+    $cityId = City::value('id');
+    $property = Property::factory()->create([
+        'owner_id' => $owner->id,
+        'city_id' => $cityId,
+    ]);
+    $apartment1 = Apartment::factory()->create([
+        'name' => 'Cheap apartment',
+        'property_id' => $property->id,
+        'capacity_adults' => 2,
+        'capacity_children' => 1,
+    ]);
+    $property2 = Property::factory()->create([
+        'owner_id' => $owner->id,
+        'city_id' => $cityId,
+    ]);
+    $apartment2 = Apartment::factory()->create([
+        'name' => 'Mid size apartment',
+        'property_id' => $property2->id,
+        'capacity_adults' => 2,
+        'capacity_children' => 1,
+    ]);
+    $user1 = User::factory()->create(['role_id' => Role::ROLE_USER]);
+    $user2 = User::factory()->create(['role_id' => Role::ROLE_USER]);
+    $booking1 = Booking::create([
+        'apartment_id' => $apartment1->id,
+        'user_id' => $user1->id,
+        'start_date' => now()->addDay(),
+        'end_date' => now()->addDays(2),
+        'guests_adults' => 1,
+        'guests_children' => 0,
+    ]);
+    $this->actingAs($user1)->putJson('/api/user/bookings/' . $booking1->id, [
+        'rating' => 7
+    ]);
+    $booking2 = Booking::create([
+        'apartment_id' => $apartment2->id,
+        'user_id' => $user1->id,
+        'start_date' => now()->addDay(),
+        'end_date' => now()->addDays(2),
+        'guests_adults' => 1,
+        'guests_children' => 0,
+    ]);
+    $this->actingAs($user1)->putJson('/api/user/bookings/' . $booking2->id, [
+        'rating' => 9
+    ]);
+    $booking3 = Booking::create([
+        'apartment_id' => $apartment2->id,
+        'user_id' => $user2->id,
+        'start_date' => now()->addDay(),
+        'end_date' => now()->addDays(2),
+        'guests_adults' => 1,
+        'guests_children' => 0,
+        'rating' => 7
+    ]);
+    $this->actingAs($user2)->putJson('/api/user/bookings/' . $booking3->id, [
+        'rating' => 7
+    ]);
+
+    $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1');
+    $response->assertStatus(200);
+    $response->assertJsonCount(2, 'properties.data');
+    $this->assertEquals(8, $response->json('properties.data')[0]['avg_rating']);
+    $this->assertEquals(7, $response->json('properties.data')[1]['avg_rating']);
+}
+```
