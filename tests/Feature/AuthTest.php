@@ -1,9 +1,6 @@
 <?php
 
 use App\Models\Role;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-
 
 test('registration fails with admin role', function () {
     $response = $this->postJson('/api/auth/register', [

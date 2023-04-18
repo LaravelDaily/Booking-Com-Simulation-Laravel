@@ -5,12 +5,7 @@ use App\Models\City;
 use App\Models\Facility;
 use App\Models\FacilityCategory;
 use App\Models\Property;
-use App\Models\Role;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-
 
 test('apartment show loads apartment with facilities', function () {
     $owner = User::factory()->owner()->create();

@@ -3,11 +3,8 @@
 use App\Models\City;
 use App\Models\Property;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Tests\TestCase;
-
 
 test('property owner has access to properties feature', function () {
     $owner = User::factory()->owner()->create();

@@ -5,9 +5,6 @@ use App\Models\Booking;
 use App\Models\City;
 use App\Models\Property;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-
 
 test('user can get only their bookings', function () {
     $user1 = User::factory()->user()->create();
