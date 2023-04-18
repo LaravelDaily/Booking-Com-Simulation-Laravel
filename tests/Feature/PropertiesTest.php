@@ -4,12 +4,10 @@ namespace Tests\Feature;
 
 use App\Models\City;
 use App\Models\Property;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Tests\TestCase;
 
 class PropertiesTest extends TestCase

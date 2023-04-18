@@ -6,7 +6,6 @@ use App\Models\Apartment;
 use App\Models\Booking;
 use App\Models\City;
 use App\Models\Property;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

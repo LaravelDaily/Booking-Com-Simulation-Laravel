@@ -19,7 +19,7 @@ class ApartmentShowTest extends TestCase
 
     public function test_apartment_show_loads_apartment_with_facilities()
     {
-        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $owner = User::factory()->owner()->create();
         $cityId = City::value('id');
         $property = Property::factory()->create([
             'owner_id' => $owner->id,
