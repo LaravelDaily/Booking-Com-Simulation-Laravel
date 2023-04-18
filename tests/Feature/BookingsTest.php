@@ -135,21 +135,3 @@ test('user can post rating for their booking', function () {
     $response->assertStatus(200);
     $response->assertJsonFragment($correctData);
 });
-
-// Helpers
-function create_apartment(): Apartment
-{
-    $owner = User::factory()->owner()->create();
-    $cityId = City::value('id');
-    $property = Property::factory()->create([
-        'owner_id' => $owner->id,
-        'city_id' => $cityId,
-    ]);
-
-    return Apartment::create([
-        'name' => 'Apartment',
-        'property_id' => $property->id,
-        'capacity_adults' => 3,
-        'capacity_children' => 2,
-    ]);
-}

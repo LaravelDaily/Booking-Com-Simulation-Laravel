@@ -1,7 +1,14 @@
 <?php
 
-uses(\Tests\TestCase::class)->in('Feature');
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class)->in('Feature');
+use App\Models\Apartment;
+use App\Models\City;
+use App\Models\Property;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+uses(TestCase::class)->in('Feature');
+uses(RefreshDatabase::class)->in('Feature');
 
 /*
 |--------------------------------------------------------------------------
@@ -41,3 +48,21 @@ uses(\Illuminate\Foundation\Testing\RefreshDatabase::class)->in('Feature');
 */
 
 /** @link https://pestphp.com/docs/custom-helpers */
+
+// Helpers
+function create_apartment(): Apartment
+{
+    $owner = User::factory()->owner()->create();
+    $cityId = City::value('id');
+    $property = Property::factory()->create([
+        'owner_id' => $owner->id,
+        'city_id' => $cityId,
+    ]);
+
+    return Apartment::create([
+        'name' => 'Apartment',
+        'property_id' => $property->id,
+        'capacity_adults' => 3,
+        'capacity_children' => 2,
+    ]);
+}
