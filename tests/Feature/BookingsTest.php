@@ -8,8 +8,6 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-uses(TestCase::class);
-uses(RefreshDatabase::class);
 
 test('user can get only their bookings', function () {
     $user1 = User::factory()->user()->create();

@@ -15,8 +15,6 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-uses(TestCase::class);
-uses(RefreshDatabase::class);
 
 test('property search by city returns correct results', function () {
     $owner = User::factory()->owner()->create();

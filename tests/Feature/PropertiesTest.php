@@ -8,8 +8,6 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
-uses(TestCase::class);
-uses(RefreshDatabase::class);
 
 test('property owner has access to properties feature', function () {
     $owner = User::factory()->owner()->create();
