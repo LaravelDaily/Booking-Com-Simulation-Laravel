@@ -2,13 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\City;
-use App\Models\Role;
-use App\Models\User;
+use App\Models\Property;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Property>
+ * @extends Factory<Property>
  */
 class PropertyFactory extends Factory
 {
@@ -26,5 +24,14 @@ class PropertyFactory extends Factory
             'lat' => fake()->latitude(),
             'long' => fake()->longitude(),
         ];
+    }
+
+    public function withImages($count = 2)
+    {
+        return $this->afterCreating(function ($property) use ($count) {
+            for ($i = 0; $i < $count; $i++) {
+                $property->addMedia(fake()->image())->toMediaCollection('images');
+            }
+        });
     }
 }

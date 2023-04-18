@@ -6,7 +6,6 @@ use App\Models\Apartment;
 use App\Models\Booking;
 use App\Models\City;
 use App\Models\Property;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -17,7 +16,7 @@ class BookingsTest extends TestCase
 
     private function create_apartment(): Apartment
     {
-        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $owner = User::factory()->owner()->create();
         $cityId = City::value('id');
         $property = Property::factory()->create([
             'owner_id' => $owner->id,
@@ -34,8 +33,8 @@ class BookingsTest extends TestCase
 
     public function test_user_can_get_only_their_bookings()
     {
-        $user1 = User::factory()->create(['role_id' => Role::ROLE_USER]);
-        $user2 = User::factory()->create(['role_id' => Role::ROLE_USER]);
+        $user1 = User::factory()->user()->create();
+        $user2 = User::factory()->user()->create();
         $apartment = $this->create_apartment();
         $booking1 = Booking::create([
             'apartment_id' => $apartment->id,
@@ -69,7 +68,7 @@ class BookingsTest extends TestCase
 
     public function test_property_owner_does_not_have_access_to_bookings_feature()
     {
-        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $owner = User::factory()->owner()->create();
         $response = $this->actingAs($owner)->getJson('/api/user/bookings');
 
         $response->assertStatus(403);
@@ -77,7 +76,7 @@ class BookingsTest extends TestCase
 
     public function test_user_can_book_apartment_successfully_but_not_twice()
     {
-        $user = User::factory()->create(['role_id' => Role::ROLE_USER]);
+        $user = User::factory()->user()->create();
         $apartment = $this->create_apartment();
 
         $bookingParameters = [
@@ -102,8 +101,8 @@ class BookingsTest extends TestCase
 
     public function test_user_can_cancel_their_booking_but_still_view_it()
     {
-        $user1 = User::factory()->create(['role_id' => Role::ROLE_USER]);
-        $user2 = User::factory()->create(['role_id' => Role::ROLE_USER]);
+        $user1 = User::factory()->user()->create();
+        $user2 = User::factory()->user()->create();
         $apartment = $this->create_apartment();
         $booking = Booking::create([
             'apartment_id' => $apartment->id,
@@ -132,8 +131,8 @@ class BookingsTest extends TestCase
 
     public function test_user_can_post_rating_for_their_booking()
     {
-        $user1 = User::factory()->create(['role_id' => Role::ROLE_USER]);
-        $user2 = User::factory()->create(['role_id' => Role::ROLE_USER]);
+        $user1 = User::factory()->user()->create();
+        $user2 = User::factory()->user()->create();
         $apartment = $this->create_apartment();
         $booking = Booking::create([
             'apartment_id' => $apartment->id,
