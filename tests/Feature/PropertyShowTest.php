@@ -19,7 +19,7 @@ class PropertyShowTest extends TestCase
 
     public function test_property_show_loads_property_correctly()
     {
-        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $owner = User::factory()->owner()->create();
         $cityId = City::value('id');
         $property = Property::factory()->create([
             'owner_id' => $owner->id,
