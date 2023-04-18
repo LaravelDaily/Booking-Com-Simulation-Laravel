@@ -17,14 +17,14 @@ test('pricing for single price', function () {
         '2023-05-11',
         '2023-05-11'
     );
-    $this->assertEquals(100, $priceForOneDay);
+    expect($priceForOneDay)->toEqual(100);
 
     $priceForTwoDays = $this->pricingService->calculateApartmentPriceForDates(
         $prices,
         '2023-05-11',
         '2023-05-12'
     );
-    $this->assertEquals(2 * 100, $priceForTwoDays);
+    expect($priceForTwoDays)->toEqual(2 * 100);
 });
 
 test('pricing for multiple price ranges', function () {
@@ -38,19 +38,19 @@ test('pricing for multiple price ranges', function () {
         '2023-05-01',
         '2023-05-01'
     );
-    $this->assertEquals(100, $priceForOneDayFirstRange);
+    expect($priceForOneDayFirstRange)->toEqual(100);
 
     $priceForTwoDaysSecondRange = $this->pricingService->calculateApartmentPriceForDates(
         $prices,
         '2023-05-11',
         '2023-05-12'
     );
-    $this->assertEquals(2 * 90, $priceForTwoDaysSecondRange);
+    expect($priceForTwoDaysSecondRange)->toEqual(2 * 90);
 
     $priceForMultipleDaysBothRanges = $this->pricingService->calculateApartmentPriceForDates(
         $prices,
         '2023-05-09',
         '2023-05-12'
     );
-    $this->assertEquals(2 * 100 + 2 * 90, $priceForMultipleDaysBothRanges);
+    expect($priceForMultipleDaysBothRanges)->toEqual(2 * 100 + 2 * 90);
 });

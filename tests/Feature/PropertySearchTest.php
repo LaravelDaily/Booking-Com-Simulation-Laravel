@@ -467,8 +467,8 @@ test('properties show correct rating and ordered by it', function () {
     $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1');
     $response->assertStatus(200);
     $response->assertJsonCount(2, 'properties.data');
-    $this->assertEquals(8, $response->json('properties.data')[0]['avg_rating']);
-    $this->assertEquals(7, $response->json('properties.data')[1]['avg_rating']);
+    expect($response->json('properties.data')[0]['avg_rating'])->toEqual(8);
+    expect($response->json('properties.data')[1]['avg_rating'])->toEqual(7);
 });
 
 test('search shows only apartments available for dates', function () {
@@ -512,9 +512,9 @@ test('search shows only apartments available for dates', function () {
     $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1&start_date=' . now()->addDay() . '&end_date=' . now()->addDays(2));
     $response->assertStatus(200);
     $response->assertJsonCount(1, 'properties.data');
-    $this->assertEquals($property2->id, $response->json('properties.data')[0]['id']);
+    expect($response->json('properties.data')[0]['id'])->toEqual($property2->id);
 
     $response = $this->getJson('/api/properties/' . $property2->id . '?city=' . $cityId . '&adults=2&children=1&start_date=' . now()->addDay() . '&end_date=' . now()->addDays(2));
     $response->assertStatus(200);
-    $this->assertEquals($property2->id, $response->json('id'));
+    expect($response->json('id'))->toEqual($property2->id);
 });
