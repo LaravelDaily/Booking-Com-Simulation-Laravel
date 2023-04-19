@@ -1,15 +1,12 @@
 <?php
 
-use App\Models\Apartment;
 use App\Models\Booking;
-use App\Models\City;
-use App\Models\Property;
-use App\Models\User;
+use function Pest\Laravel\{actingAs};
 
 test('user can get only their bookings', function () {
-    $user1 = User::factory()->user()->create();
-    $user2 = User::factory()->user()->create();
-    $apartment = create_apartment();
+    $user1 = createUser();
+    $user2 = createUser();
+    $apartment = createApartment();
     $booking1 = Booking::create([
         'apartment_id' => $apartment->id,
         'user_id' => $user1->id,
@@ -27,29 +24,26 @@ test('user can get only their bookings', function () {
         'guests_children' => 1,
     ]);
 
-    $response = $this->actingAs($user1)->getJson('/api/user/bookings');
-    $response->assertStatus(200);
-    $response->assertJsonCount(1);
-    $response->assertJsonFragment(['guests_adults' => 1]);
+    actingAs($user1)->getJson('/api/user/bookings')
+        ->assertStatus(200)
+        ->assertJsonCount(1)
+        ->assertJsonFragment(['guests_adults' => 1]);
 
-    $response = $this->actingAs($user1)->getJson('/api/user/bookings/' . $booking1->id);
-    $response->assertStatus(200);
-    $response->assertJsonFragment(['guests_adults' => 1]);
+    actingAs($user1)->getJson('/api/user/bookings/' . $booking1->id)
+        ->assertStatus(200)
+        ->assertJsonFragment(['guests_adults' => 1]);
 
-    $response = $this->actingAs($user1)->getJson('/api/user/bookings/' . $booking2->id);
-    $response->assertStatus(403);
+    actingAs($user1)->getJson('/api/user/bookings/' . $booking2->id)
+        ->assertStatus(403);
 });
 
 test('property owner does not have access to bookings feature', function () {
-    $owner = User::factory()->owner()->create();
-    $response = $this->actingAs($owner)->getJson('/api/user/bookings');
-
-    $response->assertStatus(403);
+    asOwner()->getJson('/api/user/bookings')->assertStatus(403);
 });
 
 test('user can book apartment successfully but not twice', function () {
-    $user = User::factory()->user()->create();
-    $apartment = create_apartment();
+    $user = createUser();
+    $apartment = createApartment();
 
     $bookingParameters = [
         'apartment_id' => $apartment->id,
@@ -58,23 +52,24 @@ test('user can book apartment successfully but not twice', function () {
         'guests_adults' => 2,
         'guests_children' => 1,
     ];
-    $response = $this->actingAs($user)->postJson('/api/user/bookings', $bookingParameters);
-    $response->assertStatus(201);
+    actingAs($user)->postJson('/api/user/bookings', $bookingParameters)
+        ->assertStatus(201);
 
-    $response = $this->actingAs($user)->postJson('/api/user/bookings', $bookingParameters);
-    $response->assertStatus(422);
+    actingAs($user)->postJson('/api/user/bookings', $bookingParameters)
+        ->assertStatus(422);
 
     $bookingParameters['start_date'] = now()->addDays(3);
     $bookingParameters['end_date'] = now()->addDays(4);
     $bookingParameters['guests_adults'] = 5;
-    $response = $this->actingAs($user)->postJson('/api/user/bookings', $bookingParameters);
-    $response->assertStatus(422);
+
+    actingAs($user)->postJson('/api/user/bookings', $bookingParameters)
+        ->assertStatus(422);
 });
 
 test('user can cancel their booking but still view it', function () {
-    $user1 = User::factory()->user()->create();
-    $user2 = User::factory()->user()->create();
-    $apartment = create_apartment();
+    $user1 = createUser();
+    $user2 = createUser();
+    $apartment = createApartment();
     $booking = Booking::create([
         'apartment_id' => $apartment->id,
         'user_id' => $user1->id,
@@ -84,26 +79,26 @@ test('user can cancel their booking but still view it', function () {
         'guests_children' => 0,
     ]);
 
-    $response = $this->actingAs($user2)->deleteJson('/api/user/bookings/' . $booking->id);
-    $response->assertStatus(403);
+    actingAs($user2)->deleteJson('/api/user/bookings/' . $booking->id)
+        ->assertStatus(403);
 
-    $response = $this->actingAs($user1)->deleteJson('/api/user/bookings/' . $booking->id);
-    $response->assertStatus(204);
+    actingAs($user1)->deleteJson('/api/user/bookings/' . $booking->id)
+        ->assertStatus(204);
 
-    $response = $this->actingAs($user1)->getJson('/api/user/bookings');
-    $response->assertStatus(200);
-    $response->assertJsonCount(1);
-    $response->assertJsonFragment(['cancelled_at' => now()->toDateString()]);
+    actingAs($user1)->getJson('/api/user/bookings')
+        ->assertStatus(200)
+        ->assertJsonCount(1)
+        ->assertJsonFragment(['cancelled_at' => now()->toDateString()]);
 
-    $response = $this->actingAs($user1)->getJson('/api/user/bookings/' . $booking->id);
-    $response->assertStatus(200);
-    $response->assertJsonFragment(['cancelled_at' => now()->toDateString()]);
+    actingAs($user1)->getJson('/api/user/bookings/' . $booking->id)
+        ->assertStatus(200)
+        ->assertJsonFragment(['cancelled_at' => now()->toDateString()]);
 });
 
 test('user can post rating for their booking', function () {
-    $user1 = User::factory()->user()->create();
-    $user2 = User::factory()->user()->create();
-    $apartment = create_apartment();
+    $user1 = createUser();
+    $user2 = createUser();
+    $apartment = createApartment();
     $booking = Booking::create([
         'apartment_id' => $apartment->id,
         'user_id' => $user1->id,
@@ -113,25 +108,25 @@ test('user can post rating for their booking', function () {
         'guests_children' => 0,
     ]);
 
-    $response = $this->actingAs($user2)->putJson('/api/user/bookings/' . $booking->id, []);
-    $response->assertStatus(403);
+    actingAs($user2)->putJson('/api/user/bookings/' . $booking->id, [])
+        ->assertStatus(403);
 
-    $response = $this->actingAs($user1)->putJson('/api/user/bookings/' . $booking->id, [
+    actingAs($user1)->putJson('/api/user/bookings/' . $booking->id, [
         'rating' => 11
-    ]);
-    $response->assertStatus(422);
+    ])
+        ->assertStatus(422);
 
-    $response = $this->actingAs($user1)->putJson('/api/user/bookings/' . $booking->id, [
+    actingAs($user1)->putJson('/api/user/bookings/' . $booking->id, [
         'rating' => 10,
         'review_comment' => 'Too short comment.'
-    ]);
-    $response->assertStatus(422);
+    ])
+        ->assertStatus(422);
 
     $correctData = [
         'rating' => 10,
         'review_comment' => 'Comment with a good length to be accepted.'
     ];
-    $response = $this->actingAs($user1)->putJson('/api/user/bookings/' . $booking->id, $correctData);
-    $response->assertStatus(200);
-    $response->assertJsonFragment($correctData);
+    actingAs($user1)->putJson('/api/user/bookings/' . $booking->id, $correctData)
+        ->assertStatus(200)
+        ->assertJsonFragment($correctData);
 });

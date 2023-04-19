@@ -4,29 +4,23 @@ use App\Models\City;
 use App\Models\Property;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use function Pest\Laravel\{actingAs};
-use function Pest\Laravel\{assertDatabaseHas};
+use function Pest\Laravel\{actingAs, assertDatabaseHas};
 
 test('property owner has access to properties feature', function () {
-    actingAs(createOwner())
-        ->getJson('/api/owner/properties')
-        ->assertStatus(200);
+    asOwner()->getJson('/api/owner/properties')->assertStatus(200);
 });
 
 test('user does not have access to properties feature', function () {
-    actingAs(createUser())
-        ->getJson('/api/owner/properties')
-        ->assertStatus(403);
+    asUser()->getJson('/api/owner/properties')->assertStatus(403);
 });
 
 test('property owner can add property', function () {
-    actingAs(createOwner())
-        ->postJson('/api/owner/properties', [
-            'name' => 'My property',
-            'city_id' => City::value('id'),
-            'address_street' => 'Street Address 1',
-            'address_postcode' => '12345',
-        ])
+    asOwner()->postJson('/api/owner/properties', [
+        'name' => 'My property',
+        'city_id' => City::value('id'),
+        'address_street' => 'Street Address 1',
+        'address_postcode' => '12345',
+    ])
         ->assertSuccessful()
         ->assertJsonFragment(['name' => 'My property']);
 });

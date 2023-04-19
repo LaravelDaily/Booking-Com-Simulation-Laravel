@@ -56,12 +56,22 @@ function createOwner(): User
     return User::factory()->owner()->create();
 }
 
+function asOwner()
+{
+    return test()->actingAs(createOwner());
+}
+
 function createUser(): User
 {
     return User::factory()->user()->create();
 }
 
-function create_apartment(): Apartment
+function asUser()
+{
+    return test()->actingAs(createUser());
+}
+
+function createApartment(): Apartment
 {
     $owner = User::factory()->owner()->create();
     $cityId = City::value('id');
