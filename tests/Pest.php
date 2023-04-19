@@ -50,6 +50,17 @@ uses(RefreshDatabase::class)->in('Feature');
 /** @link https://pestphp.com/docs/custom-helpers */
 
 // Helpers
+
+function createOwner(): User
+{
+    return User::factory()->owner()->create();
+}
+
+function createUser(): User
+{
+    return User::factory()->user()->create();
+}
+
 function create_apartment(): Apartment
 {
     $owner = User::factory()->owner()->create();
