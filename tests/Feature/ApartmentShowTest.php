@@ -5,7 +5,7 @@ use App\Models\City;
 use App\Models\Facility;
 use App\Models\FacilityCategory;
 use App\Models\Property;
-use function Pest\Laravel\getJson;
+use function Pest\Laravel\{getJson};
 
 test('apartment show loads apartment with facilities', function () {
     $owner = createOwner();
