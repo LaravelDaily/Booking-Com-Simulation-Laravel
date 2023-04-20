@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Models\Property;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Benchmark;
 
 /**
  * @extends Factory<Property>
