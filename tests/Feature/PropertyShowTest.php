@@ -5,10 +5,10 @@ use App\Models\City;
 use App\Models\Facility;
 use App\Models\FacilityCategory;
 use App\Models\Property;
-use App\Models\User;
+use function Pest\Laravel\{getJson};
 
 test('property show loads property correctly', function () {
-    $owner = User::factory()->owner()->create();
+    $owner = createOwner();
     $cityId = City::value('id');
     $property = Property::factory()->create([
         'owner_id' => $owner->id,
@@ -42,19 +42,19 @@ test('property show loads property correctly', function () {
     ]);
     $midSizeApartment->facilities()->attach($facility->id);
 
-    $response = $this->getJson('/api/properties/'.$property->id);
-    $response->assertStatus(200);
-    $response->assertJsonCount(3, 'apartments');
-    $response->assertJsonPath('name', $property->name);
+    getJson('/api/properties/' . $property->id)
+        ->assertStatus(200)
+        ->assertJsonCount(3, 'apartments')
+        ->assertJsonPath('name', $property->name);
 
-    $response = $this->getJson('/api/properties/'.$property->id.'?adults=2&children=1');
-    $response->assertStatus(200);
-    $response->assertJsonCount(2, 'apartments');
-    $response->assertJsonPath('name', $property->name);
-    $response->assertJsonPath('apartments.0.facilities.0.name', $facility->name);
-    $response->assertJsonCount(0, 'apartments.1.facilities');
+    getJson('/api/properties/' . $property->id . '?adults=2&children=1')
+        ->assertStatus(200)
+        ->assertJsonCount(2, 'apartments')
+        ->assertJsonPath('name', $property->name)
+        ->assertJsonPath('apartments.0.facilities.0.name', $facility->name)
+        ->assertJsonCount(0, 'apartments.1.facilities');
 
-    $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1');
-    $response->assertStatus(200);
-    $response->assertJsonPath('properties.0.apartments.0.facilities', NULL);
+    getJson('/api/search?city=' . $cityId . '&adults=2&children=1')
+        ->assertStatus(200)
+        ->assertJsonPath('properties.0.apartments.0.facilities', NULL);
 });

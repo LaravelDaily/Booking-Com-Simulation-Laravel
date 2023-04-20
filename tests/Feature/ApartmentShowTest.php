@@ -5,10 +5,10 @@ use App\Models\City;
 use App\Models\Facility;
 use App\Models\FacilityCategory;
 use App\Models\Property;
-use App\Models\User;
+use function Pest\Laravel\{getJson};
 
 test('apartment show loads apartment with facilities', function () {
-    $owner = User::factory()->owner()->create();
+    $owner = createOwner();
     $cityId = City::value('id');
     $property = Property::factory()->create([
         'owner_id' => $owner->id,
@@ -43,11 +43,6 @@ test('apartment show loads apartment with facilities', function () {
         $firstFacility->id, $secondFacility->id, $thirdFacility->id
     ]);
 
-    $response = $this->getJson('/api/apartments/'.$apartment->id);
-    $response->assertStatus(200);
-    $response->assertJsonPath('name', $apartment->name);
-    $response->assertJsonCount(2, 'facility_categories');
-
     $expectedFacilityArray = [
         $firstCategory->name => [
             $firstFacility->name,
@@ -57,5 +52,10 @@ test('apartment show loads apartment with facilities', function () {
             $thirdFacility->name
         ]
     ];
-    $response->assertJsonFragment($expectedFacilityArray, 'facility_categories');
+
+    getJson('/api/apartments/' . $apartment->id)
+        ->assertStatus(200)
+        ->assertJsonPath('name', $apartment->name)
+        ->assertJsonCount(2, 'facility_categories')
+        ->assertJsonFragment($expectedFacilityArray);
 });
