@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Observers\PropertyObserver;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
@@ -66,5 +67,10 @@ class Property extends Model implements HasMedia
     public function bookings()
     {
         return $this->hasManyThrough(Booking::class, Apartment::class);
+    }
+
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'owner_id');
     }
 }
