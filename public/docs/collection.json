@@ -1,0 +1,696 @@
+{
+    "variable": [
+        {
+            "id": "baseUrl",
+            "key": "baseUrl",
+            "type": "string",
+            "name": "string",
+            "value": "http:\/\/booking-com-simulation-laravel.test"
+        }
+    ],
+    "info": {
+        "name": "Booking.com API Documentation",
+        "_postman_id": "76902841-465b-4717-bce2-0c858788c850",
+        "description": "Example project cloning booking.com built with Laravel as part of Course in LaravelDaily.com",
+        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
+    },
+    "item": [
+        {
+            "name": "Authentication",
+            "description": "",
+            "item": [
+                {
+                    "name": "Register a new user.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/auth\/register",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/auth\/register"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"bdju\",\"email\":\"simone.mueller@example.org\",\"password\":\"voluptate\",\"role_id\":\"deleniti\"}"
+                        },
+                        "description": "[Creates a new user and returns a token for authentication.]",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"access_token\":\"1|a9ZcYzIrLURVGx6Xe41HKj1CrNsxRxe4pLA2oISo\"}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\":\"The selected role id is invalid.\",\"errors\":{\"role_id\":[\"The selected role id is invalid.\"]}}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Owner",
+            "description": "",
+            "item": [
+                {
+                    "name": "Property management",
+                    "description": "",
+                    "item": [
+                        {
+                            "name": "Properties list - **INCOMPLETE**",
+                            "request": {
+                                "url": {
+                                    "host": "{{baseUrl}}",
+                                    "path": "api\/owner\/properties",
+                                    "query": [],
+                                    "raw": "{{baseUrl}}\/api\/owner\/properties"
+                                },
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application\/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application\/json"
+                                    }
+                                ],
+                                "body": null,
+                                "description": "[List of owners properties]"
+                            },
+                            "response": [
+                                {
+                                    "header": [],
+                                    "code": 200,
+                                    "body": "{\"success\": true}",
+                                    "name": ""
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Store property",
+                            "request": {
+                                "url": {
+                                    "host": "{{baseUrl}}",
+                                    "path": "api\/owner\/properties",
+                                    "query": [],
+                                    "raw": "{{baseUrl}}\/api\/owner\/properties"
+                                },
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application\/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application\/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\"name\":\"ut\",\"city_id\":\"et\",\"address_street\":\"aspernatur\",\"address_postcode\":\"necessitatibus\"}"
+                                },
+                                "description": "[Stores new property of the owner]"
+                            },
+                            "response": [
+                                {
+                                    "header": [],
+                                    "code": 200,
+                                    "body": "{\"name\":\"My property\",\"city_id\":1,\"address_street\":\"Street Address 1\",\"address_postcode\":\"12345\",\"owner_id\":2,\"updated_at\":\"2023-05-10T07:07:45.000000Z\",\"created_at\":\"2023-05-10T07:07:45.000000Z\",\"id\":1,\"city\":{\"id\":1,\"country_id\":1,\"name\":\"New York\",\"lat\":\"40.7127760\",\"long\":\"-74.0059740\",\"created_at\":\"2023-05-10T07:07:45.000000Z\",\"updated_at\":\"2023-05-10T07:07:45.000000Z\",\"country\":{\"id\":1,\"name\":\"United States\",\"lat\":\"37.0902400\",\"long\":\"-95.7128910\",\"created_at\":\"2023-05-10T07:07:45.000000Z\",\"updated_at\":\"2023-05-10T07:07:45.000000Z\"}}}",
+                                    "name": ""
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Property photo management",
+                    "description": "",
+                    "item": [
+                        {
+                            "name": "Add a photo to a property",
+                            "request": {
+                                "url": {
+                                    "host": "{{baseUrl}}",
+                                    "path": "api\/owner\/properties\/:property_id\/photos",
+                                    "query": [],
+                                    "raw": "{{baseUrl}}\/api\/owner\/properties\/:property_id\/photos",
+                                    "variable": [
+                                        {
+                                            "id": "property_id",
+                                            "key": "property_id",
+                                            "value": "10",
+                                            "description": "The ID of the property."
+                                        }
+                                    ]
+                                },
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "multipart\/form-data"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application\/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "photo",
+                                            "src": [],
+                                            "type": "file"
+                                        }
+                                    ]
+                                },
+                                "description": "[Adds a photo to a property and returns the filename, thumbnail and position of the photo]"
+                            },
+                            "response": [
+                                {
+                                    "header": [],
+                                    "code": 200,
+                                    "body": "{\"filename\": \"http:\/\/localhost:8000\/storage\/properties\/1\/photos\/1\/IMG_20190601_123456.jpg\", \"thumbnail\": \"http:\/\/localhost:8000\/storage\/properties\/1\/photos\/1\/conversions\/thumbnail.jpg\", \"position\": 1}",
+                                    "name": ""
+                                },
+                                {
+                                    "header": [],
+                                    "code": 422,
+                                    "body": "{\"message\":\"The photo must be an image.\",\"errors\":{\"photo\":[\"The photo must be an image.\"]}}",
+                                    "name": ""
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Reorder photos of a property",
+                            "request": {
+                                "url": {
+                                    "host": "{{baseUrl}}",
+                                    "path": "api\/owner\/properties\/:property_id\/photos\/:photo_id\/reorder\/:newPosition",
+                                    "query": [],
+                                    "raw": "{{baseUrl}}\/api\/owner\/properties\/:property_id\/photos\/:photo_id\/reorder\/:newPosition",
+                                    "variable": [
+                                        {
+                                            "id": "property_id",
+                                            "key": "property_id",
+                                            "value": "6",
+                                            "description": "The ID of the property."
+                                        },
+                                        {
+                                            "id": "photo_id",
+                                            "key": "photo_id",
+                                            "value": "12",
+                                            "description": "The ID of the photo."
+                                        },
+                                        {
+                                            "id": "newPosition",
+                                            "key": "newPosition",
+                                            "value": "2",
+                                            "description": "The new position of the photo."
+                                        }
+                                    ]
+                                },
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application\/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application\/json"
+                                    }
+                                ],
+                                "body": null,
+                                "description": "[Reorders photos of a property and returns the new position of the photo]"
+                            },
+                            "response": [
+                                {
+                                    "header": [],
+                                    "code": 200,
+                                    "body": "{\"newPosition\": 2}",
+                                    "name": ""
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Public",
+            "description": "",
+            "item": [
+                {
+                    "name": "Property search",
+                    "description": "",
+                    "item": [
+                        {
+                            "name": "Search properties",
+                            "request": {
+                                "url": {
+                                    "host": "{{baseUrl}}",
+                                    "path": "api\/search",
+                                    "query": [
+                                        {
+                                            "key": "city",
+                                            "value": "1",
+                                            "description": "City ID.",
+                                            "disabled": false
+                                        },
+                                        {
+                                            "key": "country",
+                                            "value": "4",
+                                            "description": "Country ID.",
+                                            "disabled": false
+                                        },
+                                        {
+                                            "key": "geoobject",
+                                            "value": "1",
+                                            "description": "Geoobject ID.",
+                                            "disabled": false
+                                        },
+                                        {
+                                            "key": "adults",
+                                            "value": "2",
+                                            "description": "Number of adults.",
+                                            "disabled": false
+                                        },
+                                        {
+                                            "key": "children",
+                                            "value": "1",
+                                            "description": "Number of children.",
+                                            "disabled": false
+                                        },
+                                        {
+                                            "key": "facilities[0]",
+                                            "value": 1,
+                                            "description": "List of facility IDs.",
+                                            "disabled": false
+                                        },
+                                        {
+                                            "key": "facilities[1]",
+                                            "value": 2,
+                                            "description": "List of facility IDs.",
+                                            "disabled": false
+                                        },
+                                        {
+                                            "key": "facilities[2]",
+                                            "value": 3,
+                                            "description": "List of facility IDs.",
+                                            "disabled": false
+                                        },
+                                        {
+                                            "key": "price_from",
+                                            "value": "100",
+                                            "description": "Minimum price.",
+                                            "disabled": false
+                                        },
+                                        {
+                                            "key": "price_to",
+                                            "value": "200",
+                                            "description": "Maximum price.",
+                                            "disabled": false
+                                        },
+                                        {
+                                            "key": "start_date",
+                                            "value": "2024-01-01",
+                                            "description": "date Start date.",
+                                            "disabled": false
+                                        },
+                                        {
+                                            "key": "end_date",
+                                            "value": "2024-01-03",
+                                            "description": "date End date.",
+                                            "disabled": false
+                                        }
+                                    ],
+                                    "raw": "{{baseUrl}}\/api\/search?city=1&country=4&geoobject=1&adults=2&children=1&facilities[0]=1&facilities[1]=2&facilities[2]=3&price_from=100&price_to=200&start_date=2024-01-01&end_date=2024-01-03"
+                                },
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application\/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application\/json"
+                                    }
+                                ],
+                                "body": null,
+                                "description": "[Returns a list of filtered properties]",
+                                "auth": {
+                                    "type": "noauth"
+                                }
+                            },
+                            "response": [
+                                {
+                                    "header": [],
+                                    "code": 200,
+                                    "body": "{\"properties\":{\"data\":[{\"id\":2,\"name\":\"Qui velit ea.\",\"address\":\"2392 Zemlak Port Suite 655, 16225-4383, New York\",\"lat\":\"-54.8191470\",\"long\":\"-70.2183380\",\"apartments\":[{\"name\":\"Mid size apartment\",\"type\":null,\"size\":null,\"beds_list\":\"\",\"bathrooms\":0,\"price\":0}],\"photos\":[],\"avg_rating\":8},{\"id\":1,\"name\":\"Provident enim est.\",\"address\":\"1487 Ignacio Alley Suite 794, 74215, New York\",\"lat\":\"13.2359740\",\"long\":\"-74.2809120\",\"apartments\":[{\"name\":\"Cheap apartment\",\"type\":null,\"size\":null,\"beds_list\":\"\",\"bathrooms\":0,\"price\":0}],\"photos\":[],\"avg_rating\":7}],\"links\":{\"first\":\"http:\\\/\\\/booking-com-simulation-laravel.test\\\/api\\\/search?city=1&adults=2&children=1&page=1\",\"last\":\"http:\\\/\\\/booking-com-simulation-laravel.test\\\/api\\\/search?city=1&adults=2&children=1&page=1\",\"prev\":null,\"next\":null},\"meta\":{\"current_page\":1,\"from\":1,\"last_page\":1,\"links\":[{\"url\":null,\"label\":\"&laquo; Previous\",\"active\":false},{\"url\":\"http:\\\/\\\/booking-com-simulation-laravel.test\\\/api\\\/search?city=1&adults=2&children=1&page=1\",\"label\":\"1\",\"active\":true},{\"url\":null,\"label\":\"Next &raquo;\",\"active\":false}],\"path\":\"http:\\\/\\\/booking-com-simulation-laravel.test\\\/api\\\/search\",\"per_page\":10,\"to\":2,\"total\":2}},\"facilities\":[]}",
+                                    "name": ""
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Property",
+                    "description": "",
+                    "item": [
+                        {
+                            "name": "Property details",
+                            "request": {
+                                "url": {
+                                    "host": "{{baseUrl}}",
+                                    "path": "api\/properties\/:property_id",
+                                    "query": [],
+                                    "raw": "{{baseUrl}}\/api\/properties\/:property_id",
+                                    "variable": [
+                                        {
+                                            "id": "property_id",
+                                            "key": "property_id",
+                                            "value": "10",
+                                            "description": "The ID of the property."
+                                        }
+                                    ]
+                                },
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application\/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application\/json"
+                                    }
+                                ],
+                                "body": null,
+                                "description": "[Returns details of a property]",
+                                "auth": {
+                                    "type": "noauth"
+                                }
+                            },
+                            "response": [
+                                {
+                                    "header": [],
+                                    "code": 200,
+                                    "body": "{\"properties\":{\"data\":[{\"id\":1,\"name\":\"Aspernatur nostrum.\",\"address\":\"5716 Leann Point, 24974-6081, New York\",\"lat\":\"8.8008940\",\"long\":\"-82.9095500\",\"apartments\":[{\"name\":\"Mid size apartment\",\"type\":null,\"size\":null,\"beds_list\":\"\",\"bathrooms\":0,\"price\":0}],\"photos\":[],\"avg_rating\":null}],\"links\":{\"first\":\"http:\\\/\\\/booking-com-simulation-laravel.test\\\/api\\\/search?city=1&adults=2&children=1&page=1\",\"last\":\"http:\\\/\\\/booking-com-simulation-laravel.test\\\/api\\\/search?city=1&adults=2&children=1&page=1\",\"prev\":null,\"next\":null},\"meta\":{\"current_page\":1,\"from\":1,\"last_page\":1,\"links\":[{\"url\":null,\"label\":\"&laquo; Previous\",\"active\":false},{\"url\":\"http:\\\/\\\/booking-com-simulation-laravel.test\\\/api\\\/search?city=1&adults=2&children=1&page=1\",\"label\":\"1\",\"active\":true},{\"url\":null,\"label\":\"Next &raquo;\",\"active\":false}],\"path\":\"http:\\\/\\\/booking-com-simulation-laravel.test\\\/api\\\/search\",\"per_page\":10,\"to\":1,\"total\":1}},\"facilities\":[]}",
+                                    "name": ""
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Apartments",
+                    "description": "",
+                    "item": [
+                        {
+                            "name": "Get apartment details",
+                            "request": {
+                                "url": {
+                                    "host": "{{baseUrl}}",
+                                    "path": "api\/apartments\/:apartment_id",
+                                    "query": [],
+                                    "raw": "{{baseUrl}}\/api\/apartments\/:apartment_id",
+                                    "variable": [
+                                        {
+                                            "id": "apartment_id",
+                                            "key": "apartment_id",
+                                            "value": "4",
+                                            "description": "The ID of the apartment."
+                                        }
+                                    ]
+                                },
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application\/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application\/json"
+                                    }
+                                ],
+                                "body": null,
+                                "description": "[Returns details about a specific apartment]",
+                                "auth": {
+                                    "type": "noauth"
+                                }
+                            },
+                            "response": [
+                                {
+                                    "header": [],
+                                    "code": 200,
+                                    "body": "{\"name\":\"Large apartment\",\"type\":null,\"size\":null,\"beds_list\":\"\",\"bathrooms\":0,\"facility_categories\":{\"First category\":[\"First facility\",\"Second facility\"],\"Second category\":[\"Third facility\"]}}",
+                                    "name": ""
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "User",
+            "description": "",
+            "item": [
+                {
+                    "name": "Bookings",
+                    "description": "",
+                    "item": [
+                        {
+                            "name": "List of user bookings",
+                            "request": {
+                                "url": {
+                                    "host": "{{baseUrl}}",
+                                    "path": "api\/user\/bookings",
+                                    "query": [],
+                                    "raw": "{{baseUrl}}\/api\/user\/bookings"
+                                },
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application\/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application\/json"
+                                    }
+                                ],
+                                "body": null,
+                                "description": "[Returns preview list of all user bookings]"
+                            },
+                            "response": [
+                                {
+                                    "header": [],
+                                    "code": 200,
+                                    "body": "{\"id\":1,\"apartment_name\":\"Fugiat saepe sed.: Apartment\",\"start_date\":\"2023-05-11\",\"end_date\":\"2023-05-12\",\"guests_adults\":1,\"guests_children\":0,\"total_price\":0,\"cancelled_at\":null,\"rating\":null,\"review_comment\":null}",
+                                    "name": ""
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Create new booking",
+                            "request": {
+                                "url": {
+                                    "host": "{{baseUrl}}",
+                                    "path": "api\/user\/bookings",
+                                    "query": [],
+                                    "raw": "{{baseUrl}}\/api\/user\/bookings"
+                                },
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application\/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application\/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\"apartment_id\":\"et\",\"start_date\":\"2023-05-10T08:13:56\",\"end_date\":\"2023-05-10T08:13:56\",\"guests_adults\":6,\"guests_children\":5}"
+                                },
+                                "description": "[Creates new booking for authenticated user]"
+                            },
+                            "response": [
+                                {
+                                    "header": [],
+                                    "code": 201,
+                                    "body": "{\"id\":1,\"apartment_name\":\"Hic consequatur qui.: Apartment\",\"start_date\":\"2023-05-11 08:00:51\",\"end_date\":\"2023-05-12 08:00:51\",\"guests_adults\":2,\"guests_children\":1,\"total_price\":0,\"cancelled_at\":null,\"rating\":null,\"review_comment\":null}",
+                                    "name": ""
+                                }
+                            ]
+                        },
+                        {
+                            "name": "View booking",
+                            "request": {
+                                "url": {
+                                    "host": "{{baseUrl}}",
+                                    "path": "api\/user\/bookings\/:id",
+                                    "query": [],
+                                    "raw": "{{baseUrl}}\/api\/user\/bookings\/:id",
+                                    "variable": [
+                                        {
+                                            "id": "id",
+                                            "key": "id",
+                                            "value": "4",
+                                            "description": "The ID of the booking."
+                                        }
+                                    ]
+                                },
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application\/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application\/json"
+                                    }
+                                ],
+                                "body": null,
+                                "description": "[Returns details about a booking]"
+                            },
+                            "response": [
+                                {
+                                    "header": [],
+                                    "code": 200,
+                                    "body": "{\"id\":1,\"apartment_name\":\"Hic consequatur qui.: Apartment\",\"start_date\":\"2023-05-11 08:00:51\",\"end_date\":\"2023-05-12 08:00:51\",\"guests_adults\":2,\"guests_children\":1,\"total_price\":0,\"cancelled_at\":null,\"rating\":null,\"review_comment\":null}",
+                                    "name": ""
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Update existing booking rating",
+                            "request": {
+                                "url": {
+                                    "host": "{{baseUrl}}",
+                                    "path": "api\/user\/bookings\/:id",
+                                    "query": [],
+                                    "raw": "{{baseUrl}}\/api\/user\/bookings\/:id",
+                                    "variable": [
+                                        {
+                                            "id": "id",
+                                            "key": "id",
+                                            "value": "2",
+                                            "description": "The ID of the booking."
+                                        }
+                                    ]
+                                },
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application\/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application\/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\"rating\":2,\"review_comment\":\"xqffhvfyaaiudqwdtodqicpwbeclyofnseixgtvgigcrgcorauwwfmovendrpybh\"}"
+                                },
+                                "description": "[Updates booking with new details]"
+                            },
+                            "response": [
+                                {
+                                    "header": [],
+                                    "code": 200,
+                                    "body": "{\"id\":1,\"apartment_name\":\"Hic consequatur qui.: Apartment\",\"start_date\":\"2023-05-11 08:00:51\",\"end_date\":\"2023-05-12 08:00:51\",\"guests_adults\":2,\"guests_children\":1,\"total_price\":0,\"cancelled_at\":null,\"rating\":null,\"review_comment\":null}",
+                                    "name": ""
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Delete booking",
+                            "request": {
+                                "url": {
+                                    "host": "{{baseUrl}}",
+                                    "path": "api\/user\/bookings\/:id",
+                                    "query": [],
+                                    "raw": "{{baseUrl}}\/api\/user\/bookings\/:id",
+                                    "variable": [
+                                        {
+                                            "id": "id",
+                                            "key": "id",
+                                            "value": "7",
+                                            "description": "The ID of the booking."
+                                        }
+                                    ]
+                                },
+                                "method": "DELETE",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application\/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application\/json"
+                                    }
+                                ],
+                                "body": null,
+                                "description": "[Deletes a booking]"
+                            },
+                            "response": [
+                                {
+                                    "header": [],
+                                    "code": 200,
+                                    "body": "{}",
+                                    "name": ""
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "auth": {
+        "type": "apikey",
+        "apikey": [
+            {
+                "key": "in",
+                "value": "header",
+                "type": "string"
+            },
+            {
+                "key": "key",
+                "value": "X-XSRF-TOKEN",
+                "type": "string"
+            }
+        ]
+    }
+}

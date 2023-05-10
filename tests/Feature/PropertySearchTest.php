@@ -482,6 +482,9 @@ class PropertySearchTest extends TestCase
         $response->assertJsonCount(2, 'properties.data');
         $this->assertEquals(8, $response->json('properties.data')[0]['avg_rating']);
         $this->assertEquals(7, $response->json('properties.data')[1]['avg_rating']);
+
+                dump(json_encode($response->json()));
+
     }
 
     public function test_search_shows_only_apartments_available_for_dates()

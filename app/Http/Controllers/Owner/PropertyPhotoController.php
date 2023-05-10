@@ -7,8 +7,22 @@ use App\Models\Property;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
+/**
+ * @group Owner
+ * @subgroup Property photo management
+ */
 class PropertyPhotoController extends Controller
 {
+    /**
+     * Add a photo to a property
+     *
+     * [Adds a photo to a property and returns the filename, thumbnail and position of the photo]
+     *
+     * @authenticated
+     *
+     * @response {"filename": "http://localhost:8000/storage/properties/1/photos/1/IMG_20190601_123456.jpg", "thumbnail": "http://localhost:8000/storage/properties/1/photos/1/conversions/thumbnail.jpg", "position": 1}
+     * @response 422 {"message":"The photo must be an image.","errors":{"photo":["The photo must be an image."]}}
+     */
     public function store(Property $property, Request $request)
     {
         $request->validate([
@@ -35,6 +49,17 @@ class PropertyPhotoController extends Controller
         ];
     }
 
+    /**
+     * Reorder photos of a property
+     *
+     * [Reorders photos of a property and returns the new position of the photo]
+     *
+     * @authenticated
+     *
+     * @urlParam newPosition integer required The new position of the photo. Example: 2
+     *
+     * @response {"newPosition": 2}
+     */
     public function reorder(Property $property, Media $photo, int $newPosition)
     {
         if ($property->owner_id != auth()->id() || $photo->model_id != $property->id) {

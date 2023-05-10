@@ -1,0 +1,2614 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Booking.com API Documentation</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../docs/css/theme-default.style.css" media="screen">
+    <link rel="stylesheet" href="../docs/css/theme-default.print.css" media="print">
+
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+
+    <link rel="stylesheet"
+          href="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/styles/obsidian.min.css">
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/highlight.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jets/0.14.1/jets.min.js"></script>
+
+    <style id="language-style">
+        /* starts out as display none and is replaced with js later  */
+                    body .content .bash-example code { display: none; }
+                    body .content .javascript-example code { display: none; }
+                    body .content .php-example code { display: none; }
+            </style>
+
+
+    <script src="../docs/js/theme-default-4.19.1.js"></script>
+
+</head>
+
+<body data-languages="[&quot;bash&quot;,&quot;javascript&quot;,&quot;php&quot;]">
+
+<a href="#" id="nav-button">
+    <span>
+        MENU
+        <img src="../docs/images/navbar.png" alt="navbar-image"/>
+    </span>
+</a>
+<div class="tocify-wrapper">
+    
+            <div class="lang-selector">
+                                            <button type="button" class="lang-button" data-language-name="bash">bash</button>
+                                            <button type="button" class="lang-button" data-language-name="javascript">javascript</button>
+                                            <button type="button" class="lang-button" data-language-name="php">php</button>
+                    </div>
+    
+    <div class="search">
+        <input type="text" class="search" id="input-search" placeholder="Search">
+    </div>
+
+    <div id="toc">
+                    <ul id="tocify-header-introduction" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="introduction">
+                    <a href="#introduction">Introduction</a>
+                </li>
+                            </ul>
+                    <ul id="tocify-header-authenticating-requests" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="authenticating-requests">
+                    <a href="#authenticating-requests">Authenticating requests</a>
+                </li>
+                            </ul>
+                    <ul id="tocify-header-authentication" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="authentication">
+                    <a href="#authentication">Authentication</a>
+                </li>
+                                    <ul id="tocify-subheader-authentication" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="authentication-POSTapi-auth-register">
+                                <a href="#authentication-POSTapi-auth-register">Register a new user.</a>
+                            </li>
+                                                                        </ul>
+                            </ul>
+                    <ul id="tocify-header-owner" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="owner">
+                    <a href="#owner">Owner</a>
+                </li>
+                                    <ul id="tocify-subheader-owner" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="owner-property-management">
+                                <a href="#owner-property-management">Property management</a>
+                            </li>
+                                                            <ul id="tocify-subheader-owner-property-management" class="tocify-subheader">
+                                                                            <li class="tocify-item level-3" data-unique="owner-GETapi-owner-properties">
+                                            <a href="#owner-GETapi-owner-properties">Properties list - **INCOMPLETE**</a>
+                                        </li>
+                                                                            <li class="tocify-item level-3" data-unique="owner-POSTapi-owner-properties">
+                                            <a href="#owner-POSTapi-owner-properties">Store property</a>
+                                        </li>
+                                                                    </ul>
+                                                                                <li class="tocify-item level-2" data-unique="owner-property-photo-management">
+                                <a href="#owner-property-photo-management">Property photo management</a>
+                            </li>
+                                                            <ul id="tocify-subheader-owner-property-photo-management" class="tocify-subheader">
+                                                                            <li class="tocify-item level-3" data-unique="owner-POSTapi-owner-properties--property_id--photos">
+                                            <a href="#owner-POSTapi-owner-properties--property_id--photos">Add a photo to a property</a>
+                                        </li>
+                                                                            <li class="tocify-item level-3" data-unique="owner-POSTapi-owner-properties--property_id--photos--photo_id--reorder--newPosition-">
+                                            <a href="#owner-POSTapi-owner-properties--property_id--photos--photo_id--reorder--newPosition-">Reorder photos of a property</a>
+                                        </li>
+                                                                    </ul>
+                                                                        </ul>
+                            </ul>
+                    <ul id="tocify-header-public" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="public">
+                    <a href="#public">Public</a>
+                </li>
+                                    <ul id="tocify-subheader-public" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="public-property-search">
+                                <a href="#public-property-search">Property search</a>
+                            </li>
+                                                            <ul id="tocify-subheader-public-property-search" class="tocify-subheader">
+                                                                            <li class="tocify-item level-3" data-unique="public-GETapi-search">
+                                            <a href="#public-GETapi-search">Search properties</a>
+                                        </li>
+                                                                    </ul>
+                                                                                <li class="tocify-item level-2" data-unique="public-property">
+                                <a href="#public-property">Property</a>
+                            </li>
+                                                            <ul id="tocify-subheader-public-property" class="tocify-subheader">
+                                                                            <li class="tocify-item level-3" data-unique="public-GETapi-properties--property_id-">
+                                            <a href="#public-GETapi-properties--property_id-">Property details</a>
+                                        </li>
+                                                                    </ul>
+                                                                                <li class="tocify-item level-2" data-unique="public-apartments">
+                                <a href="#public-apartments">Apartments</a>
+                            </li>
+                                                            <ul id="tocify-subheader-public-apartments" class="tocify-subheader">
+                                                                            <li class="tocify-item level-3" data-unique="public-GETapi-apartments--apartment_id-">
+                                            <a href="#public-GETapi-apartments--apartment_id-">Get apartment details</a>
+                                        </li>
+                                                                    </ul>
+                                                                        </ul>
+                            </ul>
+                    <ul id="tocify-header-user" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="user">
+                    <a href="#user">User</a>
+                </li>
+                                    <ul id="tocify-subheader-user" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="user-bookings">
+                                <a href="#user-bookings">Bookings</a>
+                            </li>
+                                                            <ul id="tocify-subheader-user-bookings" class="tocify-subheader">
+                                                                            <li class="tocify-item level-3" data-unique="user-GETapi-user-bookings">
+                                            <a href="#user-GETapi-user-bookings">List of user bookings</a>
+                                        </li>
+                                                                            <li class="tocify-item level-3" data-unique="user-POSTapi-user-bookings">
+                                            <a href="#user-POSTapi-user-bookings">Create new booking</a>
+                                        </li>
+                                                                            <li class="tocify-item level-3" data-unique="user-GETapi-user-bookings--id-">
+                                            <a href="#user-GETapi-user-bookings--id-">View booking</a>
+                                        </li>
+                                                                            <li class="tocify-item level-3" data-unique="user-PUTapi-user-bookings--id-">
+                                            <a href="#user-PUTapi-user-bookings--id-">Update existing booking rating</a>
+                                        </li>
+                                                                            <li class="tocify-item level-3" data-unique="user-DELETEapi-user-bookings--id-">
+                                            <a href="#user-DELETEapi-user-bookings--id-">Delete booking</a>
+                                        </li>
+                                                                    </ul>
+                                                                        </ul>
+                            </ul>
+            </div>
+
+    <ul class="toc-footer" id="toc-footer">
+                    <li style="padding-bottom: 5px;"><a href="../docs/collection.json">View Postman collection</a></li>
+                            <li style="padding-bottom: 5px;"><a href="../docs/openapi.yaml">View OpenAPI spec</a></li>
+                <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
+    </ul>
+
+    <ul class="toc-footer" id="last-updated">
+        <li>Last updated: May 10, 2023</li>
+    </ul>
+</div>
+
+<div class="page-wrapper">
+    <div class="dark-box"></div>
+    <div class="content">
+        <h1 id="introduction">Introduction</h1>
+<p>Example project cloning booking.com built with Laravel as part of Course in LaravelDaily.com</p>
+<aside>
+    <strong>Base URL</strong>: <code>http://booking-com-simulation-laravel.test</code>
+</aside>
+<p>This documentation aims to provide all the information you need to work with our API.</p>
+<aside>As you scroll, you'll see code examples for working with the API in different programming languages in the dark area to the right (or as part of the content on mobile).
+You can switch the language used with the tabs at the top right (or from the nav menu at the top left on mobile).</aside>
+
+        <h1 id="authenticating-requests">Authenticating requests</h1>
+<p>To authenticate requests, include a <strong><code>X-XSRF-TOKEN</code></strong> header with the value <strong><code>"{YOUR_AUTH_KEY}"</code></strong>.</p>
+<p>All authenticated endpoints are marked with a <code>requires authentication</code> badge in the documentation below.</p>
+<p>You can retrieve your token by making a request to /sanctum/csrf-cookie</p>
+
+        <h1 id="authentication">Authentication</h1>
+
+    
+
+                                <h2 id="authentication-POSTapi-auth-register">Register a new user.</h2>
+
+<p>
+</p>
+
+<p>[Creates a new user and returns a token for authentication.]</p>
+
+<span id="example-requests-POSTapi-auth-register">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://booking-com-simulation-laravel.test/api/auth/register" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"name\": \"bdju\",
+    \"email\": \"simone.mueller@example.org\",
+    \"password\": \"voluptate\",
+    \"role_id\": \"deleniti\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://booking-com-simulation-laravel.test/api/auth/register"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": "bdju",
+    "email": "simone.mueller@example.org",
+    "password": "voluptate",
+    "role_id": "deleniti"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://booking-com-simulation-laravel.test/api/auth/register',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'name' =&gt; 'bdju',
+            'email' =&gt; 'simone.mueller@example.org',
+            'password' =&gt; 'voluptate',
+            'role_id' =&gt; 'deleniti',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-auth-register">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;access_token&quot;: &quot;1|a9ZcYzIrLURVGx6Xe41HKj1CrNsxRxe4pLA2oISo&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;The selected role id is invalid.&quot;,
+    &quot;errors&quot;: {
+        &quot;role_id&quot;: [
+            &quot;The selected role id is invalid.&quot;
+        ]
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-auth-register" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-auth-register"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-auth-register"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-auth-register" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-auth-register">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-auth-register" data-method="POST"
+      data-path="api/auth/register"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-auth-register', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/auth/register</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Content-Type"                data-endpoint="POSTapi-auth-register"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Accept"                data-endpoint="POSTapi-auth-register"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="name"                data-endpoint="POSTapi-auth-register"
+               value="bdju"
+               data-component="body">
+    <br>
+<p>Must not be greater than 255 characters. Example: <code>bdju</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="email"                data-endpoint="POSTapi-auth-register"
+               value="simone.mueller@example.org"
+               data-component="body">
+    <br>
+<p>Must be a valid email address. Must not be greater than 255 characters. Example: <code>simone.mueller@example.org</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="password"                data-endpoint="POSTapi-auth-register"
+               value="voluptate"
+               data-component="body">
+    <br>
+<p>Example: <code>voluptate</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>role_id</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="role_id"                data-endpoint="POSTapi-auth-register"
+               value="deleniti"
+               data-component="body">
+    <br>
+<p>Example: <code>deleniti</code></p>
+        </div>
+        </form>
+
+                <h1 id="owner">Owner</h1>
+
+    
+
+                        <h2 id="owner-property-management">Property management</h2>
+                                                    <h2 id="owner-GETapi-owner-properties">Properties list - **INCOMPLETE**</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>[List of owners properties]</p>
+
+<span id="example-requests-GETapi-owner-properties">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://booking-com-simulation-laravel.test/api/owner/properties" \
+    --header "X-XSRF-TOKEN: {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://booking-com-simulation-laravel.test/api/owner/properties"
+);
+
+const headers = {
+    "X-XSRF-TOKEN": "{YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://booking-com-simulation-laravel.test/api/owner/properties',
+    [
+        'headers' =&gt; [
+            'X-XSRF-TOKEN' =&gt; '{YOUR_AUTH_KEY}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-owner-properties">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;success&quot;: true
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-owner-properties" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-owner-properties"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-owner-properties"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-owner-properties" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-owner-properties">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-owner-properties" data-method="GET"
+      data-path="api/owner/properties"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-owner-properties', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/owner/properties</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>X-XSRF-TOKEN</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="X-XSRF-TOKEN" class="auth-value"               data-endpoint="GETapi-owner-properties"
+               value="{YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>{YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Content-Type"                data-endpoint="GETapi-owner-properties"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Accept"                data-endpoint="GETapi-owner-properties"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
+                    <h2 id="owner-POSTapi-owner-properties">Store property</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>[Stores new property of the owner]</p>
+
+<span id="example-requests-POSTapi-owner-properties">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://booking-com-simulation-laravel.test/api/owner/properties" \
+    --header "X-XSRF-TOKEN: {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"name\": \"ut\",
+    \"city_id\": \"et\",
+    \"address_street\": \"aspernatur\",
+    \"address_postcode\": \"necessitatibus\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://booking-com-simulation-laravel.test/api/owner/properties"
+);
+
+const headers = {
+    "X-XSRF-TOKEN": "{YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": "ut",
+    "city_id": "et",
+    "address_street": "aspernatur",
+    "address_postcode": "necessitatibus"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://booking-com-simulation-laravel.test/api/owner/properties',
+    [
+        'headers' =&gt; [
+            'X-XSRF-TOKEN' =&gt; '{YOUR_AUTH_KEY}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'name' =&gt; 'ut',
+            'city_id' =&gt; 'et',
+            'address_street' =&gt; 'aspernatur',
+            'address_postcode' =&gt; 'necessitatibus',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-owner-properties">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;name&quot;: &quot;My property&quot;,
+    &quot;city_id&quot;: 1,
+    &quot;address_street&quot;: &quot;Street Address 1&quot;,
+    &quot;address_postcode&quot;: &quot;12345&quot;,
+    &quot;owner_id&quot;: 2,
+    &quot;updated_at&quot;: &quot;2023-05-10T07:07:45.000000Z&quot;,
+    &quot;created_at&quot;: &quot;2023-05-10T07:07:45.000000Z&quot;,
+    &quot;id&quot;: 1,
+    &quot;city&quot;: {
+        &quot;id&quot;: 1,
+        &quot;country_id&quot;: 1,
+        &quot;name&quot;: &quot;New York&quot;,
+        &quot;lat&quot;: &quot;40.7127760&quot;,
+        &quot;long&quot;: &quot;-74.0059740&quot;,
+        &quot;created_at&quot;: &quot;2023-05-10T07:07:45.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2023-05-10T07:07:45.000000Z&quot;,
+        &quot;country&quot;: {
+            &quot;id&quot;: 1,
+            &quot;name&quot;: &quot;United States&quot;,
+            &quot;lat&quot;: &quot;37.0902400&quot;,
+            &quot;long&quot;: &quot;-95.7128910&quot;,
+            &quot;created_at&quot;: &quot;2023-05-10T07:07:45.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2023-05-10T07:07:45.000000Z&quot;
+        }
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-owner-properties" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-owner-properties"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-owner-properties"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-owner-properties" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-owner-properties">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-owner-properties" data-method="POST"
+      data-path="api/owner/properties"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-owner-properties', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/owner/properties</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>X-XSRF-TOKEN</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="X-XSRF-TOKEN" class="auth-value"               data-endpoint="POSTapi-owner-properties"
+               value="{YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>{YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Content-Type"                data-endpoint="POSTapi-owner-properties"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Accept"                data-endpoint="POSTapi-owner-properties"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="name"                data-endpoint="POSTapi-owner-properties"
+               value="ut"
+               data-component="body">
+    <br>
+<p>Example: <code>ut</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>city_id</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="city_id"                data-endpoint="POSTapi-owner-properties"
+               value="et"
+               data-component="body">
+    <br>
+<p>Example: <code>et</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>address_street</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="address_street"                data-endpoint="POSTapi-owner-properties"
+               value="aspernatur"
+               data-component="body">
+    <br>
+<p>Example: <code>aspernatur</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>address_postcode</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="address_postcode"                data-endpoint="POSTapi-owner-properties"
+               value="necessitatibus"
+               data-component="body">
+    <br>
+<p>Example: <code>necessitatibus</code></p>
+        </div>
+        </form>
+
+                                <h2 id="owner-property-photo-management">Property photo management</h2>
+                                                    <h2 id="owner-POSTapi-owner-properties--property_id--photos">Add a photo to a property</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>[Adds a photo to a property and returns the filename, thumbnail and position of the photo]</p>
+
+<span id="example-requests-POSTapi-owner-properties--property_id--photos">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://booking-com-simulation-laravel.test/api/owner/properties/10/photos" \
+    --header "X-XSRF-TOKEN: {YOUR_AUTH_KEY}" \
+    --header "Content-Type: multipart/form-data" \
+    --header "Accept: application/json" \
+    --form "photo=@/private/var/folders/87/191b_my96m7c_w2ljxt2zv_w0000gn/T/phpgstgBD" </code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://booking-com-simulation-laravel.test/api/owner/properties/10/photos"
+);
+
+const headers = {
+    "X-XSRF-TOKEN": "{YOUR_AUTH_KEY}",
+    "Content-Type": "multipart/form-data",
+    "Accept": "application/json",
+};
+
+const body = new FormData();
+body.append('photo', document.querySelector('input[name="photo"]').files[0]);
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://booking-com-simulation-laravel.test/api/owner/properties/10/photos',
+    [
+        'headers' =&gt; [
+            'X-XSRF-TOKEN' =&gt; '{YOUR_AUTH_KEY}',
+            'Content-Type' =&gt; 'multipart/form-data',
+            'Accept' =&gt; 'application/json',
+        ],
+        'multipart' =&gt; [
+            [
+                'name' =&gt; 'photo',
+                'contents' =&gt; fopen('/private/var/folders/87/191b_my96m7c_w2ljxt2zv_w0000gn/T/phpgstgBD', 'r')
+            ],
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-owner-properties--property_id--photos">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;filename&quot;: &quot;http://localhost:8000/storage/properties/1/photos/1/IMG_20190601_123456.jpg&quot;,
+    &quot;thumbnail&quot;: &quot;http://localhost:8000/storage/properties/1/photos/1/conversions/thumbnail.jpg&quot;,
+    &quot;position&quot;: 1
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;The photo must be an image.&quot;,
+    &quot;errors&quot;: {
+        &quot;photo&quot;: [
+            &quot;The photo must be an image.&quot;
+        ]
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-owner-properties--property_id--photos" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-owner-properties--property_id--photos"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-owner-properties--property_id--photos"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-owner-properties--property_id--photos" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-owner-properties--property_id--photos">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-owner-properties--property_id--photos" data-method="POST"
+      data-path="api/owner/properties/{property_id}/photos"
+      data-authed="1"
+      data-hasfiles="1"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-owner-properties--property_id--photos', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/owner/properties/{property_id}/photos</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>X-XSRF-TOKEN</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="X-XSRF-TOKEN" class="auth-value"               data-endpoint="POSTapi-owner-properties--property_id--photos"
+               value="{YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>{YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Content-Type"                data-endpoint="POSTapi-owner-properties--property_id--photos"
+               value="multipart/form-data"
+               data-component="header">
+    <br>
+<p>Example: <code>multipart/form-data</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Accept"                data-endpoint="POSTapi-owner-properties--property_id--photos"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>property_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               name="property_id"                data-endpoint="POSTapi-owner-properties--property_id--photos"
+               value="10"
+               data-component="url">
+    <br>
+<p>The ID of the property. Example: <code>10</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>photo</code></b>&nbsp;&nbsp;
+<small>file</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="file" style="display: none"
+               name="photo"                data-endpoint="POSTapi-owner-properties--property_id--photos"
+               value=""
+               data-component="body">
+    <br>
+<p>Must be an image. Must not be greater than 5000 kilobytes. Example: <code>/private/var/folders/87/191b_my96m7c_w2ljxt2zv_w0000gn/T/phpgstgBD</code></p>
+        </div>
+        </form>
+
+                    <h2 id="owner-POSTapi-owner-properties--property_id--photos--photo_id--reorder--newPosition-">Reorder photos of a property</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>[Reorders photos of a property and returns the new position of the photo]</p>
+
+<span id="example-requests-POSTapi-owner-properties--property_id--photos--photo_id--reorder--newPosition-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://booking-com-simulation-laravel.test/api/owner/properties/6/photos/12/reorder/2" \
+    --header "X-XSRF-TOKEN: {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://booking-com-simulation-laravel.test/api/owner/properties/6/photos/12/reorder/2"
+);
+
+const headers = {
+    "X-XSRF-TOKEN": "{YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://booking-com-simulation-laravel.test/api/owner/properties/6/photos/12/reorder/2',
+    [
+        'headers' =&gt; [
+            'X-XSRF-TOKEN' =&gt; '{YOUR_AUTH_KEY}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-owner-properties--property_id--photos--photo_id--reorder--newPosition-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;newPosition&quot;: 2
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-owner-properties--property_id--photos--photo_id--reorder--newPosition-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-owner-properties--property_id--photos--photo_id--reorder--newPosition-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-owner-properties--property_id--photos--photo_id--reorder--newPosition-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-owner-properties--property_id--photos--photo_id--reorder--newPosition-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-owner-properties--property_id--photos--photo_id--reorder--newPosition-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-owner-properties--property_id--photos--photo_id--reorder--newPosition-" data-method="POST"
+      data-path="api/owner/properties/{property_id}/photos/{photo_id}/reorder/{newPosition}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-owner-properties--property_id--photos--photo_id--reorder--newPosition-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/owner/properties/{property_id}/photos/{photo_id}/reorder/{newPosition}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>X-XSRF-TOKEN</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="X-XSRF-TOKEN" class="auth-value"               data-endpoint="POSTapi-owner-properties--property_id--photos--photo_id--reorder--newPosition-"
+               value="{YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>{YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Content-Type"                data-endpoint="POSTapi-owner-properties--property_id--photos--photo_id--reorder--newPosition-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Accept"                data-endpoint="POSTapi-owner-properties--property_id--photos--photo_id--reorder--newPosition-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>property_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               name="property_id"                data-endpoint="POSTapi-owner-properties--property_id--photos--photo_id--reorder--newPosition-"
+               value="6"
+               data-component="url">
+    <br>
+<p>The ID of the property. Example: <code>6</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>photo_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               name="photo_id"                data-endpoint="POSTapi-owner-properties--property_id--photos--photo_id--reorder--newPosition-"
+               value="12"
+               data-component="url">
+    <br>
+<p>The ID of the photo. Example: <code>12</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>newPosition</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               name="newPosition"                data-endpoint="POSTapi-owner-properties--property_id--photos--photo_id--reorder--newPosition-"
+               value="2"
+               data-component="url">
+    <br>
+<p>The new position of the photo. Example: <code>2</code></p>
+            </div>
+                    </form>
+
+                <h1 id="public">Public</h1>
+
+    
+
+                        <h2 id="public-property-search">Property search</h2>
+                                                    <h2 id="public-GETapi-search">Search properties</h2>
+
+<p>
+</p>
+
+<p>[Returns a list of filtered properties]</p>
+
+<span id="example-requests-GETapi-search">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://booking-com-simulation-laravel.test/api/search?city=1&amp;country=4&amp;geoobject=1&amp;adults=2&amp;children=1&amp;facilities[]=1&amp;facilities[]=2&amp;facilities[]=3&amp;price_from=100&amp;price_to=200&amp;start_date=2024-01-01&amp;end_date=2024-01-03" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://booking-com-simulation-laravel.test/api/search"
+);
+
+const params = {
+    "city": "1",
+    "country": "4",
+    "geoobject": "1",
+    "adults": "2",
+    "children": "1",
+    "facilities[0]": "1",
+    "facilities[1]": "2",
+    "facilities[2]": "3",
+    "price_from": "100",
+    "price_to": "200",
+    "start_date": "2024-01-01",
+    "end_date": "2024-01-03",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://booking-com-simulation-laravel.test/api/search',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'city' =&gt; '1',
+            'country' =&gt; '4',
+            'geoobject' =&gt; '1',
+            'adults' =&gt; '2',
+            'children' =&gt; '1',
+            'facilities[0]' =&gt; '1',
+            'facilities[1]' =&gt; '2',
+            'facilities[2]' =&gt; '3',
+            'price_from' =&gt; '100',
+            'price_to' =&gt; '200',
+            'start_date' =&gt; '2024-01-01',
+            'end_date' =&gt; '2024-01-03',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-search">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;properties&quot;: {
+        &quot;data&quot;: [
+            {
+                &quot;id&quot;: 2,
+                &quot;name&quot;: &quot;Qui velit ea.&quot;,
+                &quot;address&quot;: &quot;2392 Zemlak Port Suite 655, 16225-4383, New York&quot;,
+                &quot;lat&quot;: &quot;-54.8191470&quot;,
+                &quot;long&quot;: &quot;-70.2183380&quot;,
+                &quot;apartments&quot;: [
+                    {
+                        &quot;name&quot;: &quot;Mid size apartment&quot;,
+                        &quot;type&quot;: null,
+                        &quot;size&quot;: null,
+                        &quot;beds_list&quot;: &quot;&quot;,
+                        &quot;bathrooms&quot;: 0,
+                        &quot;price&quot;: 0
+                    }
+                ],
+                &quot;photos&quot;: [],
+                &quot;avg_rating&quot;: 8
+            },
+            {
+                &quot;id&quot;: 1,
+                &quot;name&quot;: &quot;Provident enim est.&quot;,
+                &quot;address&quot;: &quot;1487 Ignacio Alley Suite 794, 74215, New York&quot;,
+                &quot;lat&quot;: &quot;13.2359740&quot;,
+                &quot;long&quot;: &quot;-74.2809120&quot;,
+                &quot;apartments&quot;: [
+                    {
+                        &quot;name&quot;: &quot;Cheap apartment&quot;,
+                        &quot;type&quot;: null,
+                        &quot;size&quot;: null,
+                        &quot;beds_list&quot;: &quot;&quot;,
+                        &quot;bathrooms&quot;: 0,
+                        &quot;price&quot;: 0
+                    }
+                ],
+                &quot;photos&quot;: [],
+                &quot;avg_rating&quot;: 7
+            }
+        ],
+        &quot;links&quot;: {
+            &quot;first&quot;: &quot;http://booking-com-simulation-laravel.test/api/search?city=1&amp;adults=2&amp;children=1&amp;page=1&quot;,
+            &quot;last&quot;: &quot;http://booking-com-simulation-laravel.test/api/search?city=1&amp;adults=2&amp;children=1&amp;page=1&quot;,
+            &quot;prev&quot;: null,
+            &quot;next&quot;: null
+        },
+        &quot;meta&quot;: {
+            &quot;current_page&quot;: 1,
+            &quot;from&quot;: 1,
+            &quot;last_page&quot;: 1,
+            &quot;links&quot;: [
+                {
+                    &quot;url&quot;: null,
+                    &quot;label&quot;: &quot;&amp;laquo; Previous&quot;,
+                    &quot;active&quot;: false
+                },
+                {
+                    &quot;url&quot;: &quot;http://booking-com-simulation-laravel.test/api/search?city=1&amp;adults=2&amp;children=1&amp;page=1&quot;,
+                    &quot;label&quot;: &quot;1&quot;,
+                    &quot;active&quot;: true
+                },
+                {
+                    &quot;url&quot;: null,
+                    &quot;label&quot;: &quot;Next &amp;raquo;&quot;,
+                    &quot;active&quot;: false
+                }
+            ],
+            &quot;path&quot;: &quot;http://booking-com-simulation-laravel.test/api/search&quot;,
+            &quot;per_page&quot;: 10,
+            &quot;to&quot;: 2,
+            &quot;total&quot;: 2
+        }
+    },
+    &quot;facilities&quot;: []
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-search" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-search"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-search"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-search" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-search">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-search" data-method="GET"
+      data-path="api/search"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-search', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/search</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Content-Type"                data-endpoint="GETapi-search"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Accept"                data-endpoint="GETapi-search"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>city</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               name="city"                data-endpoint="GETapi-search"
+               value="1"
+               data-component="query">
+    <br>
+<p>City ID. Example: <code>1</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>country</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               name="country"                data-endpoint="GETapi-search"
+               value="4"
+               data-component="query">
+    <br>
+<p>Country ID. Example: <code>4</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>geoobject</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               name="geoobject"                data-endpoint="GETapi-search"
+               value="1"
+               data-component="query">
+    <br>
+<p>Geoobject ID. Example: <code>1</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>adults</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               name="adults"                data-endpoint="GETapi-search"
+               value="2"
+               data-component="query">
+    <br>
+<p>Number of adults. Example: <code>2</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>children</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               name="children"                data-endpoint="GETapi-search"
+               value="1"
+               data-component="query">
+    <br>
+<p>Number of children. Example: <code>1</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>facilities</code></b>&nbsp;&nbsp;
+<small>string[]</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+               name="facilities[0]"                data-endpoint="GETapi-search"
+               data-component="query">
+        <input type="text" style="display: none"
+               name="facilities[1]"                data-endpoint="GETapi-search"
+               data-component="query">
+    <br>
+<p>List of facility IDs.</p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>price_from</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               name="price_from"                data-endpoint="GETapi-search"
+               value="100"
+               data-component="query">
+    <br>
+<p>Minimum price. Example: <code>100</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>price_to</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               name="price_to"                data-endpoint="GETapi-search"
+               value="200"
+               data-component="query">
+    <br>
+<p>Maximum price. Example: <code>200</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>start_date</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+               name="start_date"                data-endpoint="GETapi-search"
+               value="2024-01-01"
+               data-component="query">
+    <br>
+<p>date Start date. Example: <code>2024-01-01</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>end_date</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+               name="end_date"                data-endpoint="GETapi-search"
+               value="2024-01-03"
+               data-component="query">
+    <br>
+<p>date End date. Example: <code>2024-01-03</code></p>
+            </div>
+                </form>
+
+                                <h2 id="public-property">Property</h2>
+                                                    <h2 id="public-GETapi-properties--property_id-">Property details</h2>
+
+<p>
+</p>
+
+<p>[Returns details of a property]</p>
+
+<span id="example-requests-GETapi-properties--property_id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://booking-com-simulation-laravel.test/api/properties/10" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://booking-com-simulation-laravel.test/api/properties/10"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://booking-com-simulation-laravel.test/api/properties/10',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-properties--property_id-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;properties&quot;: {
+        &quot;data&quot;: [
+            {
+                &quot;id&quot;: 1,
+                &quot;name&quot;: &quot;Aspernatur nostrum.&quot;,
+                &quot;address&quot;: &quot;5716 Leann Point, 24974-6081, New York&quot;,
+                &quot;lat&quot;: &quot;8.8008940&quot;,
+                &quot;long&quot;: &quot;-82.9095500&quot;,
+                &quot;apartments&quot;: [
+                    {
+                        &quot;name&quot;: &quot;Mid size apartment&quot;,
+                        &quot;type&quot;: null,
+                        &quot;size&quot;: null,
+                        &quot;beds_list&quot;: &quot;&quot;,
+                        &quot;bathrooms&quot;: 0,
+                        &quot;price&quot;: 0
+                    }
+                ],
+                &quot;photos&quot;: [],
+                &quot;avg_rating&quot;: null
+            }
+        ],
+        &quot;links&quot;: {
+            &quot;first&quot;: &quot;http://booking-com-simulation-laravel.test/api/search?city=1&amp;adults=2&amp;children=1&amp;page=1&quot;,
+            &quot;last&quot;: &quot;http://booking-com-simulation-laravel.test/api/search?city=1&amp;adults=2&amp;children=1&amp;page=1&quot;,
+            &quot;prev&quot;: null,
+            &quot;next&quot;: null
+        },
+        &quot;meta&quot;: {
+            &quot;current_page&quot;: 1,
+            &quot;from&quot;: 1,
+            &quot;last_page&quot;: 1,
+            &quot;links&quot;: [
+                {
+                    &quot;url&quot;: null,
+                    &quot;label&quot;: &quot;&amp;laquo; Previous&quot;,
+                    &quot;active&quot;: false
+                },
+                {
+                    &quot;url&quot;: &quot;http://booking-com-simulation-laravel.test/api/search?city=1&amp;adults=2&amp;children=1&amp;page=1&quot;,
+                    &quot;label&quot;: &quot;1&quot;,
+                    &quot;active&quot;: true
+                },
+                {
+                    &quot;url&quot;: null,
+                    &quot;label&quot;: &quot;Next &amp;raquo;&quot;,
+                    &quot;active&quot;: false
+                }
+            ],
+            &quot;path&quot;: &quot;http://booking-com-simulation-laravel.test/api/search&quot;,
+            &quot;per_page&quot;: 10,
+            &quot;to&quot;: 1,
+            &quot;total&quot;: 1
+        }
+    },
+    &quot;facilities&quot;: []
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-properties--property_id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-properties--property_id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-properties--property_id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-properties--property_id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-properties--property_id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-properties--property_id-" data-method="GET"
+      data-path="api/properties/{property_id}"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-properties--property_id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/properties/{property_id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Content-Type"                data-endpoint="GETapi-properties--property_id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Accept"                data-endpoint="GETapi-properties--property_id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>property_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               name="property_id"                data-endpoint="GETapi-properties--property_id-"
+               value="10"
+               data-component="url">
+    <br>
+<p>The ID of the property. Example: <code>10</code></p>
+            </div>
+                    </form>
+
+                                <h2 id="public-apartments">Apartments</h2>
+                                                    <h2 id="public-GETapi-apartments--apartment_id-">Get apartment details</h2>
+
+<p>
+</p>
+
+<p>[Returns details about a specific apartment]</p>
+
+<span id="example-requests-GETapi-apartments--apartment_id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://booking-com-simulation-laravel.test/api/apartments/4" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://booking-com-simulation-laravel.test/api/apartments/4"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://booking-com-simulation-laravel.test/api/apartments/4',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-apartments--apartment_id-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;name&quot;: &quot;Large apartment&quot;,
+    &quot;type&quot;: null,
+    &quot;size&quot;: null,
+    &quot;beds_list&quot;: &quot;&quot;,
+    &quot;bathrooms&quot;: 0,
+    &quot;facility_categories&quot;: {
+        &quot;First category&quot;: [
+            &quot;First facility&quot;,
+            &quot;Second facility&quot;
+        ],
+        &quot;Second category&quot;: [
+            &quot;Third facility&quot;
+        ]
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-apartments--apartment_id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-apartments--apartment_id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-apartments--apartment_id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-apartments--apartment_id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-apartments--apartment_id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-apartments--apartment_id-" data-method="GET"
+      data-path="api/apartments/{apartment_id}"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-apartments--apartment_id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/apartments/{apartment_id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Content-Type"                data-endpoint="GETapi-apartments--apartment_id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Accept"                data-endpoint="GETapi-apartments--apartment_id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>apartment_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               name="apartment_id"                data-endpoint="GETapi-apartments--apartment_id-"
+               value="4"
+               data-component="url">
+    <br>
+<p>The ID of the apartment. Example: <code>4</code></p>
+            </div>
+                    </form>
+
+                <h1 id="user">User</h1>
+
+    
+
+                        <h2 id="user-bookings">Bookings</h2>
+                                                    <h2 id="user-GETapi-user-bookings">List of user bookings</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>[Returns preview list of all user bookings]</p>
+
+<span id="example-requests-GETapi-user-bookings">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://booking-com-simulation-laravel.test/api/user/bookings" \
+    --header "X-XSRF-TOKEN: {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://booking-com-simulation-laravel.test/api/user/bookings"
+);
+
+const headers = {
+    "X-XSRF-TOKEN": "{YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://booking-com-simulation-laravel.test/api/user/bookings',
+    [
+        'headers' =&gt; [
+            'X-XSRF-TOKEN' =&gt; '{YOUR_AUTH_KEY}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-user-bookings">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;id&quot;: 1,
+    &quot;apartment_name&quot;: &quot;Fugiat saepe sed.: Apartment&quot;,
+    &quot;start_date&quot;: &quot;2023-05-11&quot;,
+    &quot;end_date&quot;: &quot;2023-05-12&quot;,
+    &quot;guests_adults&quot;: 1,
+    &quot;guests_children&quot;: 0,
+    &quot;total_price&quot;: 0,
+    &quot;cancelled_at&quot;: null,
+    &quot;rating&quot;: null,
+    &quot;review_comment&quot;: null
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-user-bookings" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-user-bookings"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-user-bookings"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-user-bookings" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-user-bookings">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-user-bookings" data-method="GET"
+      data-path="api/user/bookings"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-user-bookings', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/user/bookings</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>X-XSRF-TOKEN</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="X-XSRF-TOKEN" class="auth-value"               data-endpoint="GETapi-user-bookings"
+               value="{YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>{YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Content-Type"                data-endpoint="GETapi-user-bookings"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Accept"                data-endpoint="GETapi-user-bookings"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
+                    <h2 id="user-POSTapi-user-bookings">Create new booking</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>[Creates new booking for authenticated user]</p>
+
+<span id="example-requests-POSTapi-user-bookings">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://booking-com-simulation-laravel.test/api/user/bookings" \
+    --header "X-XSRF-TOKEN: {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"apartment_id\": \"et\",
+    \"start_date\": \"2023-05-10T08:13:56\",
+    \"end_date\": \"2023-05-10T08:13:56\",
+    \"guests_adults\": 6,
+    \"guests_children\": 5
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://booking-com-simulation-laravel.test/api/user/bookings"
+);
+
+const headers = {
+    "X-XSRF-TOKEN": "{YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "apartment_id": "et",
+    "start_date": "2023-05-10T08:13:56",
+    "end_date": "2023-05-10T08:13:56",
+    "guests_adults": 6,
+    "guests_children": 5
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://booking-com-simulation-laravel.test/api/user/bookings',
+    [
+        'headers' =&gt; [
+            'X-XSRF-TOKEN' =&gt; '{YOUR_AUTH_KEY}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'apartment_id' =&gt; 'et',
+            'start_date' =&gt; '2023-05-10T08:13:56',
+            'end_date' =&gt; '2023-05-10T08:13:56',
+            'guests_adults' =&gt; 6,
+            'guests_children' =&gt; 5,
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-user-bookings">
+            <blockquote>
+            <p>Example response (201):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;id&quot;: 1,
+    &quot;apartment_name&quot;: &quot;Hic consequatur qui.: Apartment&quot;,
+    &quot;start_date&quot;: &quot;2023-05-11 08:00:51&quot;,
+    &quot;end_date&quot;: &quot;2023-05-12 08:00:51&quot;,
+    &quot;guests_adults&quot;: 2,
+    &quot;guests_children&quot;: 1,
+    &quot;total_price&quot;: 0,
+    &quot;cancelled_at&quot;: null,
+    &quot;rating&quot;: null,
+    &quot;review_comment&quot;: null
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-user-bookings" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-user-bookings"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-user-bookings"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-user-bookings" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-user-bookings">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-user-bookings" data-method="POST"
+      data-path="api/user/bookings"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-user-bookings', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/user/bookings</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>X-XSRF-TOKEN</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="X-XSRF-TOKEN" class="auth-value"               data-endpoint="POSTapi-user-bookings"
+               value="{YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>{YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Content-Type"                data-endpoint="POSTapi-user-bookings"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Accept"                data-endpoint="POSTapi-user-bookings"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>apartment_id</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="apartment_id"                data-endpoint="POSTapi-user-bookings"
+               value="et"
+               data-component="body">
+    <br>
+<p>Example: <code>et</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>start_date</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="start_date"                data-endpoint="POSTapi-user-bookings"
+               value="2023-05-10T08:13:56"
+               data-component="body">
+    <br>
+<p>Must be a valid date. Example: <code>2023-05-10T08:13:56</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>end_date</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="end_date"                data-endpoint="POSTapi-user-bookings"
+               value="2023-05-10T08:13:56"
+               data-component="body">
+    <br>
+<p>Must be a valid date. Example: <code>2023-05-10T08:13:56</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>guests_adults</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               name="guests_adults"                data-endpoint="POSTapi-user-bookings"
+               value="6"
+               data-component="body">
+    <br>
+<p>Example: <code>6</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>guests_children</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               name="guests_children"                data-endpoint="POSTapi-user-bookings"
+               value="5"
+               data-component="body">
+    <br>
+<p>Example: <code>5</code></p>
+        </div>
+        </form>
+
+                    <h2 id="user-GETapi-user-bookings--id-">View booking</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>[Returns details about a booking]</p>
+
+<span id="example-requests-GETapi-user-bookings--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://booking-com-simulation-laravel.test/api/user/bookings/4" \
+    --header "X-XSRF-TOKEN: {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://booking-com-simulation-laravel.test/api/user/bookings/4"
+);
+
+const headers = {
+    "X-XSRF-TOKEN": "{YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://booking-com-simulation-laravel.test/api/user/bookings/4',
+    [
+        'headers' =&gt; [
+            'X-XSRF-TOKEN' =&gt; '{YOUR_AUTH_KEY}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-user-bookings--id-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;id&quot;: 1,
+    &quot;apartment_name&quot;: &quot;Hic consequatur qui.: Apartment&quot;,
+    &quot;start_date&quot;: &quot;2023-05-11 08:00:51&quot;,
+    &quot;end_date&quot;: &quot;2023-05-12 08:00:51&quot;,
+    &quot;guests_adults&quot;: 2,
+    &quot;guests_children&quot;: 1,
+    &quot;total_price&quot;: 0,
+    &quot;cancelled_at&quot;: null,
+    &quot;rating&quot;: null,
+    &quot;review_comment&quot;: null
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-user-bookings--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-user-bookings--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-user-bookings--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-user-bookings--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-user-bookings--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-user-bookings--id-" data-method="GET"
+      data-path="api/user/bookings/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-user-bookings--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/user/bookings/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>X-XSRF-TOKEN</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="X-XSRF-TOKEN" class="auth-value"               data-endpoint="GETapi-user-bookings--id-"
+               value="{YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>{YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Content-Type"                data-endpoint="GETapi-user-bookings--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Accept"                data-endpoint="GETapi-user-bookings--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               name="id"                data-endpoint="GETapi-user-bookings--id-"
+               value="4"
+               data-component="url">
+    <br>
+<p>The ID of the booking. Example: <code>4</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="user-PUTapi-user-bookings--id-">Update existing booking rating</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>[Updates booking with new details]</p>
+
+<span id="example-requests-PUTapi-user-bookings--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request PUT \
+    "http://booking-com-simulation-laravel.test/api/user/bookings/2" \
+    --header "X-XSRF-TOKEN: {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"rating\": 2,
+    \"review_comment\": \"xqffhvfyaaiudqwdtodqicpwbeclyofnseixgtvgigcrgcorauwwfmovendrpybh\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://booking-com-simulation-laravel.test/api/user/bookings/2"
+);
+
+const headers = {
+    "X-XSRF-TOKEN": "{YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "rating": 2,
+    "review_comment": "xqffhvfyaaiudqwdtodqicpwbeclyofnseixgtvgigcrgcorauwwfmovendrpybh"
+};
+
+fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;put(
+    'http://booking-com-simulation-laravel.test/api/user/bookings/2',
+    [
+        'headers' =&gt; [
+            'X-XSRF-TOKEN' =&gt; '{YOUR_AUTH_KEY}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'rating' =&gt; 2,
+            'review_comment' =&gt; 'xqffhvfyaaiudqwdtodqicpwbeclyofnseixgtvgigcrgcorauwwfmovendrpybh',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-PUTapi-user-bookings--id-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;id&quot;: 1,
+    &quot;apartment_name&quot;: &quot;Hic consequatur qui.: Apartment&quot;,
+    &quot;start_date&quot;: &quot;2023-05-11 08:00:51&quot;,
+    &quot;end_date&quot;: &quot;2023-05-12 08:00:51&quot;,
+    &quot;guests_adults&quot;: 2,
+    &quot;guests_children&quot;: 1,
+    &quot;total_price&quot;: 0,
+    &quot;cancelled_at&quot;: null,
+    &quot;rating&quot;: null,
+    &quot;review_comment&quot;: null
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-PUTapi-user-bookings--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-PUTapi-user-bookings--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-PUTapi-user-bookings--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-PUTapi-user-bookings--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-PUTapi-user-bookings--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-PUTapi-user-bookings--id-" data-method="PUT"
+      data-path="api/user/bookings/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('PUTapi-user-bookings--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-darkblue">PUT</small>
+            <b><code>api/user/bookings/{id}</code></b>
+        </p>
+            <p>
+            <small class="badge badge-purple">PATCH</small>
+            <b><code>api/user/bookings/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>X-XSRF-TOKEN</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="X-XSRF-TOKEN" class="auth-value"               data-endpoint="PUTapi-user-bookings--id-"
+               value="{YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>{YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Content-Type"                data-endpoint="PUTapi-user-bookings--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Accept"                data-endpoint="PUTapi-user-bookings--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               name="id"                data-endpoint="PUTapi-user-bookings--id-"
+               value="2"
+               data-component="url">
+    <br>
+<p>The ID of the booking. Example: <code>2</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>rating</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               name="rating"                data-endpoint="PUTapi-user-bookings--id-"
+               value="2"
+               data-component="body">
+    <br>
+<p>Must be between 1 and 10. Example: <code>2</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>review_comment</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+               name="review_comment"                data-endpoint="PUTapi-user-bookings--id-"
+               value="xqffhvfyaaiudqwdtodqicpwbeclyofnseixgtvgigcrgcorauwwfmovendrpybh"
+               data-component="body">
+    <br>
+<p>Must be at least 20 characters. Example: <code>xqffhvfyaaiudqwdtodqicpwbeclyofnseixgtvgigcrgcorauwwfmovendrpybh</code></p>
+        </div>
+        </form>
+
+                    <h2 id="user-DELETEapi-user-bookings--id-">Delete booking</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>[Deletes a booking]</p>
+
+<span id="example-requests-DELETEapi-user-bookings--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request DELETE \
+    "http://booking-com-simulation-laravel.test/api/user/bookings/7" \
+    --header "X-XSRF-TOKEN: {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://booking-com-simulation-laravel.test/api/user/bookings/7"
+);
+
+const headers = {
+    "X-XSRF-TOKEN": "{YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://booking-com-simulation-laravel.test/api/user/bookings/7',
+    [
+        'headers' =&gt; [
+            'X-XSRF-TOKEN' =&gt; '{YOUR_AUTH_KEY}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-DELETEapi-user-bookings--id-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{}</code>
+ </pre>
+    </span>
+<span id="execution-results-DELETEapi-user-bookings--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-DELETEapi-user-bookings--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-DELETEapi-user-bookings--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-DELETEapi-user-bookings--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-DELETEapi-user-bookings--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-DELETEapi-user-bookings--id-" data-method="DELETE"
+      data-path="api/user/bookings/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-user-bookings--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-red">DELETE</small>
+            <b><code>api/user/bookings/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>X-XSRF-TOKEN</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="X-XSRF-TOKEN" class="auth-value"               data-endpoint="DELETEapi-user-bookings--id-"
+               value="{YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>{YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Content-Type"                data-endpoint="DELETEapi-user-bookings--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+               name="Accept"                data-endpoint="DELETEapi-user-bookings--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               name="id"                data-endpoint="DELETEapi-user-bookings--id-"
+               value="7"
+               data-component="url">
+    <br>
+<p>The ID of the booking. Example: <code>7</code></p>
+            </div>
+                    </form>
+
+            
+
+        
+    </div>
+    <div class="dark-box">
+                    <div class="lang-selector">
+                                                        <button type="button" class="lang-button" data-language-name="bash">bash</button>
+                                                        <button type="button" class="lang-button" data-language-name="javascript">javascript</button>
+                                                        <button type="button" class="lang-button" data-language-name="php">php</button>
+                            </div>
+            </div>
+</div>
+</body>
+</html>

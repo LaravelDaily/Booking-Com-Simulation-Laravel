@@ -1,0 +1,213 @@
+name: Public
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/search
+    metadata:
+      groupName: Public
+      groupDescription: ''
+      subgroup: 'Property search'
+      subgroupDescription: ''
+      title: 'Search properties'
+      description: '[Returns a list of filtered properties]'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      city:
+        name: city
+        description: 'City ID.'
+        required: false
+        example: 1
+        type: integer
+        custom: []
+      country:
+        name: country
+        description: 'Country ID.'
+        required: false
+        example: 4
+        type: integer
+        custom: []
+      geoobject:
+        name: geoobject
+        description: 'Geoobject ID.'
+        required: false
+        example: 1
+        type: integer
+        custom: []
+      adults:
+        name: adults
+        description: 'Number of adults.'
+        required: false
+        example: 2
+        type: integer
+        custom: []
+      children:
+        name: children
+        description: 'Number of children.'
+        required: false
+        example: 1
+        type: integer
+        custom: []
+      facilities:
+        name: facilities
+        description: 'List of facility IDs.'
+        required: false
+        example:
+          - 1
+          - 2
+          - 3
+        type: 'string[]'
+        custom: []
+      price_from:
+        name: price_from
+        description: 'Minimum price.'
+        required: false
+        example: 100
+        type: integer
+        custom: []
+      price_to:
+        name: price_to
+        description: 'Maximum price.'
+        required: false
+        example: 200
+        type: integer
+        custom: []
+      start_date:
+        name: start_date
+        description: 'date Start date.'
+        required: false
+        example: '2024-01-01'
+        type: string
+        custom: []
+      end_date:
+        name: end_date
+        description: 'date End date.'
+        required: false
+        example: '2024-01-03'
+        type: string
+        custom: []
+    cleanQueryParameters:
+      city: 1
+      country: 4
+      geoobject: 1
+      adults: 2
+      children: 1
+      facilities:
+        - 1
+        - 2
+        - 3
+      price_from: 100
+      price_to: 200
+      start_date: '2024-01-01'
+      end_date: '2024-01-03'
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"properties":{"data":[{"id":2,"name":"Qui velit ea.","address":"2392 Zemlak Port Suite 655, 16225-4383, New York","lat":"-54.8191470","long":"-70.2183380","apartments":[{"name":"Mid size apartment","type":null,"size":null,"beds_list":"","bathrooms":0,"price":0}],"photos":[],"avg_rating":8},{"id":1,"name":"Provident enim est.","address":"1487 Ignacio Alley Suite 794, 74215, New York","lat":"13.2359740","long":"-74.2809120","apartments":[{"name":"Cheap apartment","type":null,"size":null,"beds_list":"","bathrooms":0,"price":0}],"photos":[],"avg_rating":7}],"links":{"first":"http:\/\/booking-com-simulation-laravel.test\/api\/search?city=1&adults=2&children=1&page=1","last":"http:\/\/booking-com-simulation-laravel.test\/api\/search?city=1&adults=2&children=1&page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"http:\/\/booking-com-simulation-laravel.test\/api\/search?city=1&adults=2&children=1&page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"http:\/\/booking-com-simulation-laravel.test\/api\/search","per_page":10,"to":2,"total":2}},"facilities":[]}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/properties/{property_id}'
+    metadata:
+      groupName: Public
+      groupDescription: ''
+      subgroup: Property
+      subgroupDescription: ''
+      title: 'Property details'
+      description: '[Returns details of a property]'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      property_id:
+        name: property_id
+        description: 'The ID of the property.'
+        required: true
+        example: 10
+        type: integer
+        custom: []
+    cleanUrlParameters:
+      property_id: 10
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"properties":{"data":[{"id":1,"name":"Aspernatur nostrum.","address":"5716 Leann Point, 24974-6081, New York","lat":"8.8008940","long":"-82.9095500","apartments":[{"name":"Mid size apartment","type":null,"size":null,"beds_list":"","bathrooms":0,"price":0}],"photos":[],"avg_rating":null}],"links":{"first":"http:\/\/booking-com-simulation-laravel.test\/api\/search?city=1&adults=2&children=1&page=1","last":"http:\/\/booking-com-simulation-laravel.test\/api\/search?city=1&adults=2&children=1&page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"http:\/\/booking-com-simulation-laravel.test\/api\/search?city=1&adults=2&children=1&page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"http:\/\/booking-com-simulation-laravel.test\/api\/search","per_page":10,"to":1,"total":1}},"facilities":[]}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/apartments/{apartment_id}'
+    metadata:
+      groupName: Public
+      groupDescription: ''
+      subgroup: Apartments
+      subgroupDescription: ''
+      title: 'Get apartment details'
+      description: '[Returns details about a specific apartment]'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      apartment_id:
+        name: apartment_id
+        description: 'The ID of the apartment.'
+        required: true
+        example: 4
+        type: integer
+        custom: []
+    cleanUrlParameters:
+      apartment_id: 4
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"name":"Large apartment","type":null,"size":null,"beds_list":"","bathrooms":0,"facility_categories":{"First category":["First facility","Second facility"],"Second category":["Third facility"]}}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

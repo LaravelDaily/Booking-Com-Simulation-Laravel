@@ -10,8 +10,19 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
+/**
+ * @group Authentication
+ */
 class RegisterController extends Controller
 {
+    /**
+     * Register a new user.
+     *
+     * [Creates a new user and returns a token for authentication.]
+     *
+     * @response {"access_token":"1|a9ZcYzIrLURVGx6Xe41HKj1CrNsxRxe4pLA2oISo"}
+     * @response 422 {"message":"The selected role id is invalid.","errors":{"role_id":["The selected role id is invalid."]}}
+     */
     public function __invoke(Request $request)
     {
         $request->validate([
