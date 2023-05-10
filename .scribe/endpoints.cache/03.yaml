@@ -146,11 +146,11 @@ endpoints:
         name: property_id
         description: 'The ID of the property.'
         required: true
-        example: 10
+        example: 3
         type: integer
         custom: []
     cleanUrlParameters:
-      property_id: 10
+      property_id: 3
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -190,11 +190,11 @@ endpoints:
         name: apartment_id
         description: 'The ID of the apartment.'
         required: true
-        example: 4
+        example: 16
         type: integer
         custom: []
     cleanUrlParameters:
-      apartment_id: 4
+      apartment_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

@@ -28,35 +28,35 @@ endpoints:
         name: name
         description: 'Must not be greater than 255 characters.'
         required: true
-        example: bdju
+        example: vjsoxgflpadkawiltji
         type: string
         custom: []
       email:
         name: email
         description: 'Must be a valid email address. Must not be greater than 255 characters.'
         required: true
-        example: simone.mueller@example.org
+        example: muller.tristin@example.com
         type: string
         custom: []
       password:
         name: password
         description: ''
         required: true
-        example: voluptate
+        example: ullam
         type: string
         custom: []
       role_id:
         name: role_id
         description: ''
         required: true
-        example: deleniti
+        example: aperiam
         type: string
         custom: []
     cleanBodyParameters:
-      name: bdju
-      email: simone.mueller@example.org
-      password: voluptate
-      role_id: deleniti
+      name: vjsoxgflpadkawiltji
+      email: muller.tristin@example.com
+      password: ullam
+      role_id: aperiam
     fileParameters: []
     responses:
       -

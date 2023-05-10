@@ -62,19 +62,19 @@ paths:
                 name:
                   type: string
                   description: 'Must not be greater than 255 characters.'
-                  example: bdju
+                  example: vjsoxgflpadkawiltji
                 email:
                   type: string
                   description: 'Must be a valid email address. Must not be greater than 255 characters.'
-                  example: simone.mueller@example.org
+                  example: muller.tristin@example.com
                 password:
                   type: string
                   description: ''
-                  example: voluptate
+                  example: ullam
                 role_id:
                   type: string
                   description: ''
-                  example: deleniti
+                  example: aperiam
               required:
                 - name
                 - email
@@ -234,19 +234,19 @@ paths:
                 name:
                   type: string
                   description: ''
-                  example: ut
+                  example: iure
                 city_id:
                   type: string
                   description: ''
-                  example: et
+                  example: neque
                 address_street:
                   type: string
                   description: ''
-                  example: aspernatur
+                  example: molestiae
                 address_postcode:
                   type: string
                   description: ''
-                  example: necessitatibus
+                  example: aut
               required:
                 - name
                 - city_id
@@ -365,7 +365,7 @@ paths:
         in: path
         name: property_id
         description: 'The ID of the property.'
-        example: 6
+        example: 9
         required: true
         schema:
           type: integer
@@ -373,7 +373,7 @@ paths:
         in: path
         name: photo_id
         description: 'The ID of the photo.'
-        example: 12
+        example: 2
         required: true
         schema:
           type: integer
@@ -948,7 +948,7 @@ paths:
         in: path
         name: property_id
         description: 'The ID of the property.'
-        example: 10
+        example: 3
         required: true
         schema:
           type: integer
@@ -1017,7 +1017,7 @@ paths:
         in: path
         name: apartment_id
         description: 'The ID of the apartment.'
-        example: 4
+        example: 16
         required: true
         schema:
           type: integer
@@ -1158,23 +1158,23 @@ paths:
                 apartment_id:
                   type: string
                   description: ''
-                  example: et
+                  example: sunt
                 start_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2023-05-10T08:13:56'
+                  example: '2023-05-10T11:51:53'
                 end_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2023-05-10T08:13:56'
+                  example: '2023-05-10T11:51:53'
                 guests_adults:
                   type: integer
                   description: ''
-                  example: 6
+                  example: 5
                 guests_children:
                   type: integer
                   description: ''
-                  example: 5
+                  example: 7
               required:
                 - apartment_id
                 - start_date
@@ -1316,11 +1316,11 @@ paths:
                 rating:
                   type: integer
                   description: 'Must be between 1 and 10.'
-                  example: 2
+                  example: 1
                 review_comment:
                   type: string
                   description: 'Must be at least 20 characters.'
-                  example: xqffhvfyaaiudqwdtodqicpwbeclyofnseixgtvgigcrgcorauwwfmovendrpybh
+                  example: ssccvjhgbcmqkhmkpfqnbsqgprxyglhjrezjtayzubihntqqaqcetyntvvrnbytty
     delete:
       summary: 'Delete booking'
       operationId: deleteBooking
@@ -1349,7 +1349,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the booking.'
-        example: 4
+        example: 8
         required: true
         schema:
           type: integer

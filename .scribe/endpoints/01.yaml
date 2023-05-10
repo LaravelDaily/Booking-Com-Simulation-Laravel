@@ -36,7 +36,7 @@ endpoints:
     auth:
       - headers
       - X-XSRF-TOKEN
-      - aV16feaZ364cd58PgkvbDEh
+      - kcf561v48gaPe3ZbD6VhdEa
     controller: null
     method: null
     route: null
@@ -67,35 +67,35 @@ endpoints:
         name: name
         description: ''
         required: true
-        example: ut
+        example: iure
         type: string
         custom: []
       city_id:
         name: city_id
         description: ''
         required: true
-        example: et
+        example: neque
         type: string
         custom: []
       address_street:
         name: address_street
         description: ''
         required: true
-        example: aspernatur
+        example: molestiae
         type: string
         custom: []
       address_postcode:
         name: address_postcode
         description: ''
         required: true
-        example: necessitatibus
+        example: aut
         type: string
         custom: []
     cleanBodyParameters:
-      name: ut
-      city_id: et
-      address_street: aspernatur
-      address_postcode: necessitatibus
+      name: iure
+      city_id: neque
+      address_street: molestiae
+      address_postcode: aut
     fileParameters: []
     responses:
       -
@@ -108,7 +108,7 @@ endpoints:
     auth:
       - headers
       - X-XSRF-TOKEN
-      - k6PVfb5ZEe864cg1aDadvh3
+      - 6D6hve18cPgVbdE5k4afZa3
     controller: null
     method: null
     route: null
@@ -170,7 +170,7 @@ endpoints:
     auth:
       - headers
       - X-XSRF-TOKEN
-      - Dgh34bVP8vakfEeZ6a1c5d6
+      - 8gadP3VhakbfZ14E5v6ecD6
     controller: null
     method: null
     route: null
@@ -197,14 +197,14 @@ endpoints:
         name: property_id
         description: 'The ID of the property.'
         required: true
-        example: 6
+        example: 9
         type: integer
         custom: []
       photo_id:
         name: photo_id
         description: 'The ID of the photo.'
         required: true
-        example: 12
+        example: 2
         type: integer
         custom: []
       newPosition:
@@ -215,8 +215,8 @@ endpoints:
         type: integer
         custom: []
     cleanUrlParameters:
-      property_id: 6
-      photo_id: 12
+      property_id: 9
+      photo_id: 2
       newPosition: 2
     queryParameters: []
     cleanQueryParameters: []
@@ -234,7 +234,7 @@ endpoints:
     auth:
       - headers
       - X-XSRF-TOKEN
-      - aeP8c5aE6bfVh1vk63g4ZdD
+      - g3fv6abc16aeZd5PDVE8kh4
     controller: null
     method: null
     route: null

@@ -38,7 +38,7 @@ endpoints:
     auth:
       - headers
       - X-XSRF-TOKEN
-      - fhakE41v6Pceb3g6d58aDVZ
+      - 481dfv6VhePDZ6Ek3gabc5a
     controller: null
     method: null
     route: null
@@ -69,43 +69,43 @@ endpoints:
         name: apartment_id
         description: ''
         required: true
-        example: et
+        example: sunt
         type: string
         custom: []
       start_date:
         name: start_date
         description: 'Must be a valid date.'
         required: true
-        example: '2023-05-10T08:13:56'
+        example: '2023-05-10T11:51:53'
         type: string
         custom: []
       end_date:
         name: end_date
         description: 'Must be a valid date.'
         required: true
-        example: '2023-05-10T08:13:56'
+        example: '2023-05-10T11:51:53'
         type: string
         custom: []
       guests_adults:
         name: guests_adults
         description: ''
         required: false
-        example: 6
+        example: 5
         type: integer
         custom: []
       guests_children:
         name: guests_children
         description: ''
         required: false
-        example: 5
+        example: 7
         type: integer
         custom: []
     cleanBodyParameters:
-      apartment_id: et
-      start_date: '2023-05-10T08:13:56'
-      end_date: '2023-05-10T08:13:56'
-      guests_adults: 6
-      guests_children: 5
+      apartment_id: sunt
+      start_date: '2023-05-10T11:51:53'
+      end_date: '2023-05-10T11:51:53'
+      guests_adults: 5
+      guests_children: 7
     fileParameters: []
     responses:
       -
@@ -118,7 +118,7 @@ endpoints:
     auth:
       - headers
       - X-XSRF-TOKEN
-      - 4EP56D6vagc8a31bdVhkfZe
+      - d13faE5Dv4PeV6ahc8kg6Zb
     controller: null
     method: null
     route: null
@@ -145,11 +145,11 @@ endpoints:
         name: id
         description: 'The ID of the booking.'
         required: true
-        example: 4
+        example: 8
         type: integer
         custom: []
     cleanUrlParameters:
-      id: 4
+      id: 8
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -166,7 +166,7 @@ endpoints:
     auth:
       - headers
       - X-XSRF-TOKEN
-      - d4hgcfZaV8bke5PD616avE3
+      - 66c4fZP3Eh8dvbgkVaD1e5a
     controller: null
     method: null
     route: null
@@ -194,11 +194,11 @@ endpoints:
         name: id
         description: 'The ID of the booking.'
         required: true
-        example: 2
+        example: 16
         type: integer
         custom: []
     cleanUrlParameters:
-      id: 2
+      id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -206,19 +206,19 @@ endpoints:
         name: rating
         description: 'Must be between 1 and 10.'
         required: false
-        example: 2
+        example: 1
         type: integer
         custom: []
       review_comment:
         name: review_comment
         description: 'Must be at least 20 characters.'
         required: false
-        example: xqffhvfyaaiudqwdtodqicpwbeclyofnseixgtvgigcrgcorauwwfmovendrpybh
+        example: ssccvjhgbcmqkhmkpfqnbsqgprxyglhjrezjtayzubihntqqaqcetyntvvrnbytty
         type: string
         custom: []
     cleanBodyParameters:
-      rating: 2
-      review_comment: xqffhvfyaaiudqwdtodqicpwbeclyofnseixgtvgigcrgcorauwwfmovendrpybh
+      rating: 1
+      review_comment: ssccvjhgbcmqkhmkpfqnbsqgprxyglhjrezjtayzubihntqqaqcetyntvvrnbytty
     fileParameters: []
     responses:
       -
@@ -231,7 +231,7 @@ endpoints:
     auth:
       - headers
       - X-XSRF-TOKEN
-      - 6Efe1cabh8ZDdvV5a346Pkg
+      - e6k1VcD836ZPvdg4afhEa5b
     controller: null
     method: null
     route: null
@@ -258,11 +258,11 @@ endpoints:
         name: id
         description: 'The ID of the booking.'
         required: true
-        example: 7
+        example: 9
         type: integer
         custom: []
     cleanUrlParameters:
-      id: 7
+      id: 9
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -279,7 +279,7 @@ endpoints:
     auth:
       - headers
       - X-XSRF-TOKEN
-      - b66Eda3gPkZa4VDe81fv5hc
+      - a6PfbDe3g1dV58aEZ4ckvh6
     controller: null
     method: null
     route: null

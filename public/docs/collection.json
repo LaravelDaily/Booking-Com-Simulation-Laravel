@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Booking.com API Documentation",
-        "_postman_id": "76902841-465b-4717-bce2-0c858788c850",
+        "_postman_id": "b496e0fc-0915-45aa-a13b-47435ac26a6a",
         "description": "Example project cloning booking.com built with Laravel as part of Course in LaravelDaily.com",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -41,7 +41,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"bdju\",\"email\":\"simone.mueller@example.org\",\"password\":\"voluptate\",\"role_id\":\"deleniti\"}"
+                            "raw": "{\"name\":\"vjsoxgflpadkawiltji\",\"email\":\"muller.tristin@example.com\",\"password\":\"ullam\",\"role_id\":\"aperiam\"}"
                         },
                         "description": "[Creates a new user and returns a token for authentication.]",
                         "auth": {
@@ -127,7 +127,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\"name\":\"ut\",\"city_id\":\"et\",\"address_street\":\"aspernatur\",\"address_postcode\":\"necessitatibus\"}"
+                                    "raw": "{\"name\":\"iure\",\"city_id\":\"neque\",\"address_street\":\"molestiae\",\"address_postcode\":\"aut\"}"
                                 },
                                 "description": "[Stores new property of the owner]"
                             },
@@ -213,13 +213,13 @@
                                         {
                                             "id": "property_id",
                                             "key": "property_id",
-                                            "value": "6",
+                                            "value": "9",
                                             "description": "The ID of the property."
                                         },
                                         {
                                             "id": "photo_id",
                                             "key": "photo_id",
-                                            "value": "12",
+                                            "value": "2",
                                             "description": "The ID of the photo."
                                         },
                                         {
@@ -391,7 +391,7 @@
                                         {
                                             "id": "property_id",
                                             "key": "property_id",
-                                            "value": "10",
+                                            "value": "3",
                                             "description": "The ID of the property."
                                         }
                                     ]
@@ -440,7 +440,7 @@
                                         {
                                             "id": "apartment_id",
                                             "key": "apartment_id",
-                                            "value": "4",
+                                            "value": "16",
                                             "description": "The ID of the apartment."
                                         }
                                     ]
@@ -537,7 +537,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\"apartment_id\":\"et\",\"start_date\":\"2023-05-10T08:13:56\",\"end_date\":\"2023-05-10T08:13:56\",\"guests_adults\":6,\"guests_children\":5}"
+                                    "raw": "{\"apartment_id\":\"sunt\",\"start_date\":\"2023-05-10T11:51:53\",\"end_date\":\"2023-05-10T11:51:53\",\"guests_adults\":5,\"guests_children\":7}"
                                 },
                                 "description": "[Creates new booking for authenticated user]"
                             },
@@ -562,7 +562,7 @@
                                         {
                                             "id": "id",
                                             "key": "id",
-                                            "value": "4",
+                                            "value": "8",
                                             "description": "The ID of the booking."
                                         }
                                     ]
@@ -602,7 +602,7 @@
                                         {
                                             "id": "id",
                                             "key": "id",
-                                            "value": "2",
+                                            "value": "16",
                                             "description": "The ID of the booking."
                                         }
                                     ]
@@ -620,7 +620,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\"rating\":2,\"review_comment\":\"xqffhvfyaaiudqwdtodqicpwbeclyofnseixgtvgigcrgcorauwwfmovendrpybh\"}"
+                                    "raw": "{\"rating\":1,\"review_comment\":\"ssccvjhgbcmqkhmkpfqnbsqgprxyglhjrezjtayzubihntqqaqcetyntvvrnbytty\"}"
                                 },
                                 "description": "[Updates booking with new details]"
                             },
@@ -645,7 +645,7 @@
                                         {
                                             "id": "id",
                                             "key": "id",
-                                            "value": "7",
+                                            "value": "9",
                                             "description": "The ID of the booking."
                                         }
                                     ]
