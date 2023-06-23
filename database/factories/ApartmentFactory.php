@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\Property;
+use App\Models\Apartment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Apartment>
+ * @extends Factory<Apartment>
  */
 class ApartmentFactory extends Factory
 {
@@ -21,6 +21,11 @@ class ApartmentFactory extends Factory
             'name' => fake()->text(20),
             'capacity_adults' => rand(1, 5),
             'capacity_children' => rand(1, 5),
+            'wheelchair_access' => fake()->boolean(),
+            'pets_allowed' => fake()->boolean(),
+            'smoking_allowed' => fake()->boolean(),
+            'free_cancellation' => fake()->boolean(),
+            'all_day_access' => fake()->boolean()
         ];
     }
 }

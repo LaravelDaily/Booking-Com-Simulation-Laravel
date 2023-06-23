@@ -19,6 +19,19 @@ class Apartment extends Model
         'capacity_children',
         'size',
         'bathrooms',
+        'wheelchair_access',
+        'pets_allowed',
+        'smoking_allowed',
+        'free_cancellation',
+        'all_day_access'
+    ];
+
+    protected $casts = [
+        'wheelchair_access' => 'boolean',
+        'pets_allowed' => 'boolean',
+        'smoking_allowed' => 'boolean',
+        'free_cancellation' => 'boolean',
+        'all_day_access' => 'boolean'
     ];
 
     use HasFactory;

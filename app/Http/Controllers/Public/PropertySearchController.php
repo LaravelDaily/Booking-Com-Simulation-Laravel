@@ -66,14 +66,39 @@ class PropertySearchController extends Controller
                     $query->whereIn('facilities.id', $request->facilities);
                 });
             })
-            ->when($request->price_from, function($query) use ($request) {
-                $query->whereHas('apartments.prices', function($query) use ($request) {
+            ->when($request->price_from, function ($query) use ($request) {
+                $query->whereHas('apartments.prices', function ($query) use ($request) {
                     $query->where('price', '>=', $request->price_from);
                 });
             })
-            ->when($request->price_to, function($query) use ($request) {
-                $query->whereHas('apartments.prices', function($query) use ($request) {
+            ->when($request->price_to, function ($query) use ($request) {
+                $query->whereHas('apartments.prices', function ($query) use ($request) {
                     $query->where('price', '<=', $request->price_to);
+                });
+            })
+            ->when($request->wheelchair_access, function ($query) use ($request) {
+                $query->whereHas('apartments', function ($query) use ($request) {
+                    $query->where('wheelchair_access', $request->wheelchair_access);
+                });
+            })
+            ->when($request->pets_allowed, function ($query) use ($request) {
+                $query->whereHas('apartments', function ($query) use ($request) {
+                    $query->where('pets_allowed', $request->pets_allowed);
+                });
+            })
+            ->when($request->smoking_allowed, function ($query) use ($request) {
+                $query->whereHas('apartments', function ($query) use ($request) {
+                    $query->where('smoking_allowed', $request->smoking_allowed);
+                });
+            })
+            ->when($request->free_cancellation, function ($query) use ($request) {
+                $query->whereHas('apartments', function ($query) use ($request) {
+                    $query->where('free_cancellation', $request->free_cancellation);
+                });
+            })
+            ->when($request->all_day_access, function ($query) use ($request) {
+                $query->whereHas('apartments', function ($query) use ($request) {
+                    $query->where('all_day_access', $request->all_day_access);
                 });
             });
 

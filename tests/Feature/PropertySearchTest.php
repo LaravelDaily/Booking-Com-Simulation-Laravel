@@ -532,4 +532,51 @@ class PropertySearchTest extends TestCase
         $response->assertStatus(200);
         $this->assertEquals($property2->id, $response->json('id'));
     }
+
+
+    public function test_search_by_additional_fields_return_results()
+    {
+        $owner = User::factory()->owner()->create();
+        $cityId = City::value('id');
+        $property = Property::factory()->create([
+            'owner_id' => $owner->id,
+            'city_id' => $cityId,
+        ]);
+        $apartment1 = Apartment::factory()->create([
+            'name' => 'Cheap apartment',
+            'property_id' => $property->id,
+            'capacity_adults' => 2,
+            'capacity_children' => 1,
+            'wheelchair_access' => true,
+            'pets_allowed' => true,
+            'smoking_allowed' => true,
+            'free_cancellation' => true,
+            'all_day_access' => true
+        ]);
+        $property2 = Property::factory()->create([
+            'owner_id' => $owner->id,
+            'city_id' => $cityId,
+        ]);
+        $apartment2 = Apartment::factory()->create([
+            'name' => 'Mid size apartment',
+            'property_id' => $property2->id,
+            'capacity_adults' => 2,
+            'capacity_children' => 1,
+            'wheelchair_access' => false,
+            'pets_allowed' => false,
+            'smoking_allowed' => false,
+            'free_cancellation' => false,
+            'all_day_access' => false
+        ]);
+
+        $response = $this->getJson('/api/search?' . http_build_query([
+                'wheelchair_access' => 1,
+                'pets_allowed' => 1,
+                'smoking_allowed' => 1,
+                'free_cancellation' => 1,
+                'all_day_access' => 1
+            ]));
+        $response->assertStatus(200);
+        $response->assertJsonCount(1, 'properties.data');
+    }
 }
