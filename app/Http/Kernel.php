@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\ApiHeadersMiddleware;
 use App\Http\Middleware\GateDefineMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -22,6 +23,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        ApiHeadersMiddleware::class,
     ];
 
     /**
@@ -44,6 +46,7 @@ class Kernel extends HttpKernel
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             GateDefineMiddleware::class,
+
         ],
     ];
 
@@ -65,5 +68,6 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'apiHeaders' => \App\Http\Middleware\ApiHeadersMiddleware::class,
     ];
 }

@@ -7,6 +7,11 @@ use App\Http\Controllers\Api\V2\Public;
 use App\Http\Controllers\Api\V2\User\BookingController;
 use Illuminate\Support\Facades\Route;
 
+
+Route::get('test', function() {
+    return response()->json(['version' => '2.0.0']);
+});
+
 Route::post('auth/register', RegisterController::class);
 
 Route::middleware('auth:sanctum')->group(function () {
